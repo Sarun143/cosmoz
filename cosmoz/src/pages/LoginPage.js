@@ -40,7 +40,6 @@ const LoginPage = () => {
     if (validate()) {
       console.log("Login data submitted: ", formData);
       // Simulate successful login and redirect to dashboard
-      navigate("/dashboard"); // Redirect to Dashboard
       navigate("/dashboard", { state: formData }); 
     }
   };

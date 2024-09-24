@@ -3,6 +3,7 @@
     const bcrypt = require('bcrypt');
     const User = require('../model/user')
 
+
     const router = express.Router();
 
     // User Registration

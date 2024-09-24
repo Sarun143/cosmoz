@@ -1,0 +1,176 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f8f8f8;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  background-color: #e4f7e4;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-info span {
+  font-size: 14px;
+  margin-right: 20px;
+  color: #444;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #272d2a;
+}
+
+.header-buttons button {
+  background-color: #a5d6a7;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn {
+  background-color: #4b2f39;
+}
+
+.dashboard-nav {
+  background-color: #d7e2d7;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.dashboard-nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #2d3436;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 30px 50px;
+}
+
+.welcome-section h1 {
+  font-size: 36px;
+  color: #2d3436;
+}
+
+.username {
+  color: #a5d6a7;
+}
+
+.welcome-section p {
+  font-size: 18px;
+  color: #636e72;
+  margin-bottom: 30px;
+}
+
+.profile-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(210, 64, 64, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 15px 0;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.sidebar li:hover {
+  background-color: #a5d6a7;
+  color: #fff;
+}
+
+.profile-details {
+  flex: 1;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group {
+  flex: 1;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-right: 0;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #2d3436;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #2d3436;
+}
+
+.update-btn {
+  display: inline-block;
+  padding: 10px 30px;
+  background-color: #a5d6a7;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.update-btn:hover {
+  background-color: #2ecc71;
+}
+
+.dashboard-footer {
+  background-color: #e4e4e4;
+  padding: 15px;
+  text-align: center;
+  font-size: 14px;
+}

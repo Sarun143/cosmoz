@@ -1,0 +1,72 @@
+.contact-section {
+    background-color: #fff;
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  .contact-header h2 {
+    font-size: 2rem;
+    color: #131313;
+    background: rgba(230, 223, 223, 0.6); 
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  .contact-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 0 5%;
+    margin-top: 2rem;
+  }
+  
+  .contact-left, .contact-right {
+    width: 40%;
+  }
+  
+  .contact-left h3, .contact-right h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-left h3 span, .contact-right h3 span {
+    color: #0c0a0a; /* Red text */
+  }
+  
+  .contact-left p, .contact-right p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-left p i, .contact-right p i {
+    color: #c80000;
+    margin-right: 1rem;
+  }
+  
+  .contact-left p i.fas, .contact-right p i.fas {
+    font-size: 1.2rem;
+  }
+  
+  .contact-right {
+    border-left: 2px solid #ddd;
+    padding-left: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .contact-container {
+      flex-direction: column;
+    }
+    
+    .contact-left, .contact-right {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+  
+    .contact-right {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+  

@@ -1,0 +1,90 @@
+.signup-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f2fff1;
+  }
+  
+  .signup-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+  }
+  
+  .logo img {
+    width: 100px;
+    height: 80px;
+  }
+  
+  .signup-left h3 {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 20px;
+    text-align: center;
+    color: #777;
+  }
+  
+  .signup-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e8f5e9;
+    padding: 40px;
+  }
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: -8px;
+    margin-bottom: 8px;
+  }
+  
+  
+  .google-btn {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  
+  .google-btn img {
+    width: 20px;
+    margin-right: 10px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .signup-btn {
+    background-color: #a5d6a7;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .signup-btn:hover {
+    background-color: #81c784;
+  }
+  

@@ -3,10 +3,10 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-image: url('/public/assests/images/hero2.png'); 
+    background-image: url('/public/assests/images/herosec.png'); 
     background-size: cover;
     background-position: center;
-    height: 90vh;
+    height: 100vh;
     color: rgb(26, 25, 25);
     position: relative;
   }

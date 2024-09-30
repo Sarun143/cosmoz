@@ -15,6 +15,7 @@ function Home() {
   return (
     <div className="App">
       <Navbar />
+      
       <HeroSection />
       <Services />
       <About />

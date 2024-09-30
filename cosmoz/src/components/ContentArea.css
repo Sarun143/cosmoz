@@ -1,0 +1,14 @@
+.main-content {
+    background-color: #fff;
+    padding: 20px;
+    overflow-y: scroll;
+  }
+  
+  .main-content > div {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  

@@ -38,8 +38,8 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="contact-info">
-          <span>📞 {userData.phone}</span>
-          <span>✉️ cozmostravel@gmail.com</span>
+        <span>📞 {7559910825}</span> 
+          <span>✉️ cosmoztravels@gmail.com</span>
         </div>
         <div className="logo">COZMOS</div>
         <div className="header-buttons">

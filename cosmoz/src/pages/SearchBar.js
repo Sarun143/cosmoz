@@ -28,7 +28,8 @@ const SearchBar = () => {
       <form onSubmit={handleSearch} className="search-form">
         <div className="form-group">
           <FaBus className="icon" />
-          <label htmlFor="fromCity">Select From City</label>
+          <label htmlFor="fromCity"></label>
+        {/* Select From City */}
           <select id="fromCity" value={fromCity} onChange={(e) => setFromCity(e.target.value)}>
             <option value="" disabled>Select From City</option>
             <option value="Banglore">Banglore</option>
@@ -43,7 +44,8 @@ const SearchBar = () => {
 
         <div className="form-group">
           <FaMapMarkerAlt className="icon" />
-          <label htmlFor="toCity">Select To City</label>
+          <label htmlFor="toCity"></label>
+        {/* Select From City */}
           <select id="toCity" value={toCity} onChange={(e) => setToCity(e.target.value)}>
             <option value="" disabled>Select To City</option>
             <option value="Banglore">Banglore</option>
@@ -58,7 +60,8 @@ const SearchBar = () => {
 
         <div className="form-group">
           <FaCalendarAlt className="icon" />
-          <label htmlFor="departureDate">Departure Date</label>
+          <label htmlFor="departureDate"></label>
+        {/* Departure Date */}
           <DatePicker
             selected={departureDate}
             onChange={(date) => setDepartureDate(date)}
@@ -69,7 +72,8 @@ const SearchBar = () => {
 
         <div className="form-group">
           <FaCalendarAlt className="icon" />
-          <label htmlFor="returnDate">Return Date</label>
+          <label htmlFor="returnDate"></label>
+        {/* Return Date */}
           <DatePicker
             selected={returnDate}
             onChange={(date) => setReturnDate(date)}

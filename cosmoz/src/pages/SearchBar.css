@@ -1,78 +1,80 @@
 .search-bar {
-    width: 220%;
-    background-color: #fff;
-    border-radius: 10px;
-    margin-top: 80px;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  width: 220%; /* Remove excessive width */
+  max-width: 1000px; /* Control the maximum width on larger screens */
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 20px; /* Align to the left */
+  padding: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: flex-start; /* Align content to the left */
+  align-items: center;
+  position: relative;
+  top: 155px; /* Adjust vertical position */
+}
+
+.search-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  gap: 5px;
+  flex-direction: row;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  min-width: 15px;
+}
+
+.form-group label {
+  margin-right: 5px;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-btn {
+  background-color: #e53935;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.search-btn .icon {
+  margin-right: 5px;
+}
+
+.search-btn:hover {
+  background-color: #d32f2f;
+}
+
+@media (max-width: 768px) {
   .search-form {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    gap: 10px; /* Increased gap for better spacing */
-    flex-direction: row; /* Set to row for horizontal layout */
+    flex-direction: column;
   }
-  
+
   .form-group {
-    display: flex;
-    flex-direction: row; /* Display label and input in a row */
-    align-items: center;
-    flex: 1; /* Makes form groups take equal space */
-    min-width: 150px;
+    width: 100%;
   }
-  
-  .form-group label {
-    margin-right: 10px; /* Spacing between label and input */
-  }
-  
-  input, select {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    width: 100%; /* Stretch inputs/selects to fill the form group */
-    box-sizing: border-box;
-  }
-  
+
   .search-btn {
-    background-color: #e53935;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
+    width: 100%;
     justify-content: center;
   }
-  
-  .search-btn .icon {
-    margin-right: 5px;
-  }
-  
-  .search-btn:hover {
-    background-color: #d32f2f;
-  }
-  
-  @media (max-width: 768px) {
-    .search-form {
-      flex-direction: column; /* Stack vertically on small screens */
-    }
-  
-    .form-group {
-      width: 100%;
-    }
-  
-    .search-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-  
+}

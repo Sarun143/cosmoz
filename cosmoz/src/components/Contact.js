@@ -16,13 +16,13 @@ const Contact = () => {
             Kottayam, Kottayam,<br />
             Kerala -686510
           </p>
-          <p><i className="fas fa-phone"></i> 8281604615, 04828-216287,9207231287</p>
-          <p><i className="fas fa-envelope"></i> info@cosmoztravels.com</p>
+          <p><i className="fas fa-phone"></i> 7559910825, 04822-279798 </p>
+          <p><i className="fas fa-envelope"></i>cosmoztravels@gmail.com</p>
         </div>
 
         <div className="contact-right">
           <h3><span> E-Payment related issues</span></h3>
-          <p><i className="fas fa-phone"></i> 04820-46329</p>
+          <p><i className="fas fa-phone"></i> 04822-279799</p>
           <p><i className="fas fa-envelope"></i> support@mybusbookings.com</p>
         </div>
       </div>

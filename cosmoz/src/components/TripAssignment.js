@@ -1,5 +1,5 @@
 import React from "react";
-import './TripAssignment.css';
+import './TripAssignment.css'
 const TripAssignment = ({ assignment }) => {
   const assignTrip = () => {
     // Logic for assigning trip
@@ -12,7 +12,7 @@ const TripAssignment = ({ assignment }) => {
   };
 
   return (
-    <div>
+    <div className="trip-assignment-container">
       <h4>Trip Assignment</h4>
       <p>Trip ID: {assignment.tripId}</p>
       <p>Staff ID: {assignment.staffId}</p>

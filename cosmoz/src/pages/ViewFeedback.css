@@ -1,0 +1,23 @@
+.view-feedback {
+  padding: 20px;
+  margin-left: 220px; /* Adjust this value based on your sidebar's width */
+}
+
+.view-feedback h2 {
+  margin-bottom: 20px;
+}
+
+.view-feedback table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.view-feedback th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.view-feedback th {
+  background-color: #f2f2f2;
+}

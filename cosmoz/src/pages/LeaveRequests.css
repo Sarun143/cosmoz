@@ -1,0 +1,23 @@
+.leave-requests {
+  padding: 20px;
+  margin-left: 220px; /* Make sure this value matches the sidebar's width */
+}
+
+.leave-requests h2 {
+  margin-bottom: 20px;
+}
+
+.leave-requests table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leave-requests th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.leave-requests th {
+  background-color: #f2f2f2;
+}

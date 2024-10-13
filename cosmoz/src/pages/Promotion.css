@@ -1,0 +1,24 @@
+.promotion {
+    padding: 20px;
+    margin-left: 220px;
+  }
+  
+  .promotion h2 {
+    margin-bottom: 20px;
+  }
+  
+  .promotion table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .promotion th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .promotion th {
+    background-color: #f2f2f2;
+  }
+  

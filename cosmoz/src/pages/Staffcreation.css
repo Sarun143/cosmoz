@@ -1,0 +1,38 @@
+.staff-creation-form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .staff-creation-form div {
+    margin-bottom: 15px;
+  }
+  
+  .staff-creation-form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .staff-creation-form input,
+  .staff-creation-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .staff-creation-form button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .staff-creation-form button:hover {
+    background-color: #218838;
+  }
+  

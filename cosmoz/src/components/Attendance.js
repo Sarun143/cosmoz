@@ -9,7 +9,7 @@ const Attendance = ({ attendance }) => {
   };
 
   return (
-    <div>
+    <div className="attendance-container">
       <h4>Attendance Record</h4>
       <p>Staff ID: {attendance.staffId}</p>
       <p>Date: {attendance.date}</p>

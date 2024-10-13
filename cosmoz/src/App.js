@@ -7,6 +7,14 @@ import SignupPage from "./pages/SignupPage";
 import Dashboard from './pages/Dashboard';
 import AdminHome from './pages/AdminHome';
 import StaffHome from "./pages/StaffHome";
+import RouteManagement from "./pages/Routemanagement";
+import StaffManagement from "./pages/StaffManagement";
+import ViewFeedback from "./pages/ViewFeedback";
+import Attendance from "./pages/Attendance";
+import LeaveRequests from "./pages/LeaveRequests";
+import Promotion from "./pages/Promotion";
+import BusDetails from "./pages/BusDetails";
+import Staffcreation from './pages/Staffcreation';
 
 function App() {
   return (
@@ -18,6 +26,17 @@ function App() {
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/AdminHome' element={<AdminHome />} />
         <Route path="/StaffHome" element={<StaffHome/>}/>
+        <Route path = '/admin/routemanagement' element = {<RouteManagement />} />
+        <Route path='/admin/staffmanagemenet' element={<StaffManagement/>}/>
+        <Route path='/admin/viewfeedback'element={<ViewFeedback/>}/>
+        <Route path='/admin/attendance' element={<Attendance/>}/>
+        <Route path='/admin/promotion' element={<Promotion/>}/>
+        <Route path='/admin/leaverequests' element={<LeaveRequests/>}/>
+        <Route path='/admin/busdetails' element={<BusDetails/>}/>
+        <Route path='/Staffcreation' element={<Staffcreation/>}/>
+
+
+
       </Routes>
     </Router>
   );

@@ -2,8 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const sign = require('./router/sign'); // Assuming sign.js handles authentication
+
+
+
+//router
+
+const sign=require('./router/sign'); // Assuming sign.js handles authentication
 const fetchUser = require('./router/fetch');
+const login  = require('./router/login');
+
+const staffRouter = require('./router/Staff'); // Adjust the path to your Staff router
 
 // Initialize express and dotenv
 const app = express();
@@ -21,7 +29,24 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Use authentication routes
 app.use('/api/auth',sign); // Mount auth routes under /api/auth
 app.use('/api', fetchUser);
+app.use('/api/auth',login);
+// Use staff routes
+app.use('/api', staffRouter); // Mount staff routes under /api
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+
+// // Add this route in your backend server.js file
+
+// app.get('/api/routes', async (req, res) => {
+// try {
+//     const routes = await Route.find(); // Fetch all routes from MongoDB
+//     res.json(routes); // Send routes back as JSON
+// } catch (err) {
+//     res.status(500).json({ error: 'Error fetching routes' });
+// }
+// });
+  

@@ -1,0 +1,72 @@
+/* Ensure the body or parent containers don't have unnecessary padding or margin */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Ensures the full height is used */
+}
+
+/* Sidebar and route management should be next to each other */
+.route-management-container {
+    display: flex;
+    align-items: flex-start; /* Aligns the management section to the top */
+    height: 100vh; /* Full height of the viewport */
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100vh; /* Full height of the viewport */
+    width: 220px;
+    background-color: #333; /* Adjust to your theme */
+    color: #fff;
+    position: fixed; /* Keep the sidebar fixed on the left */
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+}
+
+/* Keeps the route management section from having unnecessary margins */
+.route-management {
+    margin-left: 220px;
+    padding: 20px;
+    flex-grow: 1; /* Ensures it takes up the remaining space */
+    display: block; /* Make sure it's a block element to avoid alignment issues */
+}
+
+/* Create Route section styling */
+.create-route {
+    margin-bottom: 30px; /* Adds space below the Create Route section */
+}
+
+/* Table styles */
+.route-management table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Adds space above the routes table */
+}
+
+.route-management table, th, td {
+    border: 1px solid #ddd;
+}
+
+.route-management th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+.route-management th {
+    background-color: #f2f2f2;
+}
+
+/* Button styles */
+.route-management button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.route-management button:hover {
+    background-color: #0056b3;
+}

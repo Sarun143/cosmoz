@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Move this here
-import axios from 'axios';
-import "./signuppage.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./signuppage.css"; // your CSS file
 
 const SignupPage = () => {
-  const navigate = useNavigate(); // Move inside the component
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,72 +12,109 @@ const SignupPage = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({});
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state for button
 
-  const [errors, setErrors] = useState({}); // To store validation errors
-
-  // Validation function to check if all inputs are valid
-  const validate = () => {
-    const newErrors = {};
+  // Validate form fields and OTP
+  const validateField = (name, value) => {
+    let error = "";
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phonePattern = /^[0-9]{10}$/; // Adjust based on phone number format
+    const phonePattern = /^[0-9]{10}$/;
+    const namePattern = /^[A-Z][a-zA-Z\s]+$/; // Ensures first letter is capital and only letters/spaces follow
 
-    // Check if name is empty
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    switch (name) {
+      case "name":
+        if (!value.trim()) {
+          error = "Name is required";
+        } else if (!namePattern.test(value)) {
+          error = "Name must start with a capital letter and contain only letters and spaces";
+        }
+        break;
+      case "email":
+        if (!emailPattern.test(value)) error = "Enter a valid email";
+        break;
+      case "phone":
+        if (!phonePattern.test(value)) error = "Enter a valid 10-digit phone number";
+        break;
+      case "password":
+        if (value.length < 6) error = "Password must be at least 6 characters";
+        break;
+      case "confirmPassword":
+        if (value !== formData.password) error = "Passwords do not match";
+        break;
+      case "otp":
+        if (!value || value.length !== 6) error = "Enter a valid 6-digit OTP";
+        break;
+      default:
+        break;
     }
-
-    // Check if email is valid
-    if (!emailPattern.test(formData.email)) {
-      newErrors.email = "Enter a valid email";
-    }
-
-    // Check if phone is valid
-    if (!phonePattern.test(formData.phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number";
-    }
-
-    // Check if password is at least 6 characters long
-    if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    // Check if passwords match
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-
-    // Return true if no errors
-    return Object.keys(newErrors).length === 0;
+    return error;
   };
 
+  // Handle form data change with inline validation
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Validate each field as it's changed
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
   };
 
+  // Submit OTP for verification
+  const handleOtpSubmit = async () => {
+    const otpError = validateField("otp", otp);
+    if (otpError) {
+      setErrors({ ...errors, otp: otpError });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/verify-otp", { email: formData.email, otp });
+      console.log("OTP verification successful:", response.data);
+      await axios.post("http://localhost:5000/api/auth/register", { ...formData });
+      navigate("/login"); // Navigate to login page after successful registration
+    } catch (error) {
+      if (error.response) {
+        setErrors({ api: error.response.data.message });
+      } else {
+        setErrors({ api: "Server error" });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle form submit to send OTP
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    
+    const formErrors = {};
+    let isValid = true;
+    
+    // Validate all fields before submission
+    for (let key in formData) {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        formErrors[key] = error;
+        isValid = false;
+      }
+    }
+
+    setErrors(formErrors);
+
+    if (isValid) {
+      setIsSubmitting(true);
       try {
-        const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-        console.log("Registration successful:", response.data);
-        navigate("/dashboard", { state: formData }); /////
-        
-        // Navigate to the login page after successful registration
-        navigate("/login"); // Adjust the path as needed
+        await axios.post("http://localhost:5000/api/auth/send-otp", { email: formData.email });
+        setIsOtpSent(true); // OTP sent successfully, show OTP input box
       } catch (error) {
-        // Improved error handling
-        if (error.response) {
-          console.error("Registration failed:", error.response.data);
-          setErrors({ ...errors, api: error.response.data.message });
-        } else if (error.request) {
-          console.error("No response received:", error.request);
-          setErrors({ ...errors, api: "No response from server" });
-        } else {
-          console.error("Error:", error.message);
-          setErrors({ ...errors, api: error.message });
-        }
+        setErrors({ api: "Error sending OTP" });
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -87,16 +123,12 @@ const SignupPage = () => {
     <div className="signup-container">
       <div className="signup-left">
         <div className="logo">
-          <img src="/assests/images/cosmozlogo.png.png" alt="Cozmos" />
+          <img src="/assests/images/cosmozlogo.png.png" alt="Cosmos" />
         </div>
-        <h3>
-          Begin your adventure with us and experience convenient, affordable, and comfortable bus travel.
-        </h3>
+        <h3>Begin your adventure with us and experience convenient, affordable, and comfortable bus travel.</h3>
       </div>
+
       <div className="signup-right">
-        <button className="google-btn">
-          <img src="/assests/images/googlelogo.png" alt="Google" /> Sign in with Google
-        </button>
         <h2>Create Account</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -149,11 +181,32 @@ const SignupPage = () => {
           />
           {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
 
-          <button type="submit" className="signup-btn">
-            Sign Up
+          <button type="submit" className="signup-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Sending OTP..." : "Send OTP"}
           </button>
-          {errors.api && <p className="error">{errors.api}</p>} {/* Display API error */}
+          {errors.api && <p className="error">{errors.api}</p>}
         </form>
+
+        {isOtpSent && (
+          <div className="otp-popup">
+            <h2>Enter OTP</h2>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => {
+                setOtp(e.target.value);
+                setErrors({ ...errors, otp: validateField("otp", e.target.value) });
+              }}
+              required
+            />
+            {errors.otp && <p className="error">{errors.otp}</p>}
+
+            <button onClick={handleOtpSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Submitting OTP..." : "Submit OTP"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

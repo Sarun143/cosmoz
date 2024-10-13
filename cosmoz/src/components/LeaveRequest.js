@@ -14,7 +14,7 @@ const LeaveRequest = ({ leaveRequest }) => {
   };
 
   return (
-    <div>
+    <div className="leave-request-container">
       <h4>Leave Request</h4>
       <p>Staff ID: {leaveRequest.staffId}</p>
       <p>Start Date: {leaveRequest.startDate}</p>

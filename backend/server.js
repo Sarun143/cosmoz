@@ -15,6 +15,8 @@ const login  = require('./router/login');
 const staffRouter = require('./router/Staff'); // Adjust the path to your Staff router
 const busRoutes = require('./router/Bus');
 const viewstaffRouter = require('./router/vstaff');
+const routes = require('./router/Route'); // Assuming routes.js is in the routes folder
+
 // const loginRoute = require('./router/');
 
 // Initialize express and dotenv
@@ -53,6 +55,8 @@ app.use('/api', staffRouter); // Mount staff routes under /api
 // Bus routes
 app.use('/api/buses', busRoutes);
 app.use('/api/vstaff',viewstaffRouter);
+// Routes
+app.use('/api/routes', routes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

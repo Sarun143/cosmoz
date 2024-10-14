@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StaffManagement.css';
 import Sidebar from '../components/Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 const StaffManagement = () => {
-  const [staffList, setStaffList] = useState([
-    { id: 1, name: 'Shibu Thomas', email: 'shibu@example.com', phone: '1234567890', staffId: 'ST01', role: 'Driver', attendance: 'Present', onDuty: true },
-    { id: 2, name: 'Sathyan V K', email: 'sathyan@example.com', phone: '0987654321', staffId: 'SVK02', role: 'Conductor', attendance: 'Absent', onDuty: false }
-  ]);
-
+  const navigate = useNavigate();
+  const [staffList, setStaffList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStaff, setNewStaff] = useState({
     name: '',
@@ -15,29 +13,33 @@ const StaffManagement = () => {
     phone: '',
     staffId: '',
     role: '',
-    onDuty: false
+    onDuty: false,
   });
   const [errors, setErrors] = useState({});
 
+  // Fetch staff data from backend
+  useEffect(() => {
+    const fetchStaff = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/vstaff'); // Replace with your correct backend API
+        const data = await response.json();
+        setStaffList(data);
+      } catch (error) {
+        console.error('Error fetching staff data:', error);
+      }
+    };
+    fetchStaff();
+  }, []);
+
   const handleDelete = (id) => {
-    const updatedList = staffList.filter(staff => staff.id !== id);
+    const updatedList = staffList.filter((staff) => staff._id !== id);
     setStaffList(updatedList);
+    // Optionally, send a DELETE request to the backend to remove staff from the database
   };
 
   const handleUpdate = (id) => {
-    const staffToUpdate = staffList.find(staff => staff.id === id);
+    const staffToUpdate = staffList.find((staff) => staff._id === id);
     setNewStaff(staffToUpdate);
-    setIsModalOpen(true);
-  };
-
-  const handleCreate = () => {
-    setNewStaff({
-      name: '',
-      email: '',
-      phone: '',
-      staffId: '',
-      role: ''
-    });
     setIsModalOpen(true);
   };
 
@@ -62,7 +64,7 @@ const StaffManagement = () => {
   const handleSave = (e) => {
     e.preventDefault();
     const validationErrors = {};
-    Object.keys(newStaff).forEach(field => {
+    Object.keys(newStaff).forEach((field) => {
       const error = validateField(field, newStaff[field]);
       if (error) validationErrors[field] = error;
     });
@@ -72,7 +74,7 @@ const StaffManagement = () => {
     } else {
       setErrors({});
       if (newStaff.id) {
-        setStaffList(staffList.map(staff => (staff.id === newStaff.id ? newStaff : staff)));
+        setStaffList(staffList.map((staff) => (staff.id === newStaff.id ? newStaff : staff)));
       } else {
         setStaffList([...staffList, { ...newStaff, id: staffList.length + 1, attendance: 'Present' }]);
       }
@@ -84,7 +86,7 @@ const StaffManagement = () => {
     <div className="staff-management">
       <Sidebar />
       <h2>Manage Staff</h2>
-      <button className="create-button" onClick={handleCreate}>Create Staff</button>
+      <button className="create-button" onClick={() => navigate('/Staffcreation')}>Create Staff</button>
       <table>
         <thead>
           <tr>
@@ -99,8 +101,8 @@ const StaffManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {staffList.map(staff => (
-            <tr key={staff.id}>
+          {staffList.map((staff) => (
+            <tr key={staff._id}>
               <td>{staff.name}</td>
               <td>{staff.email}</td>
               <td>{staff.phone}</td>
@@ -109,73 +111,13 @@ const StaffManagement = () => {
               <td>{staff.attendance}</td>
               <td>{staff.onDuty ? 'Yes' : 'No'}</td>
               <td>
-                <button onClick={() => handleUpdate(staff.id)}>Update</button>
-                <button onClick={() => handleDelete(staff.id)}>Delete</button>
+                <button onClick={() => handleUpdate(staff._id)}>Update</button>
+                <button onClick={() => handleDelete(staff._id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>{newStaff.id ? 'Update Staff' : 'Create Staff'}</h3>
-            <form onSubmit={handleSave}>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={newStaff.name}
-                onChange={handleInputChange}
-              />
-              {errors.name && <span className="error">{errors.name}</span>}
-
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={newStaff.email}
-                onChange={handleInputChange}
-              />
-              {errors.email && <span className="error">{errors.email}</span>}
-
-              <label>Phone No:</label>
-              <input
-                type="text"
-                name="phone"
-                value={newStaff.phone}
-                onChange={handleInputChange}
-              />
-              {errors.phone && <span className="error">{errors.phone}</span>}
-
-              <label>Staff ID:</label>
-              <input
-                type="text"
-                name="staffId"
-                value={newStaff.staffId}
-                onChange={handleInputChange}
-              />
-              {errors.staffId && <span className="error">{errors.staffId}</span>}
-
-              <label>Role:</label>
-              <select
-                name="role"
-                value={newStaff.role}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Role</option>
-                <option value="Driver">Driver</option>
-                <option value="Conductor">Conductor</option>
-              </select>
-              {errors.role && <span className="error">{errors.role}</span>}
-
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => setIsModalOpen(false)}>Close</button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

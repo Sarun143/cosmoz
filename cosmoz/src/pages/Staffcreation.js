@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './Staffcreation.css';
+import { useNavigate } from 'react-router-dom';
 
 const StaffCreationForm = () => {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,6 +44,7 @@ const StaffCreationForm = () => {
           staffId: '',
           role: 'driver',
         });
+        navigate('/admin/staffmanagemenet')
       } else {
         const errorData = await response.json();
         console.error('Error creating staff:', errorData);

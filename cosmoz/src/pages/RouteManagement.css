@@ -1,72 +1,81 @@
-/* Ensure the body or parent containers don't have unnecessary padding or margin */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* Ensures the full height is used */
-}
-
-/* Sidebar and route management should be next to each other */
 .route-management-container {
     display: flex;
-    align-items: flex-start; /* Aligns the management section to the top */
-    height: 100vh; /* Full height of the viewport */
-}
-
-/* Sidebar styles */
-.sidebar {
-    height: 100vh; /* Full height of the viewport */
-    width: 220px;
-    background-color: #333; /* Adjust to your theme */
-    color: #fff;
-    position: fixed; /* Keep the sidebar fixed on the left */
-    top: 0;
-    left: 0;
-    padding-top: 20px;
-}
-
-/* Keeps the route management section from having unnecessary margins */
-.route-management {
-    margin-left: 220px;
+  }
+  
+  .route-management {
+    flex-grow: 1;
     padding: 20px;
-    flex-grow: 1; /* Ensures it takes up the remaining space */
-    display: block; /* Make sure it's a block element to avoid alignment issues */
-}
-
-/* Create Route section styling */
-.create-route {
-    margin-bottom: 30px; /* Adds space below the Create Route section */
-}
-
-/* Table styles */
-.route-management table {
+    background-color: #f9f9f9;
+    margin-left: 200px; /* Assuming Sidebar width */
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .create-route {
+    margin-bottom: 30px;
+  }
+  
+  .create-route input {
+    display: block;
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px; /* Adds space above the routes table */
-}
-
-.route-management table, th, td {
-    border: 1px solid #ddd;
-}
-
-.route-management th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-.route-management th {
-    background-color: #f2f2f2;
-}
-
-/* Button styles */
-.route-management button {
-    margin-right: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .create-route button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-}
-
-.route-management button:hover {
-    background-color: #0056b3;
-}
+  }
+  
+  .create-route button:hover {
+    background-color: #45a049;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+  }
+  
+  table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  button {
+    padding: 6px 12px;
+    margin-right: 5px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #007bb5;
+  }
+  
+  button:last-child {
+    background-color: #f44336;
+  }
+  
+  button:last-child:hover {
+    background-color: #d32f2f;
+  }
+  

@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching staff data' });
     }
+    
 });
 
 module.exports = router;

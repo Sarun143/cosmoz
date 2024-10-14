@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './RouteManagement.css';
+import Header from '../components/Header';
 import Sidebar from '../components/Sidebar'; // Assuming Sidebar is a separate component
 
 const RouteManagement = () => {
@@ -12,6 +13,7 @@ const RouteManagement = () => {
     arrival: '',
     stops: ''
   });
+  const [errors, setErrors] = useState({}); // To hold validation error messages
   const [editingRoute, setEditingRoute] = useState(null); // For handling updates
 
   // Fetch routes from the backend when the component mounts
@@ -28,15 +30,48 @@ const RouteManagement = () => {
     fetchRoutes();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRoute(prevRoute => ({
-      ...prevRoute,
-      [name]: value
+  // Inline validation for each field
+  const validateField = (name, value) => {
+    let error = '';
+    if (name === 'routeId' && !value) error = 'Route ID is required';
+    if (name === 'name' && !value) error = 'Route name is required';
+    if (name === 'departure' && !value) error = 'Departure time is required';
+    if (name === 'arrival' && !value) error = 'Arrival time is required';
+    if (name === 'stops' && !value) error = 'At least one stop is required';
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error
     }));
   };
 
+  // Function to handle input change and inline validation
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewRoute((prevRoute) => ({
+      ...prevRoute,
+      [name]: value
+    }));
+    validateField(name, value); // Validate the field as user types
+  };
+
+  // Validate all fields before form submission
+  const validateForm = () => {
+    let formErrors = {};
+    if (!newRoute.routeId) formErrors.routeId = 'Route ID is required';
+    if (!newRoute.name) formErrors.name = 'Route name is required';
+    if (!newRoute.departure) formErrors.departure = 'Departure time is required';
+    if (!newRoute.arrival) formErrors.arrival = 'Arrival time is required';
+    if (!newRoute.stops) formErrors.stops = 'At least one stop is required';
+
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0; // Return true if no errors
+  };
+
+  // Function to create a new route
   const handleCreateRoute = async () => {
+    if (!validateForm()) return; // Don't proceed if form is invalid
+
     const stopsArray = newRoute.stops.split(',').map(stop => stop.trim());
     const newRouteData = {
       routeId: newRoute.routeId,
@@ -55,6 +90,7 @@ const RouteManagement = () => {
     }
   };
 
+  // Function to delete a route
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/routes/${id}`);
@@ -64,6 +100,7 @@ const RouteManagement = () => {
     }
   };
 
+  // Function to handle editing a route
   const handleEdit = (route) => {
     setEditingRoute(route);
     setNewRoute({
@@ -75,7 +112,10 @@ const RouteManagement = () => {
     });
   };
 
+  // Function to update an existing route
   const handleUpdateRoute = async () => {
+    if (!validateForm()) return; // Don't proceed if form is invalid
+
     const stopsArray = newRoute.stops.split(',').map(stop => stop.trim());
     const updatedRouteData = {
       routeId: newRoute.routeId,
@@ -97,6 +137,7 @@ const RouteManagement = () => {
 
   return (
     <div className="route-management-container">
+      <Header />
       <Sidebar />
       <div className="route-management">
         <h2>Manage Routes</h2>
@@ -110,6 +151,8 @@ const RouteManagement = () => {
             placeholder="Route ID"
             onChange={handleInputChange}
           />
+          {errors.routeId && <p className="error">{errors.routeId}</p>}
+          
           <input
             type="text"
             name="name"
@@ -117,6 +160,8 @@ const RouteManagement = () => {
             placeholder="Route Name"
             onChange={handleInputChange}
           />
+          {errors.name && <p className="error">{errors.name}</p>}
+          
           <input
             type="text"
             name="departure"
@@ -124,6 +169,8 @@ const RouteManagement = () => {
             placeholder="Departure Time"
             onChange={handleInputChange}
           />
+          {errors.departure && <p className="error">{errors.departure}</p>}
+          
           <input
             type="text"
             name="arrival"
@@ -131,6 +178,8 @@ const RouteManagement = () => {
             placeholder="Arrival Time"
             onChange={handleInputChange}
           />
+          {errors.arrival && <p className="error">{errors.arrival}</p>}
+          
           <input
             type="text"
             name="stops"
@@ -138,6 +187,8 @@ const RouteManagement = () => {
             placeholder="Stops (comma separated)"
             onChange={handleInputChange}
           />
+          {errors.stops && <p className="error">{errors.stops}</p>}
+          
           {editingRoute ? (
             <button onClick={handleUpdateRoute}>Update Route</button>
           ) : (

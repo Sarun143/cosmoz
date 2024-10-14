@@ -1,8 +1,23 @@
 .attendance {
-    padding: 20px;
+    padding: 80px;
     margin-left: 220px;
   }
-  
+  /* Header Styling */
+header {
+  position: fixed;
+  top: 0;
+  left: 0; /* Start after the sidebar */
+  right: 0; /* Ensure it stretches to the right side */
+  height: 60px;
+  background-color: #444;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 1;
+}
   .attendance h2 {
     margin-bottom: 20px;
   }
@@ -19,6 +34,6 @@
   }
   
   .attendance th {
-    background-color: #f2f2f2;
+    background-color: #45a049;
   }
   

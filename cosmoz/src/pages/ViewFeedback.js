@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ViewFeedback.css';
 import Sidebar from '../components/Sidebar'; // Sidebar component is used here
+import Header from '../components/Header';
 
 const ViewFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([
@@ -11,6 +12,7 @@ const ViewFeedback = () => {
   return (
     <div className="view-feedback"> {/* Updated the class name here */}
       <Sidebar />
+      <Header/>
       <h2>View Feedback</h2>
       <table>
         <thead>

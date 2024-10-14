@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BusDetails.css';
 import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
 
 const BusDetails = () => {
   const [buses, setBuses] = useState([]);
@@ -195,6 +196,7 @@ const handleAddBus = async (e) => {
   return (
     <div className="bus-details-container">
       <Sidebar />
+      <Header/>
       <h1>Bus Details</h1>
 
       {/* Form to add or update bus */}

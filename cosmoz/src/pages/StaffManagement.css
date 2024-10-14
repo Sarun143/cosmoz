@@ -31,17 +31,53 @@
   background-color: #575757;
 }
 
+/* Header Styling */
+header {
+  position: fixed;
+  top: 0;
+  left: 0; /* Start after the sidebar */
+  right: 0; /* Ensure it stretches to the right side */
+  height: 60px;
+  background-color: #444;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header nav {
+  display: flex;
+  gap: 20px;
+}
+
+header nav a {
+  color: white;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
 /* Staff Management Section Styling */
 .staff-management {
   margin-left: 220px; /* Adjusting margin to account for the sidebar */
   padding: 20px;
+  padding-top: 80px; /* Ensure the content doesn't overlap with the header */
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 .staff-management h2 {
   margin-top: 0;
-  padding-top: 20px; /* Ensure the title doesn't overlap */
+  padding-top: 20px;
 }
 
 .staff-management .create-button {
@@ -68,13 +104,13 @@
 }
 
 .staff-management th {
-  background-color: #f2f2f2;
+  background-color: #45a049;
 }
 
 .staff-management button {
   margin-right: 10px;
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #d32f2f;
   color: white;
   border: none;
   cursor: pointer;

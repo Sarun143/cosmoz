@@ -43,24 +43,24 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update an existing route
-router.put('/:id', async (req, res) => {
-  const { routeId, name, departure, arrival, stops } = req.body;
+// // Update an existing route
+// router.put('/:id', async (req, res) => {
+// const { routeId, name, departure, arrival, stops } = req.body;
 
-  try {
-    const updatedRoute = await Route.findByIdAndUpdate(
-      req.params.id,
-      { routeId, name, departure, arrival, stops },
-      { new: true } // Return the updated document
-    );
+// try {
+//   const updatedRoute = await Route.findByIdAndUpdate(
+//     req.params.id,
+//     { routeId, name, departure, arrival, stops },
+//     { new: true } // Return the updated document
+//   );
 
-    if (!updatedRoute) return res.status(404).json({ message: 'Route not found' });
-    
-    res.json(updatedRoute);
-  } catch (error) {
-    res.status(400).json({ message: 'Error updating route' });
-  }
-});
+//   if (!updatedRoute) return res.status(404).json({ message: 'Route not found' });
+  
+//   res.json(updatedRoute);
+// } catch (error) {
+//   res.status(400).json({ message: 'Error updating route' });
+// }
+// });
 
 // Delete a route
 router.delete('/:id', async (req, res) => {
@@ -72,5 +72,16 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: 'Error deleting route' });
   }
 });
+
+// Update a route
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedRoute = await Route.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedRoute);
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating route' });
+  }
+});
+
 
 module.exports = router;

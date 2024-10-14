@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Attendance.css';
 import Sidebar from '../components/Sidebar'; // Sidebar component is used here
-
+import Header from '../components/Header';
 
 const Attendance = () => {
     
@@ -13,6 +13,7 @@ const Attendance = () => {
   return (
     <div className="attendance">
         <Sidebar/>
+        <Header/>
       <h2>Staff Attendance</h2>
       <table>
         <thead>

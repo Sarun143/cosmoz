@@ -25,21 +25,29 @@ router.get('/:id', async (req, res) => {
 
 // Create a new route
 router.post('/', async (req, res) => {
-  const { routeId, name, departure, arrival, stops } = req.body;
-
+  const { routeId, name, departure, departureStop, arrival, stops, arrivalStop, frequency, selectedDays, selectedDates } = req.body;
+  
   const newRoute = new Route({
     routeId,
     name,
+    departureStop,
     departure,
     arrival,
-    stops
+    arrivalStop,
+    stops: stops.map(stop => ({
+      stop: stop.stop,
+      arrival: stop.arrival
+    })),
+    frequency,
+    selectedDays,
+    selectedDates
   });
 
   try {
     const savedRoute = await newRoute.save();
     res.status(201).json(savedRoute);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating route' });
+    res.status(400).json({ message: 'Error creating route', error });
   }
 });
 
@@ -82,6 +90,9 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Error updating route' });
   }
 });
+
+
+// Create a new route
 
 
 module.exports = router;

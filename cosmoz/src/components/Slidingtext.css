@@ -1,0 +1,70 @@
+.slider-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 0;
+    position: relative;
+  }
+  
+  .slider-text {
+    text-align: left;
+    padding: 20px;
+    color: #000; /* Set default text color to black */
+  }
+  
+  .slider-text h6 {
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #2b2b2b; /* Light black text */
+  }
+  
+  .slider-text h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 10px 0;
+    text-transform: none;
+    color: #000;
+  }
+  
+  .slider-text .highlight-text {
+    color: #ff0051; /* Pink color for the highlight */
+  }
+  
+  .slider-text h6.section-title.text-right {
+    font-size: 1.1rem;
+    font-weight: normal;
+    margin-top: 15px;
+    color: #ff0051; /* Pink for the caption */
+  }
+  
+  @media (max-width: 768px) {
+    .slider-text h1 {
+      font-size: 2rem;
+    }
+  
+    .slider-text .highlight-text {
+      font-size: 1.7rem;
+    }
+  
+    .slider-text h6.section-title.text-right {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .slider-text h1 {
+      font-size: 1.5rem;
+    }
+  
+    .slider-text .highlight-text {
+      font-size: 1.2rem;
+    }
+  
+    .slider-text h6.section-title.text-right {
+      font-size: 0.9rem;
+    }
+  }
+  

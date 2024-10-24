@@ -6,12 +6,12 @@ import "../pages/Dashboard.css";
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email } = location.state || {};
+  const { email } = location.state || {}; // Get the email passed from the login page
   
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    phone: ""
+    phone: "",
   });
 
   // Fetch user data from the backend
@@ -20,7 +20,7 @@ const Dashboard = () => {
       const fetchUserData = async () => {
         try {
           const response = await axios.post("http://localhost:5000/api/user", { email });
-          setUserData(response.data);
+          setUserData(response.data); // Update state with fetched user data
         } catch (error) {
           console.error("Failed to fetch user data:", error);
         }
@@ -38,7 +38,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="contact-info">
-        <span>📞 {7559910825}</span> 
+          <span>📞 7559910825</span> 
           <span>✉️ cosmoztravels@gmail.com</span>
         </div>
         <div className="logo">COZMOS</div>

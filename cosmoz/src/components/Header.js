@@ -14,7 +14,7 @@ const Header = () => {
     // Or if using a context, you might want to reset the context state
 
     // Redirect to login page
-    navigate('/login');
+    navigate('/');
   };
 
   return (

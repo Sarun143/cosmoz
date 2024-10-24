@@ -75,7 +75,11 @@ const LoginPage = () => {
         console.log("Login successful:", response.data);
 
         // Navigate to the correct page based on the role
-        navigate(redirectUrl);
+        navigate(redirectUrl, {
+          state: {
+            email:formData.email
+          }
+        });
       } catch (error) {
         if (error.response && error.response.data.message) {
           setErrors({ api: error.response.data.message });
@@ -112,6 +116,7 @@ const LoginPage = () => {
             type="text"
             name="email"
             placeholder="Email"
+            id="emailid"
             value={formData.email}
             onChange={handleChange}
             required
@@ -122,6 +127,7 @@ const LoginPage = () => {
             type="password"
             name="password"
             placeholder="Password"
+            id="passwords"
             value={formData.password}
             onChange={handleChange}
             required
@@ -129,10 +135,10 @@ const LoginPage = () => {
           {errors.password && <p className="error">{errors.password}</p>} {/* Inline password error */}
 
           <div className="forgot-password">
-            <a href="/forgot-password">Forgot Password?</a>
+            <a href="/Forgotpassword">Forgot Password?</a>
           </div>
 
-          <button type="submit" className="login-btn" disabled={isSubmitting}>
+          <button id = "login" type="submit" className="login-btn" disabled={isSubmitting}>
             {isSubmitting ? "Logging in..." : "Log in"}
           </button>
           {errors.api && <p className="error">{errors.api}</p>} {/* API error */}

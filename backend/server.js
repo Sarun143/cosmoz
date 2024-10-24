@@ -16,6 +16,9 @@ const staffRouter = require('./router/Staff'); // Adjust the path to your Staff 
 const busRoutes = require('./router/Bus');
 const viewstaffRouter = require('./router/vstaff');
 const routes = require('./router/Route'); // Assuming routes.js is in the routes folder
+const ForgotRoute = require('./router/Forgotpassword');
+const BusRoute = require('./router/searchbus')
+const promotionRoutes = require('./router/Promotion'); // Import promotion routes
 
 // const loginRoute = require('./router/');
 
@@ -57,12 +60,38 @@ app.use('/api/buses', busRoutes);
 app.use('/api/vstaff',viewstaffRouter);
 // Routes
 app.use('/api/routes', routes);
+app.use('/forgetpass',ForgotRoute);
+app.use('/',BusRoute);
+app.use('/api/promotions', promotionRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+// Search route
+app.get('/api/search-bus', async (req, res) => {
+  try {
+    const { fromCity, toCity, date } = req.query;
+    const searchDate = new Date(date);
 
+    const routes = await Route.find({
+      departureStop: fromCity,
+      arrivalStop: toCity,
+      'schedule.date': {
+        $lte: searchDate, // Assuming schedule is an array of dates
+      },
+    });
+
+    if (routes.length > 0) {
+      res.json(routes);
+    } else {
+      res.status(404).json({ message: 'No buses found' });
+    }
+  } catch (error) {
+    console.error('Error fetching routes:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // // Add this route in your backend server.js file
 

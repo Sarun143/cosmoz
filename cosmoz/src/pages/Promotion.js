@@ -1,33 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Promotion.css';
-import Sidebar from '../components/Sidebar'; // Sidebar component is used here
+import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import axios from 'axios';
 
 const Promotion = () => {
-  const [promotions, setPromotions] = useState([
-    { id: 1, offer: '20% off on tickets', details: 'Applicable on payment via Paytm' },
-    { id: 2, offer: 'Buy 1 Get 1 Free', details: 'For trips booked on weekends' }
-  ]);
-
+  const [promotions, setPromotions] = useState([]);
   const [newOffer, setNewOffer] = useState('');
   const [newDetails, setNewDetails] = useState('');
 
-  const handleAddPromotion = (e) => {
-    e.preventDefault();
-    
-    // Create a new promotion object
-    const newPromotion = {
-      id: promotions.length + 1, // Simple ID generation
-      offer: newOffer,
-      details: newDetails
+  useEffect(() => {
+    // Fetch promotions from the database
+    const fetchPromotions = async () => {
+      try {
+        const res = await axios.get('/api/promotions');
+        setPromotions(res.data);
+      } catch (err) {
+        console.error('Error fetching promotions:', err);
+      }
     };
 
-    // Update the promotions state
-    setPromotions([...promotions, newPromotion]);
+    fetchPromotions();
+  }, []);
 
-    // Clear the input fields
-    setNewOffer('');
-    setNewDetails('');
+  const handleAddPromotion = async (e) => {
+    e.preventDefault();
+
+    const newPromotion = {
+      offer: newOffer,
+      details: newDetails,
+      isActive: true, // Default to active when added
+    };
+
+    try {
+      await axios.post('/api/promotions/add', newPromotion);
+      setPromotions([...promotions, newPromotion]);
+      setNewOffer('');
+      setNewDetails('');
+    } catch (err) {
+      console.error('Error adding promotion:', err);
+    }
+  };
+
+  const handleToggle = async (id) => {
+    try {
+      const res = await axios.put(`/api/promotions/toggle/${id}`);
+      const updatedPromotions = promotions.map(promotion =>
+        promotion._id === id ? { ...promotion, isActive: res.data.promotion.isActive } : promotion
+      );
+      setPromotions(updatedPromotions);
+    } catch (err) {
+      console.error('Error toggling promotion status:', err);
+    }
   };
 
   return (
@@ -52,7 +76,7 @@ const Promotion = () => {
           onChange={(e) => setNewDetails(e.target.value)}
           required
         />
-        <button type="submit">AddPromotion</button>
+        <button type="submit">Add Promotion</button>
       </form>
 
       <table>
@@ -60,13 +84,24 @@ const Promotion = () => {
           <tr>
             <th>Offer</th>
             <th>Details</th>
+            <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {promotions.map((promotion) => (
-            <tr key={promotion.id}>
+            <tr key={promotion._id}>
               <td>{promotion.offer}</td>
               <td>{promotion.details}</td>
+              <td>{promotion.isActive ? 'On' : 'Off'}</td>
+              <td>
+                <button
+                  className={promotion.isActive ? 'on' : 'off'}
+                  onClick={() => handleToggle(promotion._id)}
+                >
+                  {promotion.isActive ? 'Turn Off' : 'Turn On'}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

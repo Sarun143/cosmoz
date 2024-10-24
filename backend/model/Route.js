@@ -13,14 +13,41 @@ const routeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  departureStop:{
+    type: String,
+    required: true
+  },
+  arrivalStop: {
+    type: String,
+    required: true
+  },
   arrival: {
     type: String,
     required: true
   },
-  stops: {
-    type: [String],
-    required: true
-  }
+  frequency: {
+    type: String,
+    enum: ['all_day', 'particular_days', 'particular_dates'],
+    default: 'all_day'
+  },
+  selectedDays: [{
+    type: String,
+    enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  }],
+  selectedDates: [Date],
+
+  stops: [
+    {
+      stop: {
+        type: String,
+        required: true
+      },
+      arrival: {
+        type: String,
+        required: true
+      }
+    }
+  ]
 });
 
 module.exports = mongoose.model('Route', routeSchema);

@@ -5,8 +5,8 @@ const About = () => {
   return (
     <section className="about" id="about">
       <h2>About Us</h2>
-    {/* <p>Cosmoz Travels is dedicated to providing the best travel experiences. With us, you can explore amazing destinations around the world with ease and comfort.</p> */}
-      <p>CosmozTravels is a renowned brand in the bus operating industry. Our vision is to give a new face to the bus industry. Since our inception passenger comfort was our top priority. We have frequently added luxury buses to our huge fleet of buses. The only thing we focus on is that the comfort quotient of our passengers should never be compromised. We have always tried our best to push our limits in order to develop our travel experience. Read further to understand what we offer that enhances our reputation in the market. </p>
+    {/* <p>Cosmoz Travelmate is dedicated to providing the best travel experiences. With us, you can explore amazing destinations around the world with ease and comfort.</p> */}
+      <p>CosmozTravelmate is a renowned brand in the bus operating industry. Our vision is to give a new face to the bus industry. Since our inception passenger comfort was our top priority. We have frequently added luxury buses to our huge fleet of buses. The only thing we focus on is that the comfort quotient of our passengers should never be compromised. We have always tried our best to push our limits in order to develop our travel experience. Read further to understand what we offer that enhances our reputation in the market. </p>
       <br></br>
       <h4>Live Bus Tracking</h4>    
       <p>

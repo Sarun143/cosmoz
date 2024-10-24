@@ -5,7 +5,6 @@ const Login = require('../model/login'); // Import Login model
 const nodemailer = require('nodemailer'); 
 const crypto = require('crypto');
 const router = express.Router();
-
 let otpStore = {};
 
 // Helper function to send OTP email

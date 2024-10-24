@@ -1,0 +1,32 @@
+.gallery-container {
+    width: 90%; /* Adjust width as needed */
+    margin: auto;
+    padding: 20px 0; /* Add padding for spacing */
+  }
+  
+  .bus-inner {
+    position: relative;
+    padding: 10px;
+  }
+  
+  .bus-inner img {
+    width: 100%; /* Ensure the image takes up full container width */
+    height: auto; /* Maintain the aspect ratio */
+    border-radius: 10px; /* Optional: round the corners of the images */
+  }
+  
+  .bus-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .bus-title {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  

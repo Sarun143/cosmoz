@@ -1,7 +1,7 @@
 .search-bar {
   width: 220%; /* Remove excessive width */
   max-width: 1000px; /* Control the maximum width on larger screens */
-  background-color: #fff;
+  background-color: #cfc0ba;
   border-radius: 10px;
   margin: 20px; /* Align to the left */
   padding: 8px;
@@ -11,6 +11,7 @@
   align-items: center;
   position: relative;
   top: 155px; /* Adjust vertical position */
+  
 }
 
 .search-form {
@@ -41,12 +42,14 @@ input, select {
   border: 1px solid #ddd;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom:10px;
+
 }
 
 .search-btn {
   background-color: #e53935;
   color: white;
-  padding: 10px 20px;
+  padding: 8px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -54,6 +57,8 @@ input, select {
   align-items: center;
   white-space: nowrap;
   justify-content: center;
+  margin-top:0px;
+  margin-bottom:20px;
 }
 
 .search-btn .icon {

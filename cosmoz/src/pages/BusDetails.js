@@ -228,6 +228,8 @@ const handleAddBus = async (e) => {
         <input
           type="number"
           name="seatCapacity"
+          min ="1"
+          max="54"
           placeholder="Seat Capacity"
           value={newBus.seatCapacity}
           onChange={handleInputChange}
@@ -301,12 +303,12 @@ const handleAddBus = async (e) => {
         />
         {errors.permitEndDate && <p className="error">{errors.permitEndDate}</p>}
 
-        <input
-          type="file"
-          name="photos"
-          accept="image/*"
-          onChange={handlePhotoChange}
-        />
+      {/* <input
+        type="file"
+        name="photos"
+        accept="image/*"
+        onChange={handlePhotoChange}
+      /> */}
         <button type="submit">{isEditing ? 'Update Bus' : 'Add Bus'}</button>
       </form>
 

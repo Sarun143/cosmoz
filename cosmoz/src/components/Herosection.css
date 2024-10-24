@@ -18,7 +18,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #5a585f80; /* Overlay to make text readable */
+  /*background-color: #b0adb680; /* Overlay to make text readable */
   z-index: 1;
 }
 

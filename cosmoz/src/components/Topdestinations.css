@@ -1,0 +1,50 @@
+.top-destinations-container {
+    width: 100%; /* Full width of the container */
+    margin: auto; /* Center the container */
+  }
+  .top-destinations-container {
+    margin-top: 2rem;
+
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .top-destinations-container-header h1 {
+    
+        font-size: 2.5rem;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+      
+  }
+  
+  .top-destinations-container-header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  .route-inner {
+    position: relative; /* Position relative for absolute child elements */
+    padding: 10px; /* Add some padding */
+  }
+  
+  .route-inner img {
+    width: 100%; /* Ensure images take the full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: add some rounding */
+  }
+  
+  .route-text {
+    position: absolute; /* Positioning text overlay */
+    bottom: 10px; /* Position text at the bottom */
+    left: 10px; /* Align text to the left */
+    color: white; /* Text color */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 5px 10px; /* Add some padding around the text */
+    border-radius: 5px; /* Optional: add rounding to the text background */
+  }
+  
+  .route-title {
+    font-size: 1.2em; /* Adjust font size */
+    font-weight: bold; /* Make the title bold */
+  }
+  

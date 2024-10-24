@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-logo">
         <img src= "/assests/images/cosmozlogo.png.png" alt="Cozmos Logo" className="logo-image" />
-        Cosmoz Travels
+      
       </div>
       <ul className="navbar-menu">
         <li><a href="#home">Home</a></li>

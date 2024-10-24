@@ -1,0 +1,27 @@
+/* Scheduled trips component styles */
+.trips-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .trips-table th,
+  .trips-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .trips-table th {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .trips-table td {
+    background-color: #f9f9f9;
+  }
+  
+  .trips-table tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+  

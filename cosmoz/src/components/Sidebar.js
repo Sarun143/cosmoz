@@ -8,7 +8,7 @@ const Sidebar = ({ setSelectedSection }) => {
   return (
     <aside className="sidebar">
       <ul>
-        <li onClick={() => navigate('Dashboard')}>Dashboard</li>
+        <li onClick={() => navigate('/AdminHome')}>Dashboard</li>
         <li onClick={() => navigate('/admin/routemanagement')}>Manage Routes</li>
         <li onClick={() => navigate('/admin/staffmanagemenet')}>Manage Staff</li>
         <li onClick={() => navigate('/admin/viewfeedback')}>View Feedback</li>

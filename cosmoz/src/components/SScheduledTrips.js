@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './SScheduledTrips.css';
+import SHeader from './SHeader';
+import SSidebar from './SSidebar';
 
 
-const ScheduledTrips = () => {
+const StaffScheduledTrips = () => {
   const [trips, setTrips] = useState([]);
 
   useEffect(() => {
@@ -18,6 +20,8 @@ const ScheduledTrips = () => {
 
   return (
     <div>
+      <SHeader/>
+      <SSidebar/>
       <h2>Scheduled Trips</h2>
       <table>
         <thead>
@@ -43,4 +47,4 @@ const ScheduledTrips = () => {
   );
 };
 
-export default ScheduledTrips;
+export default StaffScheduledTrips;

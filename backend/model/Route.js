@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const routeSchema = new mongoose.Schema({
   routeId: {
     type: String,
-    required: true
+    required: true,
+    unique: true // Ensure routeId is unique
   },
   name: {
     type: String,
@@ -13,7 +14,7 @@ const routeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  departureStop:{
+  departureStop: {
     type: String,
     required: true
   },
@@ -35,7 +36,6 @@ const routeSchema = new mongoose.Schema({
     enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   }],
   selectedDates: [Date],
-
   stops: [
     {
       stop: {
@@ -44,10 +44,20 @@ const routeSchema = new mongoose.Schema({
       },
       arrival: {
         type: String,
-        required: true
+        required: true  
+      },
+      distance: {
+        type: Number,
+        required: true,
+        min: 0
       }
     }
-  ]
+  ],
+  totaldistance: {
+    type: Number,
+    required: true,
+    min: 0
+  }
 });
 
 module.exports = mongoose.model('Route', routeSchema);

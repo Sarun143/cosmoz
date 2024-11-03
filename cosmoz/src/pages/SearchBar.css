@@ -1,7 +1,8 @@
-.search-bar {
+/* General styles for the SearchBus component */
+.sear {
   width: 220%; /* Remove excessive width */
   max-width: 1000px; /* Control the maximum width on larger screens */
-  background-color: #cfc0ba;
+  background-color: #fff;
   border-radius: 10px;
   margin: 20px; /* Align to the left */
   padding: 8px;
@@ -10,11 +11,17 @@
   justify-content: flex-start; /* Align content to the left */
   align-items: center;
   position: relative;
-  top: 155px; /* Adjust vertical position */
-  
+  top: 200px; /* Adjust vertical position */
 }
 
-.search-form {
+/* Heading styles */
+.sear h2 {
+  text-align: center; /* Center align the heading */
+  color: #333; /* Dark text color */
+}
+
+/* Form styles */
+.sear form {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,62 +31,99 @@
   flex-direction: row;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  min-width: 15px;
+/* Label styles */
+.sear label {
+  font-weight: bold; /* Bold labels */
+  display: none; /* Hide labels for compact layout */
+  
 }
 
-.form-group label {
-  margin-right: 5px;
-}
-
-input, select {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  width: 100%;
+/* Input and Select styles */
+.sear input[type="text"],
+.sear input[type="date"],
+.sear select {
+  padding: 10px; /* Reduce padding for compact design */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Slightly rounded corners */
+  font-size: 14px; /* Smaller font size */
+  width: auto; /* Auto width for inline */
   box-sizing: border-box;
-  margin-bottom:10px;
-
+  flex: 1; /* Allow inputs to grow */
+  min-width: 120px; /* Set minimum width */
 }
 
-.search-btn {
-  background-color: #e53935;
-  color: white;
-  padding: 8px 20px;
-  border: none;
+/* Button styles */
+.sear button {
+  background-color: #007BFF; /* Primary color */
+  color: white; /* White text */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 8px 16px;
   border-radius: 5px;
-  cursor: pointer;
+  border: none; /* Remove border */
   display: flex;
   align-items: center;
-  white-space: nowrap;
   justify-content: center;
-  margin-top:0px;
-  margin-bottom:20px;
+  font-size: 14px;
 }
 
-.search-btn .icon {
-  margin-right: 5px;
+
+/* Hover effect */
+.sear button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }
 
-.search-btn:hover {
-  background-color: #d32f2f;
+/* Suggestions dropdown */
+.suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 1;
 }
 
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Search results */
+.sear .search-results {
+  margin-top: 20px; /* Space above the results */
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping of items */
+  gap: 20px; /* Space between items */
+}
+
+.sear .search-results li {
+  flex: 1; /* Allow items to grow equally */
+  min-width: 250px;
+  padding: 15px;
+  border: 1px solid #eaeaea;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Responsive layout for mobile devices */
 @media (max-width: 768px) {
-  .search-form {
-    flex-direction: column;
+  .sear {
+    flex-direction: column; /* Stack elements vertically on mobile */
   }
 
-  .form-group {
-    width: 100%;
+  .sear form {
+    flex-direction: column; /* Stack form elements vertically on mobile */
+    width: 100%; /* Full width on mobile */
   }
 
-  .search-btn {
-    width: 100%;
-    justify-content: center;
+  .sear button {
+    width: 100%; /* Full-width button on mobile */
   }
 }

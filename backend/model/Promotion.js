@@ -1,20 +1,32 @@
 const mongoose = require('mongoose');
 
 const promotionSchema = new mongoose.Schema({
-  offer: {
+  name: {
     type: String,
     required: true,
+    trim: true
   },
   details: {
     type: String,
     required: true,
+    trim: true
+  },
+  startDate: {
+    type: Date,
+    required: true
+  },
+  endDate: {
+    type: Date,
+    required: true
+  },
+  discountRule: {
+    type: String,
+    required: true
   },
   isActive: {
     type: Boolean,
-    default: true, // Default to true, meaning the offer is on initially
-  },
-});
+    default: true
+  }
+}, { timestamps: true });
 
-const Promotion = mongoose.model('Promotion', promotionSchema);
-
-module.exports = Promotion;
+module.exports = mongoose.model('Promotion', promotionSchema);

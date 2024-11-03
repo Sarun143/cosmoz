@@ -1,0 +1,26 @@
+.header {
+    grid-column: 1 / -1;
+    background-color:#d7e2d7;
+    color: rgb(5, 5, 5);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+  }
+  
+  .header .logo {
+    font-size: 1.5em;
+  }
+  
+  .header .admin-info {
+    display: flex;
+    align-items: center;
+  }
+
+ .header .admin-info img {
+width: 80px;
+height: 40px;
+border-radius: 50%;
+margin-left: 10px;
+} 
+  

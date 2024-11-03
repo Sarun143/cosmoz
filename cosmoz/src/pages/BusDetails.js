@@ -25,10 +25,22 @@ const BusDetails = () => {
   const [photo, setPhoto] = useState(null); // State to hold the uploaded photo
   const [errors, setErrors] = useState({}); // State to hold validation errors
 
+  const generateNextBusId = () => {
+    if (buses.length === 0) return 'BUS001';
+    
+    const lastBus = buses.reduce((max, bus) => {
+      const busNumber = parseInt(bus.busId.replace('BUS', ''));
+      return busNumber > max ? busNumber : max;
+    }, 0);
+    
+    return `BUS${String(lastBus + 1).padStart(3, '0')}`;
+  };
+
   useEffect(() => {
     const fetchBuses = async () => {
       const response = await axios.get('http://localhost:5000/api/buses');
       setBuses(response.data);
+      setNewBus(prev => ({ ...prev, busId: generateNextBusId() }));
     };
     fetchBuses();
   }, []);
@@ -44,143 +56,127 @@ const BusDetails = () => {
   };
 
   const validateDateRange = (name, value) => {
-    const dateFieldPrefix = name.split('StartDate')[0]; // Get the prefix (e.g., pollution, tax, permit)
-    const endDateField = `${dateFieldPrefix}EndDate`; // Construct the corresponding end date field name
+    const dateFieldPrefix = name.split('StartDate')[0];
+    const endDateField = `${dateFieldPrefix}EndDate`;
+    const startDateField = `${dateFieldPrefix}StartDate`;
+    
+    let hasError = false;
+    const newErrors = { ...errors };
 
-    if (newBus[endDateField] && new Date(value) > new Date(newBus[endDateField])) {
-      setErrors((prev) => ({ ...prev, [name]: `${dateFieldPrefix.charAt(0).toUpperCase() + dateFieldPrefix.slice(1)} start date must be before end date.` }));
+    // Check if end date is before start date
+    if (name.includes('EndDate')) {
+      if (newBus[startDateField] && new Date(value) < new Date(newBus[startDateField])) {
+        newErrors[name] = `${dateFieldPrefix.charAt(0).toUpperCase() + dateFieldPrefix.slice(1)} end date cannot be before start date`;
+        hasError = true;
+      }
     } else {
-      setErrors((prev) => ({ ...prev, [name]: '' })); // Clear the error if valid
+      if (newBus[endDateField] && new Date(value) > new Date(newBus[endDateField])) {
+        newErrors[name] = `${dateFieldPrefix.charAt(0).toUpperCase() + dateFieldPrefix.slice(1)} start date cannot be after end date`;
+        hasError = true;
+      }
     }
+
+    // Validate that dates are not in the past
+    if (new Date(value) < new Date().setHours(0, 0, 0, 0)) {
+      newErrors[name] = `${dateFieldPrefix.charAt(0).toUpperCase() + dateFieldPrefix.slice(1)} date cannot be in the past`;
+      hasError = true;
+    }
+
+    if (!hasError) {
+      delete newErrors[name];
+    }
+    
+    setErrors(newErrors);
+    return !hasError;
   };
 
   const handlePhotoChange = (e) => {
     setPhoto(e.target.files[0]);
   };
 
-// const handleAddBus = async (e) => {
-//   e.preventDefault();
+  const handleAddBus = async (e) => {
+    e.preventDefault();
 
-//   const formData = new FormData();
-//   formData.append('busId', newBus.busId);
-//   formData.append('routeId', newBus.routeId);
-//   formData.append('regNo', newBus.regNo);
-//   formData.append('seatCapacity', newBus.seatCapacity);
-//   formData.append('status', newBus.status);
-//   formData.append('pollutionStartDate', newBus.pollutionStartDate);
-//   formData.append('pollutionEndDate', newBus.pollutionEndDate);
-//   formData.append('taxStartDate', newBus.taxStartDate);
-//   formData.append('taxEndDate', newBus.taxEndDate);
-//   formData.append('permitStartDate', newBus.permitStartDate);
-//   formData.append('permitEndDate', newBus.permitEndDate);
+    // Validate all dates before submission
+    const dateFields = [
+      'pollutionStartDate', 'pollutionEndDate',
+      'taxStartDate', 'taxEndDate',
+      'permitStartDate', 'permitEndDate'
+    ];
 
-//   // Append the photo if it exists
-//   if (photo) {
-//     formData.append('photos', photo);
-//   }
+    const isValid = dateFields.every(field => validateDateRange(field, newBus[field]));
 
-//   if (isEditing) {
-//     // Update the existing bus
-//     await axios.put(`http://localhost:5000/api/buses/${currentBusId}`, formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-//     setBuses(buses.map(bus => (bus._id === currentBusId ? { ...bus, ...newBus } : bus)));
-//     setIsEditing(false);
-//     setCurrentBusId(null);
-//   } else {
-//     // Add a new bus
-//     const response = await axios.post('http://localhost:5000/api/buses', formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-//     setBuses([...buses, response.data]);
-//   }
-
-//   // Reset the form
-//   setNewBus({
-//     busId: '',
-//     routeId: '',
-//     regNo: '',
-//     seatCapacity: '',
-//     status: 'Ready for Service',
-//     pollutionStartDate: '',
-//     pollutionEndDate: '',
-//     taxStartDate: '',
-//     taxEndDate: '',
-//     permitStartDate: '',
-//     permitEndDate: '',
-//     photos: []
-//   });
-//   setPhoto(null); // Clear the uploaded photo
-//   setErrors({}); // Clear errors on form reset
-// };
-const handleAddBus = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append('busId', newBus.busId);
-  formData.append('routeId', newBus.routeId);
-  formData.append('regNo', newBus.regNo);
-  formData.append('seatCapacity', newBus.seatCapacity);
-  formData.append('status', newBus.status);
-  formData.append('pollutionStartDate', newBus.pollutionStartDate);
-  formData.append('pollutionEndDate', newBus.pollutionEndDate);
-  formData.append('taxStartDate', newBus.taxStartDate);
-  formData.append('taxEndDate', newBus.taxEndDate);
-  formData.append('permitStartDate', newBus.permitStartDate);
-  formData.append('permitEndDate', newBus.permitEndDate);
-
-  if (photo) {
-    formData.append('photos', photo);
-  }
-
-  try {
-    if (isEditing) {
-      await axios.put(`http://localhost:5000/api/buses/${currentBusId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setBuses(buses.map(bus => (bus._id === currentBusId ? { ...bus, ...newBus } : bus)));
-      setIsEditing(false);
-      setCurrentBusId(null);
-    } else {
-      const response = await axios.post('http://localhost:5000/api/buses', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
-      setBuses([...buses, response.data]);
+    if (!isValid) {
+      alert('Please correct the date errors before submitting');
+      return;
     }
 
-    // Reset form
-    setNewBus({
-      busId: '',
-      routeId: '',
-      regNo: '',
-      seatCapacity: '',
-      status: 'Ready for Service',
-      pollutionStartDate: '',
-      pollutionEndDate: '',
-      taxStartDate: '',
-      taxEndDate: '',
-      permitStartDate: '',
-      permitEndDate: '',
-      photos: []
-    });
-    setPhoto(null);
-    setErrors({});
+    const formData = new FormData();
+    formData.append('busId', newBus.busId);
+    formData.append('routeId', newBus.routeId);
+    formData.append('regNo', newBus.regNo);
+    formData.append('seatCapacity', newBus.seatCapacity);
+    formData.append('status', newBus.status);
+    formData.append('pollutionStartDate', newBus.pollutionStartDate);
+    formData.append('pollutionEndDate', newBus.pollutionEndDate);
+    formData.append('taxStartDate', newBus.taxStartDate);
+    formData.append('taxEndDate', newBus.taxEndDate);
+    formData.append('permitStartDate', newBus.permitStartDate);
+    formData.append('permitEndDate', newBus.permitEndDate);
 
-  } catch (error) {
-    console.error('Error adding/updating bus:', error);
-    alert('Failed to add/update the bus. Check the console for details.');
-  }
-};
+    if (photo) {
+      formData.append('photos', photo);
+    }
 
+    try {
+      if (isEditing) {
+        await axios.put(`http://localhost:5000/api/buses/${currentBusId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setBuses(buses.map(bus => (bus._id === currentBusId ? { ...bus, ...newBus } : bus)));
+        setIsEditing(false);
+        setCurrentBusId(null);
+      } else {
+        const response = await axios.post('http://localhost:5000/api/buses', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        
+        setBuses([...buses, response.data]);
+      }
+
+      // Reset form
+      setNewBus({
+        busId: '',
+        routeId: '',
+        regNo: '',
+        seatCapacity: '',
+        status: 'Ready for Service',
+        pollutionStartDate: '',
+        pollutionEndDate: '',
+        taxStartDate: '',
+        taxEndDate: '',
+        permitStartDate: '',
+        permitEndDate: '',
+        photos: []
+      });
+      setPhoto(null);
+      setErrors({});
+
+      // After successful submission, generate next bus ID for the form
+      setNewBus(prev => ({
+        ...prev,
+        busId: generateNextBusId()
+      }));
+
+    } catch (error) {
+      console.error('Error adding/updating bus:', error);
+      alert('Failed to add/update the bus. Check the console for details.');
+    }
+  };
 
   const handleDeleteBus = async (id) => {
     await axios.delete(`http://localhost:5000/api/buses/${id}`);
@@ -206,8 +202,8 @@ const handleAddBus = async (e) => {
           name="busId"
           placeholder="Bus ID"
           value={newBus.busId}
-          onChange={handleInputChange}
-          required
+          readOnly
+          style={{ backgroundColor: '#f0f0f0' }}
         />
         <input
           type="text"

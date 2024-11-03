@@ -43,7 +43,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding:20px;
   box-sizing: border-box;
   z-index: 1;
 }
@@ -73,6 +73,7 @@ header nav a:hover {
   padding-top: 80px; /* Ensure the content doesn't overlap with the header */
   min-height: 100vh;
   box-sizing: border-box;
+  padding: 60px;
 }
 
 .staff-management h2 {
@@ -131,6 +132,7 @@ header nav a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .staff-management .modal-content {
@@ -138,6 +140,7 @@ header nav a:hover {
   padding: 20px;
   border-radius: 5px;
   width: 400px;
+  
 }
 
 .staff-management .modal-content form {

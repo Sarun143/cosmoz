@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './SSalary.css';
+import SHeader from './SHeader';
+import SSidebar from './SSidebar';
 
-const Salary = () => {
+const StaffSalary = () => {
   const [salary, setSalary] = useState([]);
 
   useEffect(() => {
@@ -17,6 +19,8 @@ const Salary = () => {
 
   return (
     <div>
+      <SHeader/>
+      <SSidebar/>
       <h2>Salary Details</h2>
       <table>
         <thead>
@@ -42,4 +46,4 @@ const Salary = () => {
   );
 };
 
-export default Salary;
+export default StaffSalary;

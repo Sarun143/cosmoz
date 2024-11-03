@@ -6,39 +6,76 @@ import axios from 'axios';
 
 const Promotion = () => {
   const [promotions, setPromotions] = useState([]);
-  const [newOffer, setNewOffer] = useState('');
-  const [newDetails, setNewDetails] = useState('');
+  const [newPromotion, setNewPromotion] = useState({
+    name: '',
+    details: '',
+    startDate: '',
+    endDate: '',
+    discountRule: '',
+  });
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // Fetch promotions from the database
-    const fetchPromotions = async () => {
-      try {
-        const res = await axios.get('/api/promotions');
-        setPromotions(res.data);
-      } catch (err) {
-        console.error('Error fetching promotions:', err);
-      }
-    };
-
     fetchPromotions();
   }, []);
 
+  const fetchPromotions = async () => {
+    try {
+      const res = await axios.get('/api/promotions');
+      setPromotions(res.data);
+    } catch (err) {
+      console.error('Error fetching promotions:', err);
+    }
+  };
+
+  const validateDates = () => {
+    const start = new Date(newPromotion.startDate);
+    const end = new Date(newPromotion.endDate);
+    const today = new Date();
+
+    if (start < today) {
+      setError('Start date cannot be in the past');
+      return false;
+    }
+    if (end < start) {
+      setError('End date cannot be before start date');
+      return false;
+    }
+    setError('');
+    return true;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewPromotion(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleAddPromotion = async (e) => {
     e.preventDefault();
-
-    const newPromotion = {
-      offer: newOffer,
-      details: newDetails,
-      isActive: true, // Default to active when added
-    };
+    
+    if (!validateDates()) {
+      return;
+    }
 
     try {
-      await axios.post('/api/promotions/add', newPromotion);
-      setPromotions([...promotions, newPromotion]);
-      setNewOffer('');
-      setNewDetails('');
+      const res = await axios.post('/api/promotions/add', {
+        ...newPromotion,
+        isActive: true
+      });
+      
+      setPromotions([...promotions, res.data.promotion]);
+      setNewPromotion({
+        name: '',
+        details: '',
+        startDate: '',
+        endDate: '',
+        discountRule: '',
+      });
     } catch (err) {
-      console.error('Error adding promotion:', err);
+      setError(err.response?.data?.error || 'Error adding promotion');
     }
   };
 
@@ -58,22 +95,47 @@ const Promotion = () => {
     <div className="promotion">
       <Sidebar />
       <Header />
-      <h2>Current Offers</h2>
+      <h2>Current Promotions</h2>
 
-      {/* Form to add new promotion */}
+      {error && <div className="error-message">{error}</div>}
+
       <form onSubmit={handleAddPromotion} className="promotion-form">
         <input
           type="text"
-          placeholder="Offer"
-          value={newOffer}
-          onChange={(e) => setNewOffer(e.target.value)}
+          name="name"
+          placeholder="Promotion Name"
+          value={newPromotion.name}
+          onChange={handleInputChange}
           required
         />
         <input
           type="text"
-          placeholder="Details"
-          value={newDetails}
-          onChange={(e) => setNewDetails(e.target.value)}
+          name="details"
+          placeholder="Promotion Details"
+          value={newPromotion.details}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="date"
+          name="startDate"
+          value={newPromotion.startDate}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="date"
+          name="endDate"
+          value={newPromotion.endDate}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="text"
+          name="discountRule"
+          placeholder="Discount Rule (e.g., '10% OFF')"
+          value={newPromotion.discountRule}
+          onChange={handleInputChange}
           required
         />
         <button type="submit">Add Promotion</button>
@@ -82,8 +144,11 @@ const Promotion = () => {
       <table>
         <thead>
           <tr>
-            <th>Offer</th>
+            <th>Name</th>
             <th>Details</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Discount Rule</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -91,15 +156,18 @@ const Promotion = () => {
         <tbody>
           {promotions.map((promotion) => (
             <tr key={promotion._id}>
-              <td>{promotion.offer}</td>
+              <td>{promotion.name}</td>
               <td>{promotion.details}</td>
-              <td>{promotion.isActive ? 'On' : 'Off'}</td>
+              <td>{new Date(promotion.startDate).toLocaleDateString()}</td>
+              <td>{new Date(promotion.endDate).toLocaleDateString()}</td>
+              <td>{promotion.discountRule}</td>
+              <td>{promotion.isActive ? 'Active' : 'Inactive'}</td>
               <td>
                 <button
                   className={promotion.isActive ? 'on' : 'off'}
                   onClick={() => handleToggle(promotion._id)}
                 >
-                  {promotion.isActive ? 'Turn Off' : 'Turn On'}
+                  {promotion.isActive ? 'Deactivate' : 'Activate'}
                 </button>
               </td>
             </tr>

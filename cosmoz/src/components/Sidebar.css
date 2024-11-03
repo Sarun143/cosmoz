@@ -1,24 +1,41 @@
+/* Sidebar component styles */
 .sidebar {
-    background-color: #444;
-    padding: 10px;
-    height: 8 0%;
-    border-radius: 0%;
+    background-color: #333; /* Dark background color */
+    color: white;
+    width: 250px; /* Fixed width */
+    height: 100vh; /* Full viewport height */
+    position: fixed; /* Fixed position for sidebar */
+    left: 0;
+    padding: 20px; /* Increased padding for spacing */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
     margin-top: 60px;
-  }
-  
-  .sidebar ul {
+    border-radius: 0; /* No rounded corners */
+}
+
+.sidebar ul {
     list-style-type: none;
-    padding: 10;
-  }
-  
-  .sidebar ul li {
-    margin-bottom: 15px;
-    cursor: pointer;
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    flex-grow: 1;
+}
+
+.sidebar ul li {
+    padding: 15px 20px; /* Add padding to items */
+    margin-bottom: 10px; /* Space between items */
     color: white;
     font-size: 1.1em;
-  }
-  
-  .sidebar ul li:hover {
-    text-decoration: underline;
-  }
-  
+    font-weight: bold;
+    background-color: #444; /* Slightly lighter background */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Center vertically */
+}
+
+.sidebar ul li:hover {
+    background-color: #555; /* Darken background on hover */
+    text-decoration: none; /* Remove underline on hover */
+}

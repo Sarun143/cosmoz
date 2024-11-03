@@ -1,34 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import './SLeaveManagement.css';
+// import SHeader from './SHeader';
+// import SSidebar from './SSidebar';
 
-const LeaveManagement = () => {
+const StaffLeaveManagement = ({ staffId }) => {
   const [leaves, setLeaves] = useState([]);
-  const [newLeave, setNewLeave] = useState({ startDate: '', endDate: '', reason: '' });
+  const [newLeave, setNewLeave] = useState({ startDate: '', endDate: '', reason: '', staffId });
 
   useEffect(() => {
-    // Fetch leave data from backend
     fetchLeaves();
   }, []);
 
   const fetchLeaves = async () => {
-    const response = await fetch('/api/staff/leaves');
+    const response = await fetch('/api/staff/leaves/${staffId}');
     const data = await response.json();
     setLeaves(data);
   };
 
   const handleSubmitLeave = async (e) => {
     e.preventDefault();
-    // Submit leave request
-    await fetch('/api/staff/request-leave', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newLeave),
-    });
-    fetchLeaves(); // Refresh leave list
+    try {
+      const response = await fetch('http://localhost:5000/api/staff/requestleave', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newLeave),
+      });
+      
+      if (!response.ok) throw new Error('Failed to submit leave request');
+      
+      fetchLeaves(); // Refresh leave list
+    } catch (error) {
+      console.error("Error submitting leave request:", error);
+    }
   };
+  
+  
 
   return (
     <div>
+    {/* <SHeader /> */}
+    {/* <SSidebar /> */}
       <h2>Leave Management</h2>
       <form onSubmit={handleSubmitLeave}>
         <label>Start Date:</label>
@@ -55,4 +66,4 @@ const LeaveManagement = () => {
   );
 };
 
-export default LeaveManagement;
+export default StaffLeaveManagement;

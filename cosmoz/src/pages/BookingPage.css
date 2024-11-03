@@ -1,0 +1,90 @@
+.booking-page {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+}
+
+.seat-selection {
+  margin-top: 20px;
+}
+
+.bus-front {
+  text-align: center;
+  font-weight: bold;
+}
+
+.seats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.booked {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+.selected {
+  background-color: green;
+}
+
+.available {
+  background-color: lightgray;
+}
+
+.aisle {
+  width: 20px;
+}
+
+.legend {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 12px;
+}
+
+.pickup-dropoff, .passenger-details {
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+select, input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.proceed-button {
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%;
+  background-color: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

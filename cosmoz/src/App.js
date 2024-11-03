@@ -19,6 +19,13 @@ import BusDetails from "./pages/BusDetails";
 import Staffcreation from './pages/Staffcreation';
 import Forgotpassword from "./pages/Forgotpassword";
 import StaffDashboard from './components/StaffDashboard';
+import StaffProfile from "./components/SProfile";
+import StaffAttendance from "./components/SAttendance";
+import StaffSalary from "./components/SSalary";
+import StaffLeaveManagement from "./components/SLeaveManagement";
+import StaffScheduledTrips from "./components/SScheduledTrips";
+import SearchResults from "./pages/SearchResults";
+import BookingPage from './pages/BookingPage';
 
 function App() {
   return (
@@ -39,8 +46,16 @@ function App() {
         <Route path='/admin/busdetails' element={<BusDetails/>}/>
         <Route path='/Staffcreation' element={<Staffcreation/>}/>
         <Route path='/Forgotpassword' element={<Forgotpassword/>}/>
-        <Route path='/StaffDashboard' element={<StaffDashboard/>}/>
-        
+        <Route path='/StaffDashboard/*' element={<StaffDashboard/>}/>
+        <Route path='/staff/profile' element={<StaffProfile />} />
+        <Route path='/staff/attendance' element={<StaffAttendance />} />
+        <Route path='/staff/salary' element={<StaffSalary />} />
+        <Route path='/staff/scheduledtrips' element={<StaffScheduledTrips />} />
+        <Route path='/staff/leave-management' element={<StaffLeaveManagement />} />
+        <Route path='/searchresults' element={<SearchResults />} />
+        <Route path='BookingPage' element={<BookingPage />} />
+
+
 
       </Routes>
     </Router>

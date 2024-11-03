@@ -19,6 +19,8 @@ const routes = require('./router/Route'); // Assuming routes.js is in the routes
 const ForgotRoute = require('./router/Forgotpassword');
 const BusRoute = require('./router/searchbus')
 const promotionRoutes = require('./router/Promotion'); // Import promotion routes
+const leaveRoutes = require('./router/leaveRoutes');
+const bookingRoutes = require('./router/bookings');
 
 // const loginRoute = require('./router/');
 
@@ -64,43 +66,14 @@ app.use('/forgetpass',ForgotRoute);
 app.use('/',BusRoute);
 app.use('/api/promotions', promotionRoutes);
 
+app.use('/api/search',BusRoute)
+app.use('/api/staff', leaveRoutes);
+
+// Routes
+app.use('/api/bookings', bookingRoutes);
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-// Search route
-app.get('/api/search-bus', async (req, res) => {
-  try {
-    const { fromCity, toCity, date } = req.query;
-    const searchDate = new Date(date);
 
-    const routes = await Route.find({
-      departureStop: fromCity,
-      arrivalStop: toCity,
-      'schedule.date': {
-        $lte: searchDate, // Assuming schedule is an array of dates
-      },
-    });
-
-    if (routes.length > 0) {
-      res.json(routes);
-    } else {
-      res.status(404).json({ message: 'No buses found' });
-    }
-  } catch (error) {
-    console.error('Error fetching routes:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// // Add this route in your backend server.js file
-
-// app.get('/api/routes', async (req, res) => {
-// try {
-//     const routes = await Route.find(); // Fetch all routes from MongoDB
-//     res.json(routes); // Send routes back as JSON
-// } catch (err) {
-//     res.status(500).json({ error: 'Error fetching routes' });
-// }
-// });
-  

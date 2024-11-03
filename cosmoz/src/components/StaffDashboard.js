@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import SHeader from './SHeader';
 import Sidebar from './SSidebar';
 import Profile from './SProfile';
 import Attendance from './SAttendance';
@@ -12,6 +13,7 @@ function StaffDash() {
   
       <div>
         {/* Sidebar should be rendered persistently */}
+        <SHeader/>
         <Sidebar />
 
         {/* Main content area */}

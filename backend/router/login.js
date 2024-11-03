@@ -43,10 +43,10 @@ router.post('/login', async (req, res) => {
         redirectUrl = '/Dashboard';
         break;
       case 'staff':
-        redirectUrl = '/staffpage';
+        redirectUrl = '/StaffDashboard';
         break;
       default:
-        redirectUrl = '/userpage'; // Default to user page
+        redirectUrl = '/Dashboard'; // Default to user page
         break;
     }
 

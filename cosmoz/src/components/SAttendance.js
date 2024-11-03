@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './SAttendance.css';
-const Attendance = () => {
+import SHeader from './SHeader';
+import SSidebar from './SSidebar';
+const StaffAttendance = () => {
   const [attendance, setAttendance] = useState([]);
 
   useEffect(() => {
@@ -16,6 +18,8 @@ const Attendance = () => {
 
   return (
     <div>
+      <SHeader/>
+      <SSidebar/>
       <h2>Attendance</h2>
       <table>
         <thead>
@@ -37,4 +41,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default StaffAttendance;

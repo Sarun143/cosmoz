@@ -10,7 +10,7 @@ const SSidebar = ({ setSelectedSection }) => {
       <li onClick={() => navigate('/staff/profile')}>Profile</li>
       <li onClick={() => navigate('/staff/attendance')}>Attendance</li>
       <li onClick={() => navigate('/staff/leave-management')}>LeaveManagement</li>
-      <li onClick={() => navigate('/staff/salary')}>Salary</li>
+    {/* <li onClick={() => navigate('/staff/salary')}>Salary</li> */}
       <li onClick={() => navigate('/staff/scheduledtrips')}>ScheduledTrips</li>
     </ul>
     </aside>

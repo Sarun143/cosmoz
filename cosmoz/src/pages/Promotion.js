@@ -15,19 +15,22 @@ const Promotion = () => {
   });
   const [error, setError] = useState('');
 
+  // Fetch promotions from the backend on component mount
   useEffect(() => {
     fetchPromotions();
   }, []);
 
+  // Function to fetch all promotions
   const fetchPromotions = async () => {
     try {
-      const res = await axios.get('/api/promotions');
+      const res = await axios.get('http://localhost:5000/api/promotions');
       setPromotions(res.data);
     } catch (err) {
       console.error('Error fetching promotions:', err);
     }
   };
 
+  // Function to validate start and end dates
   const validateDates = () => {
     const start = new Date(newPromotion.startDate);
     const end = new Date(newPromotion.endDate);
@@ -45,27 +48,31 @@ const Promotion = () => {
     return true;
   };
 
+  // Function to handle input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewPromotion(prev => ({
+    setNewPromotion((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
+  // Function to add a new promotion
   const handleAddPromotion = async (e) => {
     e.preventDefault();
-    
+
+    // Validate dates before submitting
     if (!validateDates()) {
       return;
     }
 
     try {
-      const res = await axios.post('/api/promotions/add', {
+      const res = await axios.post('http://localhost:5000/api/promotions/add', {
         ...newPromotion,
-        isActive: true
+        isActive: true,
       });
       
+      // Add new promotion to the state and reset form
       setPromotions([...promotions, res.data.promotion]);
       setNewPromotion({
         name: '',
@@ -79,10 +86,11 @@ const Promotion = () => {
     }
   };
 
+  // Function to toggle promotion's active status
   const handleToggle = async (id) => {
     try {
-      const res = await axios.put(`/api/promotions/toggle/${id}`);
-      const updatedPromotions = promotions.map(promotion =>
+      const res = await axios.put(`http://localhost:5000/api/promotions/toggle/${id}`);
+      const updatedPromotions = promotions.map((promotion) =>
         promotion._id === id ? { ...promotion, isActive: res.data.promotion.isActive } : promotion
       );
       setPromotions(updatedPromotions);
@@ -104,6 +112,7 @@ const Promotion = () => {
           type="text"
           name="name"
           placeholder="Promotion Name"
+          id="promotion-name"
           value={newPromotion.name}
           onChange={handleInputChange}
           required
@@ -112,6 +121,7 @@ const Promotion = () => {
           type="text"
           name="details"
           placeholder="Promotion Details"
+          id ="promotion-details"
           value={newPromotion.details}
           onChange={handleInputChange}
           required
@@ -119,6 +129,7 @@ const Promotion = () => {
         <input
           type="date"
           name="startDate"
+          id ="promotion-start-date"
           value={newPromotion.startDate}
           onChange={handleInputChange}
           required
@@ -126,6 +137,7 @@ const Promotion = () => {
         <input
           type="date"
           name="endDate"
+          id="promotion-end-date"
           value={newPromotion.endDate}
           onChange={handleInputChange}
           required
@@ -133,12 +145,13 @@ const Promotion = () => {
         <input
           type="text"
           name="discountRule"
+          id="promotion-discount-rule"
           placeholder="Discount Rule (e.g., '10% OFF')"
           value={newPromotion.discountRule}
           onChange={handleInputChange}
           required
         />
-        <button type="submit">Add Promotion</button>
+        <button type="submit" id="submitt">Add Promotion</button>
       </form>
 
       <table>

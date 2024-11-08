@@ -18,9 +18,10 @@ const viewstaffRouter = require('./router/vstaff');
 const routes = require('./router/Route'); // Assuming routes.js is in the routes folder
 const ForgotRoute = require('./router/Forgotpassword');
 const BusRoute = require('./router/searchbus')
-const promotionRoutes = require('./router/Promotion'); // Import promotion routes
+const promotionRoutes = require('./router/Promotion'); // Import your routes
 const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
+// const Promotion = require('./model/Promotion');
 
 // const loginRoute = require('./router/');
 
@@ -31,7 +32,8 @@ dotenv.config();
 // Middleware
 app.use(express.json());  // To parse incoming JSON requests
 // app.use(cors());          // To allow requests from your React frontend
-app.use(cors({ origin: 'http://localhost:3000' }));
+// app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://cosmoz-b302.onrender.com' }));
 
 
 app.use((err, req, res, next) => {
@@ -64,8 +66,10 @@ app.use('/api/vstaff',viewstaffRouter);
 app.use('/api/routes', routes);
 app.use('/forgetpass',ForgotRoute);
 app.use('/',BusRoute);
-app.use('/api/promotions', promotionRoutes);
+// Use the promotion routes
 
+// Mount the promotion router with the base path
+app.use('/api/promotions', promotionRoutes);
 app.use('/api/search',BusRoute)
 app.use('/api/staff', leaveRoutes);
 

@@ -11,18 +11,28 @@ const LeaveRequests = () => {
   }, []);
 
   const fetchLeaves = async () => {
-    const response = await fetch('/api/admin/leaves');
-    const data = await response.json();
-    setLeaves(data);
+    try {
+      const response = await fetch('http://localhost:5000/api/admin/leaves');
+      if (!response.ok) throw new Error('Failed to fetch leaves');
+      const data = await response.json();
+      setLeaves(data);
+    } catch (error) {
+      console.error("Error fetching leaves:", error);
+    }
   };
 
   const handleUpdateStatus = async (leaveId, status) => {
-    await fetch(`/api/admin/leaves/${leaveId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    });
-    fetchLeaves();
+    try {
+      const response = await fetch(`http://localhost:5000/api/admin/leaves/${leaveId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) throw new Error('Failed to update status');
+      fetchLeaves();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
 
   return (
@@ -33,7 +43,7 @@ const LeaveRequests = () => {
       <ul>
         {leaves.map((leave) => (
           <li key={leave._id}>
-            {leave.staffId.name}: {leave.startDate} - {leave.endDate}: {leave.reason} 
+            {leave.staffId?.name || 'Unknown Staff'}: {new Date(leave.startDate).toLocaleDateString()} - {new Date(leave.endDate).toLocaleDateString()}: {leave.reason} 
             (Status: {leave.status})
             <button onClick={() => handleUpdateStatus(leave._id, 'Approved')}>Approve</button>
             <button onClick={() => handleUpdateStatus(leave._id, 'Rejected')}>Reject</button>

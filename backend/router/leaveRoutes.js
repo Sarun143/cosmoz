@@ -5,13 +5,36 @@ const Leave = require('../model/leaveModel');
 const router = express.Router();
 
 // Route to submit a leave request
-router.post('/requestleave', async (req, res) => {
+router.post('/staff/requestleave', async (req, res) => {
+  console.log('Received leave request:', req.body);
+  
   const { staffId, startDate, endDate, reason } = req.body;
+  
   try {
-    const newLeave = await Leave.create({ staffId, startDate, endDate, reason });
+    if (!staffId || !startDate || !endDate || !reason) {
+      return res.status(400).json({ 
+        message: 'Missing required fields',
+        received: { staffId, startDate, endDate, reason }
+      });
+    }
+
+    const newLeave = await Leave.create({
+      staffId,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      reason,
+      status: 'Pending'
+    });
+
+    console.log('Created leave:', newLeave);
     res.status(201).json(newLeave);
   } catch (error) {
-    res.status(500).json({ message: 'Error submitting leave request', error });
+    console.error('Leave creation error:', error);
+    res.status(500).json({ 
+      message: 'Error submitting leave request', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 

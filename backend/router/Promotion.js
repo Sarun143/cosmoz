@@ -2,17 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Promotion = require('../model/Promotion');
 
-// Create a new promotion
-router.post('/add', async (req, res) => {
-  const { name, details, startDate, endDate, discountRule, isActive } = req.body;
+// Assuming you're using Express
+router.post('/api/promotions/add', async (req, res) => {
   try {
-    const newPromotion = new Promotion({ name, details, startDate, endDate, discountRule, isActive });
-    await newPromotion.save();
-    res.status(201).json({ message: 'Promotion added successfully!', promotion: newPromotion });
+    const promotion = new Promotion(req.body);
+    await promotion.save();
+    res.status(201).json({ message: 'Promotion added successfully', promotion });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add promotion', details: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to add promotion' });
   }
 });
+
 
 // Fetch all promotions
 router.get('/', async (req, res) => {

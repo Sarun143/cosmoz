@@ -69,7 +69,7 @@ const SearchResults = () => {
         
         {results.length > 0 && (
           <div className="result-card">
-            <h3> Stops #### </h3>
+            <h3> Stops on this route </h3>
             <div className="stops-list">
               {[...new Set(results.flatMap(result => 
                 [

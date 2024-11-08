@@ -10,6 +10,7 @@ import Footer from '../components/Footer';
 import TopDestinations from '../components/Topdestiantions';
 import Gallery from '../components/Gallery';
 import AmenitySlider from '../components/AmenitySlider';
+import Promotioncomponet from '../components/Promotioncomponent';
 
 
 //import Slidingtext from '../components/Slidingtext';
@@ -24,6 +25,7 @@ function Home() {
       <Navbar />
       <HeroSection />
       <TopDestinations/>
+      <Promotioncomponet/>
       <Services />
       <AmenitySlider/>
 

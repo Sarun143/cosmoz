@@ -12,9 +12,14 @@ const StaffLeaveManagement = ({ staffId }) => {
   }, []);
 
   const fetchLeaves = async () => {
-    const response = await fetch('/api/staff/leaves/${staffId}');
-    const data = await response.json();
-    setLeaves(data);
+    try {
+      const response = await fetch(`http://localhost:5000/api/staff/leaves/${staffId}`);
+      if (!response.ok) throw new Error('Failed to fetch leaves');
+      const data = await response.json();
+      setLeaves(data);
+    } catch (error) {
+      console.error("Error fetching leaves:", error);
+    }
   };
 
   const handleSubmitLeave = async (e) => {

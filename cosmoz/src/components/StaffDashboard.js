@@ -4,7 +4,7 @@ import Sidebar from './SSidebar';
 import Profile from './SProfile';
 import Attendance from './SAttendance';
 import LeaveManagement from './SLeaveManagement';
-import Salary from './SSalary';
+// import Salary from './SSalary';
 import ScheduledTrips from './SScheduledTrips';
 import './StaffDashboard.css';
 
@@ -21,7 +21,7 @@ function StaffDash() {
           <Route path="/staff/profile" element={<Profile />} />
           <Route path="/staff/attendance" element={<Attendance />} />
           <Route path="/staff/leave-management" element={<LeaveManagement />} />
-          <Route path="/staff/salary" element={<Salary />} />
+        {/* <Route path="/staff/salary" element={<Salary />} /> */}
           <Route path="/staff/scheduledtrips" element={<ScheduledTrips />} />
         </Routes>
       </div>

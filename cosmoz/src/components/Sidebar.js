@@ -14,7 +14,7 @@ const Sidebar = ({ setSelectedSection }) => {
         <li onClick={() => navigate('/admin/viewfeedback')}>View Feedback</li>
         <li onClick={() => navigate('/admin/attendance')}>Attendance</li>
         <li onClick={() => navigate('/admin/leaverequests')}>Leave Requests</li>
-        <li onClick={() => navigate('/admin/promotion')}>Promotion</li>
+        <li id="promotionn" onClick={() => navigate('/admin/promotion')}>Promotion</li>
         <li onClick={() => navigate('/admin/busdetails')}>BusDetails</li>
 
 

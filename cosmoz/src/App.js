@@ -26,6 +26,7 @@ import StaffLeaveManagement from "./components/SLeaveManagement";
 import StaffScheduledTrips from "./components/SScheduledTrips";
 import SearchResults from "./pages/SearchResults";
 import BookingPage from './pages/BookingPage';
+import Promotioncomponet from "./components/Promotioncomponent";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
         <Route path='/staff/leave-management' element={<StaffLeaveManagement />} />
         <Route path='/searchresults' element={<SearchResults />} />
         <Route path='BookingPage' element={<BookingPage />} />
+        <Route path='/Promotioncomponet' element={<Promotioncomponet />} />
+
 
 
 

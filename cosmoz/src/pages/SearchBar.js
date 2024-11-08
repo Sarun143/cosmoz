@@ -106,6 +106,7 @@ const SearchBus = () => {
           <DatePicker
             selected={departureDate}
             onChange={(date) => setDepartureDate(date)}
+            id="departureDate"
             dateFormat="EEE, dd MMM"
             minDate={new Date()}
           />
@@ -121,7 +122,7 @@ const SearchBus = () => {
           />
         </div>
         
-        <button type="submit">
+        <button type="submit" id="submit">
           <FaSearch /> Search
         </button>
       </form>

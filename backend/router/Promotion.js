@@ -14,6 +14,15 @@ router.post('/api/promotions/add', async (req, res) => {
   }
 });
 
+router.get('/promotions/active', async (req, res) => {
+  try {
+    const activePromotions = await Promotion.find({ isActive: true });
+    res.status(200).json(activePromotions);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching active promotions', error });
+  }
+});
+
 
 // Fetch all promotions
 router.get('/', async (req, res) => {

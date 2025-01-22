@@ -21,7 +21,7 @@ const BusRoute = require('./router/searchbus')
 const promotionRoutes = require('./router/Promotion'); // Import your routes
 const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
-// const Promotion = require('./model/Promotion');
+
 
 // const loginRoute = require('./router/');
 
@@ -32,8 +32,8 @@ dotenv.config();
 // Middleware
 app.use(express.json());  // To parse incoming JSON requests
 // app.use(cors());          // To allow requests from your React frontend
-// app.use(cors({ origin: 'http://localhost:3000' }));
-app.use(cors({ origin: 'https://cosmoz-b302.onrender.com' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
+// app.use(cors({ origin: 'https://cosmoz-b302.onrender.com' }));
 
 
 app.use((err, req, res, next) => {

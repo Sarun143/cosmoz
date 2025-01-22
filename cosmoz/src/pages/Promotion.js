@@ -67,7 +67,7 @@ const Promotion = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/promotions/add', {
+      const res = await axios.post('http://localhost:5000//api/promotions/add', {
         ...newPromotion,
         isActive: true,
       });

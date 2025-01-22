@@ -8,7 +8,7 @@ const Promotioncomponet = () => {
   useEffect(() => {
     const fetchActivePromotions = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/promotions/active');
+        const res = await axios.get('http://localhost:5000/api/promotions/promotions/active');
         setPromotions(res.data);
       } catch (error) {
         console.error('Error fetching active promotions:', error);

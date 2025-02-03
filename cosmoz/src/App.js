@@ -27,7 +27,11 @@ import StaffScheduledTrips from "./components/SScheduledTrips";
 import SearchResults from "./pages/SearchResults";
 import BookingPage from './pages/BookingPage';
 import Promotioncomponet from "./components/Promotioncomponent";
-
+import ViewLeaveRequests from "./components/LeaveRequest";
+import PDFProcessor from "./pages/PDFProcessor";
+import SalaryManagement from "./components/SalaryManagement";
+import Booking from "./components/Booking";
+import AddBusPage from "./pages/AddBusPage";
 function App() {
   return (
     <Router>
@@ -43,7 +47,7 @@ function App() {
         <Route path='/admin/viewfeedback'element={<ViewFeedback/>}/>
         <Route path='/admin/attendance' element={<Attendance/>}/>
         <Route path='/admin/promotion' element={<Promotion/>}/>
-        <Route path='/admin/leaverequests' element={<LeaveRequests/>}/>
+        <Route path='/admin/leaverequests' element={<ViewLeaveRequests/>}/>
         <Route path='/admin/busdetails' element={<BusDetails/>}/>
         <Route path='/Staffcreation' element={<Staffcreation/>}/>
         <Route path='/Forgotpassword' element={<Forgotpassword/>}/>
@@ -56,7 +60,10 @@ function App() {
         <Route path='/searchresults' element={<SearchResults />} />
         <Route path='BookingPage' element={<BookingPage />} />
         <Route path='/Promotioncomponet' element={<Promotioncomponet />} />
-
+        <Route path='/PDFProcessor' element={<PDFProcessor />} />
+        <Route path='/admin/salaryManagement' element={<SalaryManagement />} />
+        <Route path='/admin/booking' element={<Booking />} />
+        <Route path='/add-bus' element={<AddBusPage />} />
 
 
 

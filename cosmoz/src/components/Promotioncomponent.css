@@ -1,35 +1,133 @@
-/* HomePage.css */
+/* Promotioncomponent.css */
 
-.homepage {
-  padding: 20px;
+.promotioncomponent {
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(to bottom right, #f8fafc, #e8edf2);
+  border-radius: 15px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
 }
 
+.promotion-title {
+  font-size: 2.8rem;
+  color: #1e293b;
+  margin-bottom: 25px;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  border-radius: 15px;
+  padding: 15px 0;
+  background: linear-gradient(to right, #ffffff, #f9fafb);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.marquee {
+  display: flex;
+  animation: scroll-left 25s linear infinite;
+  gap: 40px;
+  padding: 15px 0;
+}
+
+.promotion-card {
+  flex-shrink: 0;
+  width: 280px;
+  border: none;
+  border-radius: 15px;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff, #e0f4fc);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promotion-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.promotion-card h3 {
+  font-size: 1.6rem;
+  color: #0d47a1;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.promotion-card p {
+  margin: 6px 0;
+  color: #374151;
+  font-family: 'Roboto', sans-serif;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.promotion-card strong {
+  color: #0d47a1;
+}
+
+.no-promotions {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* Smooth scrolling animation */
+@keyframes scroll-left {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Enhanced Promotions Section */
 .promotions-section {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .promotions-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  justify-content: center;
+  gap: 25px;
 }
 
 .promotion-card {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  width: 250px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  flex: 1 1 280px;
+  max-width: 280px;
+  border: none;
+  padding: 20px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #e0f7fa, #f1f8f9);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .promotion-card h3 {
   margin: 0;
-  font-size: 18px;
-  color: #333;
+  font-size: 1.4rem;
+  color: #0077b6;
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .promotion-card p {
-  margin: 5px 0;
+  margin: 8px 0;
   color: #555;
+  text-align: left;
+}
+
+.promotion-card p strong {
+  color: #1d4ed8;
+}
+
+/* Add hover effect to enhance cards */
+.promotion-card:hover {
+  background: linear-gradient(135deg, #dbeafe, #e3f2fd);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }

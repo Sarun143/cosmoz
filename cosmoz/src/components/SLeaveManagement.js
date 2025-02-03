@@ -1,74 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import './SLeaveManagement.css';
-// import SHeader from './SHeader';
-// import SSidebar from './SSidebar';
+import React, { useState } from 'react';
 
-const StaffLeaveManagement = ({ staffId }) => {
-  const [leaves, setLeaves] = useState([]);
-  const [newLeave, setNewLeave] = useState({ startDate: '', endDate: '', reason: '', staffId });
+const SLeaveManagement = () => {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [reason, setReason] = useState('');
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    fetchLeaves();
-  }, []);
+  const handleSubmitLeave = async () => {
+    setMessage(''); // Reset message
 
-  const fetchLeaves = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/staff/leaves/${staffId}`);
-      if (!response.ok) throw new Error('Failed to fetch leaves');
-      const data = await response.json();
-      setLeaves(data);
-    } catch (error) {
-      console.error("Error fetching leaves:", error);
+    // Validate input before sending the request
+    if (!startDate || !endDate || !reason) {
+      setMessage('Please fill in all the fields.');
+      return;
     }
-  };
 
-  const handleSubmitLeave = async (e) => {
-    e.preventDefault();
+    if (new Date(startDate) > new Date(endDate)) {
+      setMessage('End date cannot be before start date.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/staff/requestleave', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newLeave),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate,
+          endDate,
+          reason,
+        }),
       });
-      
-      if (!response.ok) throw new Error('Failed to submit leave request');
-      
-      fetchLeaves(); // Refresh leave list
+
+      // Log the response status for debugging
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        setMessage(`Error: ${errorData.message}`);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('Success response:', data);
+      setMessage('Leave request submitted successfully!');
     } catch (error) {
-      console.error("Error submitting leave request:", error);
+      console.error('Error submitting leave request:', error);
+      setMessage('An error occurred while submitting the leave request.');
     }
   };
-  
-  
 
   return (
     <div>
-    {/* <SHeader /> */}
-    {/* <SSidebar /> */}
-      <h2>Leave Management</h2>
-      <form onSubmit={handleSubmitLeave}>
+      <h1>Staff Leave Management</h1>
+      <div>
         <label>Start Date:</label>
-        <input type="date" value={newLeave.startDate} onChange={(e) => setNewLeave({ ...newLeave, startDate: e.target.value })} />
-        
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+      </div>
+      <div>
         <label>End Date:</label>
-        <input type="date" value={newLeave.endDate} onChange={(e) => setNewLeave({ ...newLeave, endDate: e.target.value })} />
-        
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </div>
+      <div>
         <label>Reason:</label>
-        <textarea value={newLeave.reason} onChange={(e) => setNewLeave({ ...newLeave, reason: e.target.value })}></textarea>
-        
-        <button type="submit">Submit Leave Request</button>
-      </form>
-
-      <h3>Your Leave Requests</h3>
-      <ul>
-        {leaves.map((leave, index) => (
-          <li key={index}>
-            {leave.startDate} - {leave.endDate}: {leave.reason} (Status: {leave.status})
-          </li>
-        ))}
-      </ul>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Enter reason for leave"
+        />
+      </div>
+      <button onClick={handleSubmitLeave}>Submit Leave Request</button>
+      {message && <p>{message}</p>}
     </div>
   );
 };
 
-export default StaffLeaveManagement;
+export default SLeaveManagement;

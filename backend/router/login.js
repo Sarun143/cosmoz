@@ -1,7 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcrypt'); // Import bcrypt for password comparison
+const jwt = require('jsonwebtoken'); // Import jsonwebtoken for token generation
 const Login = require('../model/login'); // Import Login model
 const router = express.Router();
+
+// Secret key for signing the JWT (should be stored in environment variables)
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 // Login Route
 router.post('/login', async (req, res) => {
@@ -50,8 +54,20 @@ router.post('/login', async (req, res) => {
         break;
     }
 
-    // Send a successful response with the role and redirection URL
-    res.status(200).json({ message: 'Login successful', role, redirectUrl });
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, role }, // Payload (user ID and role)
+      JWT_SECRET, // Secret key
+      { expiresIn: '1h' } // Token expiration time
+    );
+
+    // Send a successful response with the token, role, and redirection URL
+    res.status(200).json({ 
+      message: 'Login successful', 
+      token, // Include the token
+      role, 
+      redirectUrl 
+    });
 
   } catch (error) {
     console.error('Error logging in:', error);

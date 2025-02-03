@@ -1,0 +1,42 @@
+.bus-booking-details {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .bus-list {
+    margin-top: 30px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .bus-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .bus-list th, .bus-list td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .bus-list th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .bus-list td {
+    background-color: #f9f9f9;
+  }
+  
+  .bus-list tr:nth-child(even) td {
+    background-color: #f1f1f1;
+  }
+  

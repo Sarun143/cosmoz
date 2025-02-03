@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Promotioncomponent.css';
 
-const Promotioncomponet = () => {
+const PromotionComponent = () => {
   const [promotions, setPromotions] = useState([]);
 
   useEffect(() => {
@@ -20,24 +20,28 @@ const Promotioncomponet = () => {
 
   return (
     <div className="promotioncomponent">
-      <section className="promotions-section">
+      <h1 className="promotion-title">Exciting Offers Just for You!</h1>
+      <div className="marquee-container">
         {promotions.length > 0 ? (
-          <div className="promotions-list">
+          <div className="marquee">
             {promotions.map((promotion) => (
               <div key={promotion._id} className="promotion-card">
                 <h3>{promotion.name}</h3>
                 <p>{promotion.details}</p>
-                <p>Discount: {promotion.discountRule}</p>
-                <p>Valid From: {new Date(promotion.startDate).toLocaleDateString()} to {new Date(promotion.endDate).toLocaleDateString()}</p>
+                <p><strong>Discount:</strong> {promotion.discountRule}</p>
+                <p>
+                  <strong>Valid From:</strong> {new Date(promotion.startDate).toLocaleDateString()} to{' '}
+                  {new Date(promotion.endDate).toLocaleDateString()}
+                </p>
               </div>
             ))}
           </div>
         ) : (
-          <p>No active promotions available at the moment.</p>
+          <p className="no-promotions">No active promotions available at the moment.</p>
         )}
-      </section>
+      </div>
     </div>
   );
 };
 
-export default Promotioncomponet;
+export default PromotionComponent;

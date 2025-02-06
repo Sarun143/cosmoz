@@ -15,7 +15,7 @@ const ViewLeaveRequests = () => {
     setError("");
 
     try {
-      const response = await axios.get("http://localhost:3000/api/staff/viewleaves"); // Ensure the backend is running
+      const response = await axios.get("http://localhost:5000/api/staff/viewleaves"); // Ensure the backend is running
       setLeaveRequests(response.data.leaveRequests || []); // Handle undefined response properly
     } catch (err) {
       if (err.response) {
@@ -57,26 +57,26 @@ const ViewLeaveRequests = () => {
           </tr>
         </thead>
         <tbody>
-          {leaveRequests.length > 0 ? (
-            leaveRequests.map((leave) => (
-              <tr key={leave._id}>
-                <td>{leave.staffId?.name || "N/A"}</td>
-                <td>{leave.staffId?.email || "N/A"}</td>
-                <td>{leave.staffId?.role || "N/A"}</td>
-                <td>{new Date(leave.startDate).toLocaleDateString()}</td>
-                <td>{new Date(leave.endDate).toLocaleDateString()}</td>
-                <td>{leave.reason || "No reason provided"}</td>
-                <td>{leave.status || "Pending"}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7" className="no-data">
-                No leave requests found.
-              </td>
-            </tr>
-          )}
-        </tbody>
+  {leaveRequests.length > 0 ? (
+    leaveRequests.map((leave) => (
+      <tr key={leave._id}>
+        <td>{leave.staffId?.name || "N/A"}</td>
+        <td>{leave.staffId?.email || "N/A"}</td> {/* Access email inside staffId */}
+        <td>{leave.staffId?.role || "N/A"}</td> {/* Access role inside staffId */}
+        <td>{new Date(leave.startDate).toLocaleDateString()}</td>
+        <td>{new Date(leave.endDate).toLocaleDateString()}</td>
+        <td>{leave.reason || "No reason provided"}</td>
+        <td>{leave.status || "Pending"}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="7" className="no-data">
+        No leave requests found.
+      </td>
+    </tr>
+  )}
+</tbody>
       </table>
     </div>
   );

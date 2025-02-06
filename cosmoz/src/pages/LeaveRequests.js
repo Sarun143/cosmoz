@@ -16,7 +16,7 @@ const LeaveRequests = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('http://localhost:5000/api/admin/leaves');
+      const response = await fetch('http://localhost:5000/api/staff/viewleaves');
       if (!response.ok) throw new Error('Failed to fetch leave requests.');
       const data = await response.json();
       setLeaves(data.leaveRequests || []);

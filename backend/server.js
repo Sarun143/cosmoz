@@ -28,6 +28,7 @@ const bookingRoutes = require('./router/bookings');
 // Initialize express and dotenv
 const app = express();
 dotenv.config();
+console.log('JWT_SECRET is set:', !!process.env.JWT_SECRET);
 
 // Middleware
 app.use(express.json());  // To parse incoming JSON requests

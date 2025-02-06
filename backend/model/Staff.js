@@ -46,6 +46,5 @@ const staffSchema = new mongoose.Schema({
   },
 });
 
-const Staff = mongoose.model('Staff', staffSchema);
-
-module.exports = Staff;
+// Export the model only if it hasn't been registered yet
+module.exports = mongoose.models.Staff || mongoose.model('Staff', staffSchema);

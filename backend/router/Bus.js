@@ -22,9 +22,7 @@ router.post("/add", async (req, res) => {
 
     const vehicle = new Vehicle({
       registrationNumber,
-      model,
-      taxExpiryDate: taxExpiryDate ? new Date(taxExpiryDate) : null,
-      insuranceExpiryDate: insuranceExpiryDate ? new Date(insuranceExpiryDate) : null,
+  suranceExpiryDate: insuranceExpiryDate ? new Date(insuranceExpiryDate) : null,
       pollutionExpiryDate: pollutionExpiryDate ? new Date(pollutionExpiryDate) : null,
     });
 

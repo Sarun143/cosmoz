@@ -22,6 +22,32 @@ const promotionRoutes = require('./router/Promotion'); // Import your routes
 const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
 
+//liveloc
+// let busLocation = { latitude: 28.7041, longitude: 77.1025 }; // Default location
+
+// // Endpoint to get bus location
+// app.get("/api/bus/location", (req, res) => {
+//     res.json(busLocation);
+// });
+
+// // Endpoint to update bus location (Simulate GPS update)
+// app.post("/api/bus/update-location", (req, res) => {
+//     const { latitude, longitude } = req.body;
+//     busLocation = { latitude, longitude };
+//     res.json({ message: "Bus location updated!" });
+// });
+const path1 = require('path');
+const app1 = express(); // Initialize app first
+
+// Serve static files from the React frontend build folder
+app1.use(express.static(path1.join(__dirname, 'build')));
+
+app1.get('*', (req, res) => {
+  res.sendFile(path1.join(__dirname, 'build', 'index.html'));
+});
+
+
+
 
 // const loginRoute = require('./router/');
 

@@ -13,7 +13,7 @@ import RouteManagement from "./pages/Routemanagement";
 import StaffManagement from "./pages/StaffManagement";
 import ViewFeedback from "./pages/ViewFeedback";
 import Attendance from "./pages/Attendance";
-import LeaveRequests from "./pages/LeaveRequests";
+// import LeaveRequests from "./pages/LeaveRequests";
 import Promotion from "./pages/Promotion";
 import BusDetails from "./pages/BusDetails";
 import Staffcreation from './pages/Staffcreation';
@@ -32,6 +32,9 @@ import PDFProcessor from "./pages/PDFProcessor";
 import SalaryManagement from "./components/SalaryManagement";
 import Booking from "./components/Booking";
 import AddBusPage from "./pages/AddBusPage";
+//import Slocation from "./components/Slocation";
+import LiveTracking from "./components/LiveTracking";
+//import BusLocation from "./components/BusLocation";
 function App() {
   return (
     <Router>
@@ -64,7 +67,10 @@ function App() {
         <Route path='/admin/salaryManagement' element={<SalaryManagement />} />
         <Route path='/admin/booking' element={<Booking />} />
         <Route path='/add-bus' element={<AddBusPage />} />
-
+        <Route path='/LiveTracking' element={<LiveTracking />} />
+        {/* //<Route path='Slocation' element={<Slocation />} />
+        //<Route path='LiveTracking' element={<LiveTracking />} />
+        <Route path='BusLocation' element={<BusLocation />} /> */}
 
 
       </Routes>

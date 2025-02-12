@@ -1,6 +1,8 @@
 import React from 'react';
 import './Navbar.css';
 import Loginbtn from './loginbtn';
+import { Link } from "react-router-dom";
+
 
 
 // import logo from '../assests/images/cosmozlog.png.png'; 
@@ -18,6 +20,8 @@ const Navbar = () => {
         <li><a href="#services">Services</a></li>
         <li><a href="#testimonials">Testimonials</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><Link to="/LiveTracking">Live Tracking</Link></li>
+
         <Loginbtn />
       </ul>
     </nav>

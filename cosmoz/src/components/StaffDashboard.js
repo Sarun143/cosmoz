@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import SHeader from './SHeader';
 import Sidebar from './SSidebar';

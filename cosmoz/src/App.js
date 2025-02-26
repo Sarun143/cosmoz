@@ -30,7 +30,7 @@ import Promotioncomponet from "./components/Promotioncomponent";
 import ViewLeaveRequests from "./components/LeaveRequest";
 import PDFProcessor from "./pages/PDFProcessor";
 import SalaryManagement from "./components/SalaryManagement";
-import Booking from "./components/Booking";
+import BusBooking from "./components/Booking";
 import AddBusPage from "./pages/AddBusPage";
 //import Slocation from "./components/Slocation";
 import LiveTracking from "./components/LiveTracking";
@@ -65,7 +65,7 @@ function App() {
         <Route path='/Promotioncomponet' element={<Promotioncomponet />} />
         <Route path='/PDFProcessor' element={<PDFProcessor />} />
         <Route path='/admin/salaryManagement' element={<SalaryManagement />} />
-        <Route path='/admin/booking' element={<Booking />} />
+        <Route path='/admin/busbooking' element={<BusBooking />} />
         <Route path='/add-bus' element={<AddBusPage />} />
         <Route path='/LiveTracking' element={<LiveTracking />} />
         {/* //<Route path='Slocation' element={<Slocation />} />

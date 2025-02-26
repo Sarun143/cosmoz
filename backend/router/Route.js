@@ -1,14 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const Route = require('../model/Route'); // Assuming Route model is in the models folder
+const Route = require('../model/Route'); // Make sure this path is correct
 
 // Get all routes
 router.get('/', async (req, res) => {
   try {
-    const routes = await Route.find();
+    console.log('Fetching all routes...');
+    // Add this to verify the model
+    console.log('Collection name:', Route.collection.name);
+    
+    const routes = await Route.find().lean();
+    console.log(`Found ${routes.length} routes:`, routes);
     res.json(routes);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching routes' });
+    console.error('Error in GET /api/routes:', error);
+    res.status(500).json({ 
+      message: 'Error fetching routes',
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
@@ -25,44 +35,61 @@ router.get('/:id', async (req, res) => {
 
 // Create a new route
 // Create a new route with enhanced validation
-router.post('/', async (req, res) => {
-  const { routeId, name, departureStop, departure, arrivalStop, arrival, stops, frequency, selectedDays, selectedDates, distance } = req.body;
-
+router.post('/new-route', async (req, res) => {
   try {
-    const totalStopDistance = stops.reduce((acc, stop) => acc + (stop.distance || 0), 0);
+    const { 
+      name, 
+      departureStop, 
+      departure, 
+      arrivalStop, 
+      arrival, 
+      stops, 
+      frequency, 
+      selectedDays, 
+      selectedDates, 
+      totaldistance 
+    } = req.body;
 
-    if (parseFloat(distance) < totalStopDistance) {
-      return res.status(400).json({ message: 'Total route distance must be at least equal to the sum of all stop distances.' });
+    // Validate totaldistance
+    const distance = parseFloat(totaldistance);
+    if (isNaN(distance) || distance <= 0) {
+      return res.status(400).json({ 
+        message: 'Invalid total distance value. Must be a number greater than 0.' 
+      });
     }
 
-    const existingRoute = await Route.findOne({ routeId });
-    if (existingRoute) {
-      return res.status(400).json({ message: 'Route ID already exists. Please use a unique ID.' });
-    }
+    // Generate automated routeId
+    const routeCount = await Route.countDocuments();
+    const routeId = `ROUTE${(routeCount + 1).toString().padStart(4, '0')}`; // Creates ROUTE0001, ROUTE0002, etc.
 
     const newRoute = new Route({
-      routeId,
+      routeId, // Use the generated routeId
       name,
       departureStop,
       departure,
       arrivalStop,
       arrival,
       stops: stops.map(stop => ({
-        stop: stop.stop,
-        arrival: stop.arrival,
+        ...stop,
         distance: parseFloat(stop.distance) || 0
       })),
       frequency,
       selectedDays,
       selectedDates,
-      totaldistance: parseFloat(distance)
+      totaldistance: distance,
+      busAssigned: req.body.busAssigned,
+      staffs: req.body.staffs,
+      status: req.body.status
     });
 
     const savedRoute = await newRoute.save();
     res.status(201).json(savedRoute);
   } catch (error) {
     console.error('Error saving route:', error);
-    res.status(500).json({ message: 'Internal server error. Please try again later.' });
+    res.status(500).json({ 
+      message: 'Error creating route', 
+      error: error.message 
+    });
   }
 });
 

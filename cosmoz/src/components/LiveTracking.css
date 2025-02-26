@@ -1,0 +1,9 @@
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Add these styles to ensure the map tiles load properly */
+.leaflet-tile {
+    visibility: inherit !important;
+} 

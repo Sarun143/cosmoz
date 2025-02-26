@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@radix-ui/react-select": "^2.1.6",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.9",
+    "babel-loader": "^8.0.6",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "date-fns": "^2.28.0",
@@ -15,6 +17,7 @@
     "express": "^4.21.2",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.475.0",
     "mongoose": "^8.9.5",
     "multer": "^1.4.5-lts.1",
     "pdfjs-dist": "^4.10.38",
@@ -34,8 +37,7 @@
     "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.6.13",
     "tesseract.js": "^6.0.0",
-    "web-vitals": "^2.1.4",
-    "webpack": "^5.97.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

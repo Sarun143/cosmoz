@@ -11,7 +11,7 @@ const LeaveRequests = () => {
   useEffect(() => {
     fetchLeaves();
   }, []);
-
+ 
   const fetchLeaves = async () => {
     setLoading(true);
     setError('');
@@ -59,7 +59,8 @@ const LeaveRequests = () => {
           <table>
             <thead>
               <tr>
-                <th>Staff Name</th>
+                <th>Email</th>
+                <th>Role</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Reason</th>
@@ -70,30 +71,25 @@ const LeaveRequests = () => {
             <tbody>
               {leaves.map((leave) => (
                 <tr key={leave._id}>
-                  <td>{leave.staffId?.name || 'Unknown'}</td>
-                  <td>{new Date(leave.startDate).toLocaleDateString()}</td>
-                  <td>{new Date(leave.endDate).toLocaleDateString()}</td>
+                  <td>{leave.email}</td>
+                  <td>{leave.role}</td>
+                  <td>{leave.startDate}</td>
+                  <td>{leave.endDate}</td>
                   <td>{leave.reason}</td>
                   <td>{leave.status}</td>
                   <td>
-                    {leave.status === 'Pending' ? (
-                      <>
-                        <button
-                          className="approve-btn"
-                          onClick={() => handleUpdateStatus(leave._id, 'Approved')}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleUpdateStatus(leave._id, 'Rejected')}
-                        >
-                          Reject
-                        </button>
-                      </>
-                    ) : (
-                      <span>{leave.status}</span>
-                    )}
+                    <button
+                      onClick={() => handleUpdateStatus(leave._id, 'Approved')}
+                      style={{ backgroundColor: '#4CAF50', color: 'white', marginRight: '5px' }}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(leave._id, 'Rejected')}
+                      style={{ backgroundColor: '#f44336', color: 'white' }}
+                    >
+                      Reject
+                    </button>
                   </td>
                 </tr>
               ))}

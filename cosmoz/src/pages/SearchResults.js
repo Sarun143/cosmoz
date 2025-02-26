@@ -63,7 +63,7 @@ const SearchResults = () => {
             <p><strong>Arrival:</strong> {result.arrivalStop} at {result.arrival}</p>
             <p><strong>Total Distance:</strong> {result.totaldistance} km</p>
             <p><strong>Frequency:</strong> {result.frequency}</p>
-            <button onClick={() => navigate('/BookingPage')} className="book-button">Book</button>
+            <button onClick={() => navigate('/busbooking')} className="book-button">Book</button>
           </div>
         ))}
         

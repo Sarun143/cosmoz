@@ -1,16 +1,18 @@
-// AddBusPage.js
 import React, { useState } from "react";
 import Tesseract from "tesseract.js";
 import axios from "axios";
-import "./AddBusPage.css"; // Optional styling file
+import "./AddBusPage.css";
 
 const AddBusPage = () => {
   const [formData, setFormData] = useState({
     registrationNumber: "",
-    model: "",
+    type: "AC",
+    Lower: "",
+    Upper: "",
     taxExpiryDate: "",
     insuranceExpiryDate: "",
     pollutionExpiryDate: "",
+    status: "Active",
   });
 
   const handleInputChange = (e) => {
@@ -31,7 +33,6 @@ const AddBusPage = () => {
       const expiryDateMatch = data.text.match(/(\d{2}[\/-]\d{2}[\/-]\d{4})/);
       if (expiryDateMatch) {
         let expiryDate = expiryDateMatch[0];
-
         let [day, month, year] = expiryDate.split(/[\/-]/);
         expiryDate = `${year}-${month}-${day}`;
 
@@ -56,15 +57,19 @@ const AddBusPage = () => {
     try {
       const formattedData = {
         ...formData,
+        Lower: parseInt(formData.Lower) || 0,
+        Upper: parseInt(formData.Upper) || 0,
+        totalSeats: (parseInt(formData.Lower) || 0) + (parseInt(formData.Upper) || 0),
         taxExpiryDate: formData.taxExpiryDate ? new Date(formData.taxExpiryDate) : null,
         insuranceExpiryDate: formData.insuranceExpiryDate ? new Date(formData.insuranceExpiryDate) : null,
         pollutionExpiryDate: formData.pollutionExpiryDate ? new Date(formData.pollutionExpiryDate) : null,
+        status: formData.status,
       };
 
-      await axios.post("http://localhost:5000/api/buses/add", formattedData);
-      alert("Vehicle added successfully!");
+      await axios.post("http://localhost:5000/api/buses/bus/add", formattedData);
+      alert("Bus added successfully!");
     } catch (error) {
-      console.error("Error adding vehicle:", error);
+      console.error("Error adding bus:", error);
     }
   };
 
@@ -77,8 +82,21 @@ const AddBusPage = () => {
           <input type="text" name="registrationNumber" value={formData.registrationNumber} onChange={handleInputChange} required />
         </div>
         <div>
-          <label>Model:</label>
-          <input type="text" name="model" value={formData.model} onChange={handleInputChange} required />
+          <label>Bus Type:</label>
+          <select name="type" value={formData.type} onChange={handleInputChange} required>
+            <option value="AC">AC</option>
+            <option value="Non-AC">Non-AC</option>
+            <option value="Sleeper">Sleeper</option>
+            <option value="Seater">Seater</option>
+          </select>
+        </div>
+        <div>
+          <label>Lower Deck Seats:</label>
+          <input type="number" name="Lower" value={formData.Lower} onChange={handleInputChange} required />
+        </div>
+        <div>
+          <label>Upper Deck Seats:</label>
+          <input type="number" name="Upper" value={formData.Upper} onChange={handleInputChange} required />
         </div>
         <div>
           <label>Road Tax Document:</label>
@@ -104,7 +122,15 @@ const AddBusPage = () => {
           <label>Pollution Expiry Date:</label>
           <input type="text" name="pollutionExpiryDate" value={formData.pollutionExpiryDate} readOnly />
         </div>
-        <button type="submit">Add Vehicle</button>
+        <div>
+          <label>Status:</label>
+          <select name="status" value={formData.status} onChange={handleInputChange} required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Deleted">Deleted</option>
+          </select>
+        </div>
+        <button type="submit">Add Bus</button>
       </form>
     </div>
   );

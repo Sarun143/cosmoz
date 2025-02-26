@@ -7,455 +7,727 @@ import Sidebar from '../components/Sidebar';
 const RouteManagement = () => {
   const [routes, setRoutes] = useState([]);
   const [newRoute, setNewRoute] = useState({
-    routeId: '',
-    name: '',
-    departureStop: '',
-    departure: '',
-    arrivalStop: '',
-    arrival: '',
-    distance: '',
-    stops: [],
-    frequency: 'all_day',
-    selectedDays: [],
-    selectedDates: [],
+    routeName: '',
+    startLocation: {
+      name: '',
+      coordinates: []
+    },
+    endLocation: {
+      name: '',
+      coordinates: []
+    },
+    startTime: '',
+    endTime: '',
+    serviceDays: [],
+    distance: 0,
+    estimatedTime: '',
+    busAssigned: '',
+    status: 'Active',
+    staffs: []
   });
-  const [stopInputs, setStopInputs] = useState([]);
+
+  const [stops, setStops] = useState([]);
+  const [newStop, setNewStop] = useState({
+    name: '',
+    coordinates: [],
+    arrivalTime: '',
+    busTripRoute: '',
+    fare: 0,
+    isBoardingPoint: false,
+    isTopStation: false
+  });
+
   const [errors, setErrors] = useState({});
   const [editingRoute, setEditingRoute] = useState(null);
 
+  const [buses, setBuses] = useState([]);
+  const [staffList, setStaffList] = useState([]);
+
   useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/routes');
-        setRoutes(response.data);
-        const nextRouteId = response.data.length + 1;
-        setNewRoute((prevRoute) => ({ ...prevRoute, routeId: nextRouteId }));
-      } catch (error) {
-        console.error('Error fetching routes:', error);
-      }
-    };
     fetchRoutes();
+    fetchBuses();
+    fetchStaff();
   }, []);
 
-  const handleEditRoute = (route) => {
-    setEditingRoute(route);
-    setNewRoute({
-      routeId: route.routeId,
-      name: route.name,
-      departureStop: route.departureStop,
-      departure: route.departure,
-      arrivalStop: route.arrivalStop,
-      arrival: route.arrival,
-      distance: route.totaldistance,
-      stops: route.stops,
-      frequency: route.frequency,
-      selectedDays: route.selectedDays || [],
-      selectedDates: route.selectedDates || [],
-    });
-    setStopInputs(route.stops.map(stop => ({
-      stop: stop.stop,
-      arrival: stop.arrival,
-      distance: stop.distance,
-    })));
-  };
-  
+  const fetchRoutes = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/routes');
+      console.log('Routes response:', response.data);
+      
+      if (Array.isArray(response.data)) {
+        const transformedRoutes = response.data.map(route => ({
+          _id: route._id,
+          routeName: route.name,
+          startLocation: {
+            name: route.departureStop,
+            coordinates: []
+          },
+          endLocation: {
+            name: route.arrivalStop,
+            coordinates: []
+          },
+          startTime: route.departure,
+          endTime: route.arrival,
+          serviceDays: route.selectedDays || [],
+          distance: route.totaldistance,
+          status: route.status || 'Active',
+          busAssigned: route.busAssigned,
+          staffs: route.staffs || [],
+          stops: route.stops || []
+        }));
 
-  const validateField = (name, value) => {
-    let error = '';
-    if (name === 'name' && !value) error = 'Route name is required';
-    if (name === 'departureStop' && !value) error = 'Departure stop is required';
-    if (name === 'departure' && !value) error = 'Departure time is required';
-    if (name === 'arrival' && !value) error = 'Arrival time is required';
-    if (name === 'distance' && (!value || isNaN(value) || value <= 0)) error = 'Valid distance is required';
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
-  };
-
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = {};
-
-    ['name', 'departureStop', 'departure', 'arrival', 'distance'].forEach((field) => {
-      if (!newRoute[field]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
-        valid = false;
-      }
-    });
-
-    setErrors(newErrors);
-    return valid;
-  };
-
-  const formatStops = (stops) => {
-    return stops.map((stop, index) => {
-      if (index === 0) {
-        return `From Departure to ${stop.stop}: ${stop.distance} km, Arrival: ${stop.arrival}`;
-
+        setRoutes(transformedRoutes);
       } else {
-        return `From ${stops[index - 1].stop} to ${stop.stop}: ${stop.distance} km,Arrival : ${stop.arrival}`;
+        console.error('Invalid response format:', response.data);
+        alert('Failed to fetch routes: Invalid data format');
       }
-    });
+    } catch (error) {
+      console.error('Error fetching routes:', error);
+      alert(`Failed to fetch routes: ${error.response?.data?.message || error.message}`);
+    }
   };
-  
+
+  const fetchBuses = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/buses/all/buses');
+      // Filter only Active buses
+      const activeBuses = response.data.filter(bus => bus.status === 'Active');
+      setBuses(activeBuses);
+    } catch (error) {
+      console.error('Error fetching buses:', error);
+    }
+  };
+
+  const fetchStaff = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/vstaff');
+      // Filter staff by role if needed
+      const staffData = response.data;
+      setStaffList(staffData);
+    } catch (error) {
+      console.error('Error fetching staff:', error);
+    }
+  };
+
+  const validateRoute = () => {
+    const errors = {};
+    if (!newRoute.routeName) errors.routeName = 'Route name is required';
+    if (!newRoute.startLocation.name) errors.startLocation = 'Start location is required';
+    if (!newRoute.endLocation.name) errors.endLocation = 'End location is required';
+    if (!newRoute.startTime) errors.startTime = 'Start time is required';
+    if (!newRoute.endTime) errors.endTime = 'End time is required';
+    if (!newRoute.distance) errors.distance = 'Distance is required';
+    if (newRoute.serviceDays.length === 0) errors.serviceDays = 'Select at least one service day';
+    
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewRoute((prevRoute) => ({
-      ...prevRoute,
-      [name]: value,
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setNewRoute(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setNewRoute(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
+  const handleServiceDayChange = (day) => {
+    setNewRoute(prev => ({
+      ...prev,
+      serviceDays: prev.serviceDays.includes(day)
+        ? prev.serviceDays.filter(d => d !== day)
+        : [...prev.serviceDays, day]
     }));
-    validateField(name, value);
   };
 
-  const handleAddStop = () => {
-    setStopInputs((prev) => [...prev, { stop: '', arrival: '', distance: '' }]);
-  };
-
-  const handleStopInputChange = (index, field, value) => {
-    setStopInputs((prev) => {
-      const updatedStops = [...prev];
-      updatedStops[index][field] = value;
-      return updatedStops;
-    });
-  };
-
-  const calculateTotalDistance = () => {
-    return stopInputs.reduce((total, stop) => total + (parseFloat(stop.distance) || 0), 0);
-  };
-
-  const handleCreateRoute = async () => {
-    if (!validateForm()) return;
-
-    const totalStopDistance = calculateTotalDistance();
-    if (parseFloat(newRoute.distance) < totalStopDistance) {
-      setErrors({ distance: 'Total route distance should be at least the sum of all stops' });
-      return;
-    }
-
-    const stops = stopInputs.map((input) => ({
-      stop: input.stop,
-      arrival: input.arrival,
-      distance: parseFloat(input.distance) || 0,
+  const handleStopChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewStop(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/routes', {
-        ...newRoute,
-        stops,
-      });
-      setRoutes([...routes, response.data]);
-      resetForm();
-    } catch (error) {
-      console.error('Error creating route:', error);
-    }
   };
 
-  
-  const handleUpdateRoute = async () => {
-    if (!validateForm()) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (editingRoute) {
+      await handleUpdate(e);
+    } else {
+      if (!validateRoute()) return;
 
-    const totalStopDistance = calculateTotalDistance();
-    if (parseFloat(newRoute.distance) < totalStopDistance) {
-      setErrors({ distance: 'Total route distance should be at least the sum of all stops' });
-    }
+      try {
+        console.log('Preparing to submit route...');
+        
+        const formattedStops = stops.map(stop => ({
+          stop: stop.name,
+          arrival: stop.arrivalTime,
+          distance: parseFloat(stop.fare) || 0
+        }));
 
-    const stops = stopInputs.map((input) => ({
-      stop: input.stop,
-      arrival: input.arrival,
-      distance: parseFloat(input.distance) || 0,
-    }));
+        const totalDistance = parseFloat(newRoute.distance);
+        if (isNaN(totalDistance) || totalDistance <= 0) {
+          alert('Please enter a valid distance greater than 0');
+          return;
+        }
 
-    const formatStopsWithArrival = (stops) => {
-      return stops.map((stop) => `${stop.stopName} (${stop.arrivalTime})`);
-    };
+        // Create a unique routeId using timestamp to avoid conflicts
+        const timestamp = new Date().getTime();
+        const routeId = `${newRoute.routeName.replace(/\s+/g, '-').toLowerCase()}-${timestamp}`;
 
-    const formatStopArrivalTimes = (stops) => stops.map(stop => stop.arrivalTime);
+        const routeData = {
+          routeId: routeId,
+          name: newRoute.routeName,
+          departureStop: newRoute.startLocation.name,
+          departure: newRoute.startTime,
+          arrivalStop: newRoute.endLocation.name,
+          arrival: newRoute.endTime,
+          stops: formattedStops,
+          frequency: "daily",
+          selectedDays: newRoute.serviceDays,
+          selectedDates: [],
+          totaldistance: totalDistance,
+          busAssigned: newRoute.busAssigned || null,
+          staffs: newRoute.staffs || [],
+          status: newRoute.status || 'Active'
+        };
 
-    try {
-      const response = await axios.put(`http://localhost:5000/api/routes/${editingRoute._id}`, {
-        ...newRoute,
-        stops,
-      });
-      setRoutes(routes.map((route) => (route._id === editingRoute._id ? response.data : route)));
-      resetForm();
-    } catch (error) {
-      console.error('Error updating route:', error);
-    }
-  };
+        console.log('Submitting route data:', routeData);
 
-  const handleDelete = async (routeId) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/routes/${routeId}`);
-      setRoutes(routes.filter((route) => route._id !== routeId));
-    } catch (error) {
-      console.error('Error deleting route:', error);
+        const response = await axios.post('http://localhost:5000/api/routes/new-route', routeData);
+        console.log('Route creation response:', response.data);
+
+        if (response.data) {
+          // Transform the response data to match the table structure
+          const newRouteForTable = {
+            _id: response.data._id,
+            routeName: response.data.name,
+            startLocation: { name: response.data.departureStop },
+            endLocation: { name: response.data.arrivalStop },
+            startTime: response.data.departure,
+            endTime: response.data.arrival,
+            distance: response.data.totaldistance,
+            status: response.data.status,
+            serviceDays: response.data.selectedDays,
+            busAssigned: response.data.busAssigned,
+            staffs: response.data.staffs,
+            stops: response.data.stops
+          };
+
+          setRoutes(prevRoutes => [...prevRoutes, newRouteForTable]);
+          alert('Route created successfully!');
+          resetForm();
+        }
+
+      } catch (error) {
+        console.error('Error creating route:', error.response?.data || error.message);
+        alert(`Failed to create route: ${error.response?.data?.message || error.message}`);
+      }
     }
   };
 
   const resetForm = () => {
     setNewRoute({
-      routeId: routes.length + 2,
-      name: '',
-      departureStop: '',
-      departure: '',
-      arrivalStop: '',
-      arrival: '',
-      distance: '',
-      stops: [],
-      frequency: 'all_day',
-      selectedDays: [],
-      selectedDates: [],
+      routeName: '',
+      startLocation: { name: '', coordinates: [] },
+      endLocation: { name: '', coordinates: [] },
+      startTime: '',
+      endTime: '',
+      serviceDays: [],
+      distance: 0,
+      estimatedTime: '',
+      busAssigned: '',
+      status: 'Active',
+      staffs: []
     });
-    setStopInputs([]);
+    setStops([]);
+    setErrors({});
     setEditingRoute(null);
   };
 
-  // Add this new function to handle frequency change
-  const handleFrequencyChange = (e) => {
-    const frequency = e.target.value;
-    setNewRoute((prevRoute) => ({
-      ...prevRoute,
-      frequency,
-      selectedDays: frequency === 'particular_days' ? prevRoute.selectedDays : [],
-      selectedDates: frequency === 'particular_dates' ? prevRoute.selectedDates : [],
-    }));
-  };
+  const handleDelete = async (routeId) => {
+    if (!window.confirm('Are you sure you want to delete this route?')) {
+      return;
+    }
 
-  // Add these new functions to handle day and date selection
-  const handleDaySelection = (day) => {
-    setNewRoute((prevRoute) => ({
-      ...prevRoute,
-      selectedDays: prevRoute.selectedDays.includes(day)
-        ? prevRoute.selectedDays.filter((d) => d !== day)
-        : [...prevRoute.selectedDays, day],
-    }));
-  };
-
-  const handleDateSelection = (date) => {
-    setNewRoute((prevRoute) => ({
-      ...prevRoute,
-      selectedDates: prevRoute.selectedDates.includes(date)
-        ? prevRoute.selectedDates.filter((d) => d !== date)
-        : [...prevRoute.selectedDates, date],
-    }));
-  };
-
-  // Add this helper function to format the frequency information
-  const formatFrequency = (route) => {
-    switch (route.frequency) {
-      case 'all_day':
-        return 'All Day';
-      case 'particular_days':
-        return `On ${route.selectedDays.join(', ')}`;
-      case 'particular_dates':
-        return `On ${route.selectedDates.map(date => new Date(date).toLocaleDateString()).join(', ')}`;
-      default:
-        return 'N/A';
+    try {
+      await axios.delete(`http://localhost:5000/api/routes/${routeId}`);
+      setRoutes(prevRoutes => prevRoutes.filter(route => route._id !== routeId));
+      alert('Route deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting route:', error);
+      alert(`Failed to delete route: ${error.response?.data?.message || error.message}`);
     }
   };
 
-  // Add this function to get all unique stops from all routes
-  const getAllUniqueStops = () => {
-    const stopsSet = new Set();
-    
-    routes.forEach(route => {
-      // Add departure and arrival stops
-      stopsSet.add(route.departureStop);
-      stopsSet.add(route.arrivalStop);
-      
-      // Add intermediate stops
-      route.stops.forEach(stop => {
-        stopsSet.add(stop.stop);
-      });
+  const handleEdit = (route) => {
+    setEditingRoute(route);
+    // Populate the form with the route data
+    setNewRoute({
+      routeName: route.routeName,
+      startLocation: route.startLocation,
+      endLocation: route.endLocation,
+      startTime: route.startTime,
+      endTime: route.endTime,
+      serviceDays: route.serviceDays || [],
+      distance: route.distance,
+      estimatedTime: route.estimatedTime || '',
+      busAssigned: route.busAssigned || '',
+      status: route.status || 'Active',
+      staffs: route.staffs || []
     });
-
-    return Array.from(stopsSet);
+    // Populate stops
+    setStops(route.stops.map(stop => ({
+      name: stop.stop,
+      coordinates: [],
+      arrivalTime: stop.arrival,
+      fare: stop.distance,
+      isBoardingPoint: false,
+      isTopStation: false
+    })));
   };
 
-  // Export stops data through localStorage or context
-  useEffect(() => {
-    const allStops = getAllUniqueStops();
-    localStorage.setItem('allStops', JSON.stringify(allStops));
-  }, [routes]);
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!validateRoute()) return;
+
+    try {
+      const formattedStops = stops.map(stop => ({
+        stop: stop.name,
+        arrival: stop.arrivalTime,
+        distance: parseFloat(stop.fare) || 0
+      }));
+
+      const routeData = {
+        name: newRoute.routeName,
+        departureStop: newRoute.startLocation.name,
+        departure: newRoute.startTime,
+        arrivalStop: newRoute.endLocation.name,
+        arrival: newRoute.endTime,
+        stops: formattedStops,
+        frequency: "daily",
+        selectedDays: newRoute.serviceDays,
+        selectedDates: [],
+        distance: parseFloat(newRoute.distance),
+        busAssigned: newRoute.busAssigned || null,
+        staffs: newRoute.staffs || [],
+        status: newRoute.status
+      };
+
+      const response = await axios.put(`http://localhost:5000/api/routes/${editingRoute._id}`, routeData);
+
+      if (response.data) {
+        // Update the routes list with the edited route
+        setRoutes(prevRoutes => prevRoutes.map(route => 
+          route._id === editingRoute._id ? {
+            ...route,
+            routeName: response.data.name,
+            startLocation: { name: response.data.departureStop },
+            endLocation: { name: response.data.arrivalStop },
+            startTime: response.data.departure,
+            endTime: response.data.arrival,
+            distance: response.data.totaldistance,
+            status: response.data.status,
+            serviceDays: response.data.selectedDays,
+            busAssigned: response.data.busAssigned,
+            staffs: response.data.staffs,
+            stops: response.data.stops
+          } : route
+        ));
+
+        alert('Route updated successfully!');
+        resetForm();
+      }
+    } catch (error) {
+      console.error('Error updating route:', error);
+      alert(`Failed to update route: ${error.response?.data?.message || error.message}`);
+    }
+  };
+
+  // Add this helper function to calculate total stop distance
+  const calculateTotalStopDistance = () => {
+    return stops.reduce((acc, stop) => acc + (Number(stop.fare) || 0), 0);
+  };
 
   return (
     <div className="route-management-container">
       <Header />
       <Sidebar />
       <div className="route-management">
-        <h2>Manage Routes</h2>
-        <div className="create-route">
-          <h3>{editingRoute ? 'Edit Route' : 'Create New Route'}</h3>
-          <input
-            type="text"
-            name="routeId"
-            value={newRoute.routeId}
-            placeholder="Route ID"
-            readOnly
-          />
-          <input
-            type="text"
-            name="name"
-            value={newRoute.name}
-            placeholder="Route Name"
-            onChange={handleInputChange}
-          />
-          {errors.name && <p className="error">{errors.name}</p>}
-          <input
-            type="text"
-            name="departureStop"
-            value={newRoute.departureStop}
-            placeholder="Departure Stop"
-            onChange={handleInputChange}
-          />
-          {errors.departureStop && <p className="error">{errors.departureStop}</p>}
-          <input
-            type="time"
-            name="departure"
-            value={newRoute.departure}
-            onChange={handleInputChange}
-          />
-          {errors.departure && <p className="error">{errors.departure}</p>}
-          <input
-            type="text"
-            name="arrivalStop"
-            value={newRoute.arrivalStop}
-            placeholder="Arrival Stop"
-            onChange={handleInputChange}
-          />
-          <input
-            type="time"
-            name="arrival"
-            value={newRoute.arrival}
-            onChange={handleInputChange}
-          />
-          {errors.arrival && <p className="error">{errors.arrival}</p>}
-          <input
-            type="number"
-            name="distance"
-            value={newRoute.distance}
-            placeholder="Total Distance (km)"
-            onChange={handleInputChange}
-            min={0}
-          />
-          {errors.distance && <p className="error">{errors.distance}</p>}
+        <h2>Route Management</h2>
+        
+        <form onSubmit={handleSubmit} className="route-form">
+          <div className="form-group">
+            <label>Route Name</label>
+            <input
+              type="text"
+              name="routeName"
+              value={newRoute.routeName}
+              onChange={handleInputChange}
+              placeholder="Enter route name"
+            />
+            {errors.routeName && <span className="error">{errors.routeName}</span>}
+          </div>
 
-          {stopInputs.map((input, index) => (
-            <div key={index} className="stop-inputs">
+          <div className="form-group">
+            <label>Start Location</label>
+            <input
+              type="text"
+              name="startLocation.name"
+              value={newRoute.startLocation.name}
+              onChange={handleInputChange}
+              placeholder="Enter start location"
+            />
+            <div className="coordinates-input">
               <input
-                type="text"
-                value={input.stop}
-                placeholder="Add Stop"
-                onChange={(e) => handleStopInputChange(index, 'stop', e.target.value)}
-              />
-              <input
-                type="time"
-                value={input.arrival}
-                placeholder="Add Arrival Time"
-                onChange={(e) => handleStopInputChange(index, 'arrival', e.target.value)}
+                type="number"
+                name="startLocation.coordinates.0"
+                value={newRoute.startLocation.coordinates[0] || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setNewRoute(prev => ({
+                    ...prev,
+                    startLocation: {
+                      ...prev.startLocation,
+                      coordinates: [parseFloat(value), prev.startLocation.coordinates[1] || 0]
+                    }
+                  }));
+                }}
+                placeholder="Latitude"
+                step="any"
               />
               <input
                 type="number"
-                value={input.distance}
-                placeholder="Distance from Last Stop (km)"
-                onChange={(e) => handleStopInputChange(index, 'distance', e.target.value)}
-                min={0}
+                name="startLocation.coordinates.1"
+                value={newRoute.startLocation.coordinates[1] || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setNewRoute(prev => ({
+                    ...prev,
+                    startLocation: {
+                      ...prev.startLocation,
+                      coordinates: [prev.startLocation.coordinates[0] || 0, parseFloat(value)]
+                    }
+                  }));
+                }}
+                placeholder="Longitude"
+                step="any"
               />
             </div>
-          ))}
-          <button onClick={handleAddStop}>Add Stop</button>
+          </div>
 
-          {/* Add frequency selection */}
-          <select
-            name="frequency"
-            value={newRoute.frequency}
-            onChange={handleFrequencyChange}
-          >
-            <option value="all_day">All Day</option>
-            <option value="particular_days">Particular Days</option>
-            <option value="particular_dates">Particular Dates</option>
-          </select>
+          <div className="form-group">
+            <label>End Location</label>
+            <input
+              type="text"
+              name="endLocation.name"
+              value={newRoute.endLocation.name}
+              onChange={handleInputChange}
+              placeholder="Enter end location"
+            />
+            <div className="coordinates-input">
+              <input
+                type="number"
+                name="endLocation.coordinates.0"
+                value={newRoute.endLocation.coordinates[0] || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setNewRoute(prev => ({
+                    ...prev,
+                    endLocation: {
+                      ...prev.endLocation,
+                      coordinates: [parseFloat(value), prev.endLocation.coordinates[1] || 0]
+                    }
+                  }));
+                }}
+                placeholder="Latitude"
+                step="any"
+              />
+              <input
+                type="number"
+                name="endLocation.coordinates.1"
+                value={newRoute.endLocation.coordinates[1] || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setNewRoute(prev => ({
+                    ...prev,
+                    endLocation: {
+                      ...prev.endLocation,
+                      coordinates: [prev.endLocation.coordinates[0] || 0, parseFloat(value)]
+                    }
+                  }));
+                }}
+                placeholder="Longitude"
+                step="any"
+              />
+            </div>
+          </div>
 
-          {/* Add day selection for 'particular_days' frequency */}
-          {newRoute.frequency === 'particular_days' && (
-            <div className="day-selection">
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+          <div className="form-group">
+            <label>Start Time</label>
+            <input
+              type="time"
+              name="startTime"
+              value={newRoute.startTime}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>End Time</label>
+            <input
+              type="time"
+              name="endTime"
+              value={newRoute.endTime}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Service Days</label>
+            <div className="service-days">
+              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
                 <label key={day}>
                   <input
                     type="checkbox"
-                    checked={newRoute.selectedDays.includes(day)}
-                    onChange={() => handleDaySelection(day)}
+                    checked={newRoute.serviceDays.includes(day)}
+                    onChange={() => handleServiceDayChange(day)}
                   />
                   {day}
                 </label>
               ))}
             </div>
-          )}
+          </div>
 
-          {/* Add date selection for 'particular_dates' frequency */}
-          {newRoute.frequency === 'particular_dates' && (
-            <div className="date-selection">
+          <div className="form-group">
+            <label>Distance (km)</label>
+            <input
+              type="number"
+              name="distance"
+              value={newRoute.distance}
+              onChange={handleInputChange}
+              min="0"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Estimated Time</label>
+            <input
+              type="text"
+              name="estimatedTime"
+              value={newRoute.estimatedTime}
+              onChange={handleInputChange}
+              placeholder="HH:MM format"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Status</label>
+            <select name="status" value={newRoute.status} onChange={handleInputChange}>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Assign Bus</label>
+            <select
+              name="busAssigned"
+              value={newRoute.busAssigned}
+              onChange={handleInputChange}
+            >
+              <option value="">Select Bus</option>
+              {buses.map(bus => (
+                <option key={bus._id} value={bus._id}>
+                  {bus.registrationNumber} - {bus.type} ({bus.status})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Assign Staff</label>
+            <select
+              multiple
+              name="staffs"
+              value={newRoute.staffs}
+              onChange={(e) => {
+                const selectedStaff = Array.from(e.target.selectedOptions, option => option.value);
+                setNewRoute(prev => ({
+                  ...prev,
+                  staffs: selectedStaff
+                }));
+              }}
+              className="staff-select"
+            >
+              <option value="">Select Staff</option>
+              {staffList.map(staff => (
+                <option key={staff._id} value={staff._id}>
+                  {staff.name} - {staff.role}
+                </option>
+              ))}
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple staff members</small>
+            {errors.staffs && <span className="error">{errors.staffs}</span>}
+          </div>
+
+          <h3>Add Stops</h3>
+          {stops.map((stop, index) => (
+            <div key={index} className="stop-form">
               <input
-                type="date"
-                onChange={(e) => handleDateSelection(e.target.value)}
+                type="text"
+                placeholder="Stop name"
+                value={stop.name}
+                onChange={(e) => {
+                  const newStops = [...stops];
+                  newStops[index].name = e.target.value;
+                  setStops(newStops);
+                }}
               />
-              <div>
-                {newRoute.selectedDates.map((date) => (
-                  <span key={date} onClick={() => handleDateSelection(date)}>
-                    {new Date(date).toLocaleDateString()} &#x2715;
-                  </span>
-                ))}
+              <div className="coordinates-input">
+                <input
+                  type="number"
+                  placeholder="Latitude"
+                  value={stop.coordinates[0] || ''}
+                  onChange={(e) => {
+                    const newStops = [...stops];
+                    newStops[index].coordinates = [
+                      parseFloat(e.target.value),
+                      newStops[index].coordinates[1] || 0
+                    ];
+                    setStops(newStops);
+                  }}
+                  step="any"
+                />
+                <input
+                  type="number"
+                  placeholder="Longitude"
+                  value={stop.coordinates[1] || ''}
+                  onChange={(e) => {
+                    const newStops = [...stops];
+                    newStops[index].coordinates = [
+                      newStops[index].coordinates[0] || 0,
+                      parseFloat(e.target.value)
+                    ];
+                    setStops(newStops);
+                  }}
+                  step="any"
+                />
+              </div>
+              <input
+                type="time"
+                value={stop.arrivalTime}
+                onChange={(e) => {
+                  const newStops = [...stops];
+                  newStops[index].arrivalTime = e.target.value;
+                  setStops(newStops);
+                }}
+              />
+              <input
+                type="number"
+                placeholder="Fare"
+                value={stop.fare}
+                onChange={(e) => {
+                  const newStops = [...stops];
+                  newStops[index].fare = e.target.value;
+                  setStops(newStops);
+                }}
+              />
+              <div className="stop-checkboxes">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={stop.isBoardingPoint}
+                    onChange={(e) => {
+                      const newStops = [...stops];
+                      newStops[index].isBoardingPoint = e.target.checked;
+                      setStops(newStops);
+                    }}
+                  />
+                  Boarding Point
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={stop.isTopStation}
+                    onChange={(e) => {
+                      const newStops = [...stops];
+                      newStops[index].isTopStation = e.target.checked;
+                      setStops(newStops);
+                    }}
+                  />
+                  Top Station
+                </label>
               </div>
             </div>
-          )}
+          ))}
+          <button type="button" onClick={() => setStops([...stops, { ...newStop }])}>
+            Add Stop
+          </button>
 
-          {editingRoute ? (
-            <button onClick={handleUpdateRoute}>Update Route</button>
-          ) : (
-            <button onClick={handleCreateRoute}>Create Route</button>
-          )}
-        </div>
+          <button type="submit" className="submit-button">
+            {editingRoute ? 'Update Route' : 'Create Route'}
+          </button>
+        </form>
 
-        <h3>Existing Routes</h3>
-        <table className="route-table">
-          <thead>
-            <tr>
-              <th>Route ID</th>
-              <th>Name</th>
-              <th>Departure Stop</th>
-              <th>Departure Time</th>
-              <th>Arrival Stop</th>
-              <th>Arrival Time</th>
-              <th>Total Distance</th>
-              <th>Stops</th>
-              <th>Frequency</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {routes.map((route) => (
-              <tr key={route._id}>
-                <td>{route.routeId}</td>
-                <td>{route.name}</td>
-                <td>{route.departureStop}</td>
-                <td>{route.departure}</td>
-                <td>{route.arrivalStop}</td>
-                <td>{route.arrival}</td>
-                <td>{route.totaldistance} km</td>
-                <td>{formatStops(route.stops).join(', ')}</td>
-                <td>{formatFrequency(route)}</td>
-                <td>
-                  <button onClick={() => handleEditRoute(route)}>Edit</button>
-                  <button onClick={() => handleDelete(route._id)}>Delete</button>
-                </td>
+        <div className="routes-list">
+          <h3>Existing Routes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Route Name</th>
+                <th>Start Location</th>
+                <th>End Location</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Distance</th>
+                <th>Status</th>
+                <th>Stops</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
+            </thead>
+            <tbody>
+              {routes.map(route => (
+                <tr key={route._id}>
+                  <td>{route.routeName}</td>
+                  <td>{route.startLocation.name}</td>
+                  <td>{route.endLocation.name}</td>
+                  <td>{route.startTime}</td>
+                  <td>{route.endTime}</td>
+                  <td>{route.distance} km</td>
+                  <td>{route.status}</td>
+                  <td>
+                    {route.stops && route.stops.length > 0 ? (
+                      <div className="stops-cell">
+                        {route.stops.map((stop, index) => (
+                          <div key={index} className="stop-item">
+                            {stop.stop} ({stop.arrival})
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      'No stops'
+                    )}
+                  </td>
+                  <td>
+                    <button onClick={() => handleEdit(route)}>Edit</button>
+                    <button onClick={() => handleDelete(route._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

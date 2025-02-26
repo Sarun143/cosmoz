@@ -3,61 +3,69 @@ const mongoose = require('mongoose');
 const routeSchema = new mongoose.Schema({
   routeId: {
     type: String,
-    required: true,
-    unique: true // Ensure routeId is unique
-  },
-  name: {
-    type: String,
+    unique: true,
     required: true
   },
-  departure: {
-    type: String,
-    required: true
-  },
-  departureStop: {
-    type: String,
-    required: true
-  },
-  arrivalStop: {
-    type: String,
-    required: true
-  },
-  arrival: {
-    type: String,
-    required: true
-  },
-  frequency: {
-    type: String,
-    enum: ['all_day', 'particular_days', 'particular_dates'],
-    default: 'all_day'
-  },
-  selectedDays: [{
-    type: String,
-    enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-  }],
-  selectedDates: [Date],
-  stops: [
-    {
-      stop: {
-        type: String,
-        required: true
-      },
-      arrival: {
-        type: String,
-        required: true  
-      },
-      distance: {
-        type: Number,
-        required: true,
-        min: 0
-      }
+  name: String,
+  departureStop: String,
+  departure: String,
+  arrivalStop: String,
+  arrival: String,
+  stops: [{
+    stop: String,
+    arrival: String,
+    distance: {
+      type: Number,
+      min: 0,
+      default: 0
     }
-  ],
+  }],
+  frequency: String,
+  selectedDays: [String],
+  selectedDates: [Date],
   totaldistance: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    validate: {
+      validator: function(v) {
+        return !isNaN(v) && v > 0;
+      },
+      message: props => `${props.value} is not a valid distance!`
+    }
+  },
+  busAssigned: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Bus'
+  },
+  staffs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Staff'
+  }],
+  status: {
+    type: String,
+    default: 'Active'
+  }
+}, {
+  timestamps: true,
+  collection: 'bustriproutes'
+});
+
+routeSchema.pre('find', function() {
+  console.log('Finding in collection:', this.model.collection.name);
+});
+
+// Add a pre-save middleware to ensure totaldistance is a valid number
+routeSchema.pre('save', function(next) {
+  if (isNaN(this.totaldistance)) {
+    next(new Error('Total distance must be a valid number'));
+  } else {
+    next();
   }
 });
 
-module.exports = mongoose.model('Route', routeSchema);
+// Add index for routeId to ensure uniqueness
+routeSchema.index({ routeId: 1 }, { unique: true });
+
+const Route = mongoose.model('Route', routeSchema, 'bustriproutes');
+module.exports = Route;

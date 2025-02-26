@@ -16,7 +16,7 @@ const BusDetailsPage = () => {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/buses");
+      const response = await axios.get("http://localhost:5000/api/buses/viewvehicle");
       setVehicles(response.data);
     } catch (error) {
       console.error("Error fetching vehicles:", error.response?.data || error.message);
@@ -41,20 +41,28 @@ const BusDetailsPage = () => {
           <thead>
             <tr>
               <th>Reg. No.</th>
-              <th>Model</th>
+              <th>Bus Type</th>
+              <th>Lower Deck</th>
+              <th>Upper Deck</th>
+              <th>Total Seats</th>
               <th>Tax Exp.</th>
               <th>Insurance Exp.</th>
               <th>Pollution Exp.</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {vehicles.map((vehicle) => (
               <tr key={vehicle._id}>
                 <td>{vehicle.registrationNumber}</td>
-                <td>{vehicle.model}</td>
+                <td>{vehicle.type}</td>
+                <td>{vehicle.seats.Lower}</td>
+                <td>{vehicle.seats.Upper}</td>
+                <td>{vehicle.seats.totalSeats}</td>
                 <td>{vehicle.taxExpiryDate ? new Date(vehicle.taxExpiryDate).toLocaleDateString() : "N/A"}</td>
                 <td>{vehicle.insuranceExpiryDate ? new Date(vehicle.insuranceExpiryDate).toLocaleDateString() : "N/A"}</td>
                 <td>{vehicle.pollutionExpiryDate ? new Date(vehicle.pollutionExpiryDate).toLocaleDateString() : "N/A"}</td>
+                <td>{vehicle.status}</td>
               </tr>
             ))}
           </tbody>

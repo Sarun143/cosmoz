@@ -16,9 +16,11 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const busIcon = new L.Icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/346/346188.png",
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png",
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+    shadowUrl: null
 });
 
 const LiveTracking = () => {

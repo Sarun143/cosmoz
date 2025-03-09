@@ -97,6 +97,7 @@ const SLeaveManagement = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
+            id="startdate"
           />
         </div>
         <div className="form-group">
@@ -105,6 +106,7 @@ const SLeaveManagement = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
+            id="enddate"
           />
         </div>
         <div className="form-group">
@@ -113,9 +115,10 @@ const SLeaveManagement = () => {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Enter reason for leave"
+            id="reason"
           />
         </div>
-        <button onClick={handleSubmitLeave} disabled={loading}>
+        <button onClick={handleSubmitLeave} disabled={loading}  id="submitleave">
           {loading ? 'Submitting...' : 'Submit Leave Request'}
         </button>
         {message && <p className="message">{message}</p>}

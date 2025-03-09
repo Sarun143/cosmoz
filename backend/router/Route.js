@@ -43,7 +43,9 @@ router.post('/new-route', async (req, res) => {
       departure, 
       arrivalStop, 
       arrival, 
-      stops, 
+      stops,
+      startLocation,
+      endLocation,
       frequency, 
       selectedDays, 
       selectedDates, 
@@ -63,14 +65,24 @@ router.post('/new-route', async (req, res) => {
     const routeId = `ROUTE${(routeCount + 1).toString().padStart(4, '0')}`; // Creates ROUTE0001, ROUTE0002, etc.
 
     const newRoute = new Route({
-      routeId, // Use the generated routeId
+      routeId,
       name,
       departureStop,
       departure,
       arrivalStop,
       arrival,
+      startLocation: {
+        name: startLocation.name,
+        coordinates: startLocation.coordinates
+      },
+      endLocation: {
+        name: endLocation.name,
+        coordinates: endLocation.coordinates
+      },
       stops: stops.map(stop => ({
-        ...stop,
+        stop: stop.stop,
+        arrival: stop.arrival,
+        coordinates: stop.coordinates,
         distance: parseFloat(stop.distance) || 0
       })),
       frequency,
@@ -129,7 +141,20 @@ router.delete('/:id', async (req, res) => {
 // Update a route with distance
 // Update an existing route
 router.put('/:id', async (req, res) => {
-  const { name, departureStop, departure, arrivalStop, arrival, stops, frequency, selectedDays, selectedDates, distance } = req.body;
+  const { 
+    name, 
+    departureStop, 
+    departure, 
+    arrivalStop, 
+    arrival, 
+    stops,
+    startLocation,
+    endLocation,
+    frequency, 
+    selectedDays, 
+    selectedDates, 
+    distance 
+  } = req.body;
 
   try {
     // Validate incoming data
@@ -149,7 +174,31 @@ router.put('/:id', async (req, res) => {
 
     const updatedRoute = await Route.findByIdAndUpdate(
       req.params.id,
-      { name, departureStop, departure, arrivalStop, arrival, stops, frequency, selectedDays, selectedDates, totaldistance: distance },
+      { 
+        name, 
+        departureStop, 
+        departure, 
+        arrivalStop, 
+        arrival,
+        startLocation: {
+          name: startLocation.name,
+          coordinates: startLocation.coordinates
+        },
+        endLocation: {
+          name: endLocation.name,
+          coordinates: endLocation.coordinates
+        },
+        stops: stops.map(stop => ({
+          stop: stop.stop,
+          arrival: stop.arrival,
+          coordinates: stop.coordinates,
+          distance: parseFloat(stop.distance) || 0
+        })),
+        frequency, 
+        selectedDays, 
+        selectedDates, 
+        totaldistance: distance 
+      },
       { new: true }
     );
 

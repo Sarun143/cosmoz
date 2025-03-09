@@ -5,6 +5,8 @@ import './SProfile.css';
 import { useParams } from 'react-router-dom';
 
 const StaffProfile = () => {
+  const user = localStorage.getItem('user');
+  console.log(user);
   const { id } = useParams(); // Get the staff ID from the route params
   const [profile, setProfile] = useState({
     name: '',
@@ -25,7 +27,7 @@ const StaffProfile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/staff/${id}`);
+      const response = await fetch(`http://localhost:5000/api/vstaff/view`);
       if (!response.ok) throw new Error('Failed to fetch profile data');
       const data = await response.json();
       setProfile(data);

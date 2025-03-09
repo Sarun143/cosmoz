@@ -22,7 +22,7 @@ const StaffManagement = () => {
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/vstaff');
+        const response = await fetch('http://localhost:5000/api/vstaff/view');
         const data = await response.json();
         setStaffList(data);
       } catch (error) {

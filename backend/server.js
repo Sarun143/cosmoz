@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 const path = require('path'); 
 
 
-
 //router
 
 const sign=require('./router/sign'); // Assuming sign.js handles authentication
@@ -21,6 +20,8 @@ const BusRoute = require('./router/searchbus')
 const promotionRoutes = require('./router/Promotion'); // Import your routes
 const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
+const feedbackRoutes = require("./router/FeedbackRoutes");
+
 
 //liveloc
 // let busLocation = { latitude: 28.7041, longitude: 77.1025 }; // Default location
@@ -99,6 +100,8 @@ app.use('/',BusRoute);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/search',BusRoute)
 app.use('/api/staff', leaveRoutes);
+//feedback
+app.use("/api/feedback", feedbackRoutes);
 
 // Routes
 app.use('/api/bookings', bookingRoutes);

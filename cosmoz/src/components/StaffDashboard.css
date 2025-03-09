@@ -30,7 +30,7 @@ body {
 }
 
 /* Sidebar links */
-.sidebar a {
+.sidebar a { 
     display: block; /* Make the links block elements */
     color: #ecf0f1; /* Light text color */
     padding: 10px; /* Padding for links */

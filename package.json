@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "jwt-decode": "^4.0.0"
+    "jwt-decode": "^4.0.0",
+    "natural": "^8.0.1",
+    "vader-sentiment": "^1.1.3"
   }
-  
 }
-

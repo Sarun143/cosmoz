@@ -172,6 +172,7 @@ const RouteManagement = () => {
         const formattedStops = stops.map(stop => ({
           stop: stop.name,
           arrival: stop.arrivalTime,
+          coordinates: stop.coordinates,
           distance: parseFloat(stop.fare) || 0
         }));
 
@@ -192,6 +193,14 @@ const RouteManagement = () => {
           departure: newRoute.startTime,
           arrivalStop: newRoute.endLocation.name,
           arrival: newRoute.endTime,
+          startLocation: {
+            name: newRoute.startLocation.name,
+            coordinates: newRoute.startLocation.coordinates
+          },
+          endLocation: {
+            name: newRoute.endLocation.name,
+            coordinates: newRoute.endLocation.coordinates
+          },
           stops: formattedStops,
           frequency: "daily",
           selectedDays: newRoute.serviceDays,
@@ -212,8 +221,14 @@ const RouteManagement = () => {
           const newRouteForTable = {
             _id: response.data._id,
             routeName: response.data.name,
-            startLocation: { name: response.data.departureStop },
-            endLocation: { name: response.data.arrivalStop },
+            startLocation: {
+              name: response.data.departureStop,
+              coordinates: response.data.startLocation?.coordinates || []
+            },
+            endLocation: {
+              name: response.data.arrivalStop,
+              coordinates: response.data.endLocation?.coordinates || []
+            },
             startTime: response.data.departure,
             endTime: response.data.arrival,
             distance: response.data.totaldistance,
@@ -305,6 +320,7 @@ const RouteManagement = () => {
       const formattedStops = stops.map(stop => ({
         stop: stop.name,
         arrival: stop.arrivalTime,
+        coordinates: stop.coordinates,
         distance: parseFloat(stop.fare) || 0
       }));
 
@@ -314,6 +330,14 @@ const RouteManagement = () => {
         departure: newRoute.startTime,
         arrivalStop: newRoute.endLocation.name,
         arrival: newRoute.endTime,
+        startLocation: {
+          name: newRoute.startLocation.name,
+          coordinates: newRoute.startLocation.coordinates
+        },
+        endLocation: {
+          name: newRoute.endLocation.name,
+          coordinates: newRoute.endLocation.coordinates
+        },
         stops: formattedStops,
         frequency: "daily",
         selectedDays: newRoute.serviceDays,
@@ -332,8 +356,14 @@ const RouteManagement = () => {
           route._id === editingRoute._id ? {
             ...route,
             routeName: response.data.name,
-            startLocation: { name: response.data.departureStop },
-            endLocation: { name: response.data.arrivalStop },
+            startLocation: {
+              name: response.data.departureStop,
+              coordinates: response.data.startLocation?.coordinates || []
+            },
+            endLocation: {
+              name: response.data.arrivalStop,
+              coordinates: response.data.endLocation?.coordinates || []
+            },
             startTime: response.data.departure,
             endTime: response.data.arrival,
             distance: response.data.totaldistance,

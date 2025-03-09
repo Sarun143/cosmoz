@@ -32,6 +32,8 @@ import PDFProcessor from "./pages/PDFProcessor";
 import SalaryManagement from "./components/SalaryManagement";
 import BusBooking from "./components/Booking";
 import AddBusPage from "./pages/AddBusPage";
+import UHeader from "./components/UHeader";
+import FeedbackAnalytics from "./components/FeedbackAnalytics";
 //import Slocation from "./components/Slocation";
 import LiveTracking from "./components/LiveTracking";
 //import BusLocation from "./components/BusLocation";
@@ -68,6 +70,8 @@ function App() {
         <Route path='/admin/busbooking' element={<BusBooking />} />
         <Route path='/add-bus' element={<AddBusPage />} />
         <Route path='/LiveTracking' element={<LiveTracking />} />
+        <Route path='/UHeader' element={<UHeader />} />
+        <Route path='/FeedbackAnalytics' element={<FeedbackAnalytics />} />
         {/* //<Route path='Slocation' element={<Slocation />} />
         //<Route path='LiveTracking' element={<LiveTracking />} />
         <Route path='BusLocation' element={<BusLocation />} /> */}

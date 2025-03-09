@@ -11,9 +11,18 @@ const routeSchema = new mongoose.Schema({
   departure: String,
   arrivalStop: String,
   arrival: String,
+  startLocation: {
+    name: String,
+    coordinates: [Number]
+  },
+  endLocation: {
+    name: String,
+    coordinates: [Number]
+  },
   stops: [{
     stop: String,
     arrival: String,
+    coordinates: [Number],
     distance: {
       type: Number,
       min: 0,

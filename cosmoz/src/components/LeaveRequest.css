@@ -1,32 +1,168 @@
-.leave-request-container {
-    border: 1px solid #dc3545;
-    padding: 16px;
-    margin: 16px 0;
-    border-radius: 8px;
-    background-color: #f8d7da;
+/* LeaveRequest.css */
+
+/* Common styles */
+.leave-container,
+.view-leave-requests-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.leave-status-content,
+.content-wrapper {
+  padding: 2rem;
+  margin-left: 250px; /* Adjust based on your sidebar width */
+  margin-top: 70px; /* Adjust based on your header height */
+}
+
+h1, h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Table styles */
+.leave-requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.leave-requests-table th,
+.leave-requests-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.leave-requests-table th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+}
+
+.leave-requests-table tr:last-child td {
+  border-bottom: none;
+}
+
+.leave-requests-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Status styling */
+.status-approved {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-rejected {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn,
+.reject-btn,
+.new-leave-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.approve-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
+}
+
+.new-leave-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  margin-top: 20px;
+}
+
+.new-leave-btn:hover {
+  background-color: #0069d9;
+}
+
+.action-complete {
+  font-weight: 600;
+}
+
+/* Loading and error states */
+.loading-message,
+.error-message {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.loading-message {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.no-data,
+.no-leaves-message {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .leave-status-content,
+  .content-wrapper {
+    margin-left: 0;
+    padding: 1rem;
   }
   
-  .leave-request-container h4 {
-    font-size: 18px;
-    margin-bottom: 8px;
+  .action-buttons {
+    flex-direction: column;
   }
   
-  .leave-request-container p {
-    margin: 4px 0;
-    color: #721c24;
+  .leave-requests-table {
+    font-size: 14px;
   }
-  
-  .leave-request-container button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    border: none;
-    background-color: #dc3545;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .leave-requests-table th,
+  .leave-requests-table td {
+    padding: 8px 10px;
   }
-  
-  .leave-request-container button:hover {
-    background-color: #c82333;
-  }
-  
+}

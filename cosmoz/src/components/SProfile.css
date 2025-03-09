@@ -1,97 +1,310 @@
-/* SProfile.css */
+/* SProfile.css - Enhanced for Document Upload */
 
 .staff-profile {
+  max-width: 900px;
+  margin: 90px auto 30px;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.profile-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.profile-picture-container {
+  position: relative;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f0f0f0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 80px;
-}
-
-.staff-profile h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.staff-profile form {
-  width: 100%;
+  background-color: #e9ecef;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #6c757d;
+  overflow: hidden;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-picture-text {
+  text-transform: uppercase;
+}
+
+.upload-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  padding: 5px 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.profile-picture-container:hover .upload-overlay {
+  opacity: 1;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.profile-email {
+  color: #6c757d;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.profile-role {
+  display: inline-block;
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 3px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.staff-id {
+  color: #6c757d;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.form-section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+  padding: 0 10px;
+  margin-bottom: 20px;
 }
 
 .staff-profile label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .staff-profile input[type="text"],
 .staff-profile input[type="email"],
 .staff-profile input[type="password"] {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
   width: 100%;
   box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: white;
 }
 
-.staff-profile img {
-  margin: 10px 0;
-  width: 100px;
-  height: auto;
-  border-radius: 5px;
+.staff-profile input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.staff-profile input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.documents-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.document-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.document-container {
+  flex: 1;
+  min-width: 200px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.document-title {
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Document upload related styles */
+.document-upload-container {
+  position: relative;
+  height: 150px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.document-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
   border: 1px solid #ddd;
+  background-color: #f8f9fa;
+}
+
+.document-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 14px;
+  background-color: #e9ecef;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+}
+
+.document-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  padding: 8px 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.document-upload-container:hover .document-upload-overlay {
+  opacity: 1;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .staff-profile button {
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .staff-profile button:hover {
   background-color: #45a049;
 }
 
+.message-container {
+  margin-bottom: 20px;
+}
+
 .error {
-  color: #ff4d4d;
+  color: #dc3545;
   font-size: 14px;
-  margin-top: 10px;
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 10px 15px;
+  border-radius: 4px;
 }
 
 .success {
-  color: #4CAF50;
+  color: #28a745;
   font-size: 14px;
-  margin-top: 10px;
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 100%;
+  font-size: 16px;
+  color: #6c757d;
 }
 
 @media (max-width: 768px) {
   .staff-profile {
-    padding: 15px;
-    margin: 15px;
+    padding: 20px;
+    margin: 70px 15px 20px;
   }
 
-  .staff-profile input[type="text"],
-  .staff-profile input[type="email"],
-  .staff-profile input[type="password"] {
-    font-size: 14px;
-    padding: 8px;
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
   }
 
-  .staff-profile button {
-    font-size: 14px;
-    padding: 8px;
+  .profile-picture-container {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .form-group, .document-container {
+    flex: 100%;
+  }
+
+  .button-container {
+    justify-content: center;
   }
 }

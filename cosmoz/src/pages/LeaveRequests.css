@@ -1,68 +1,68 @@
 .leave-requests {
-  padding: 80px;
-  margin-left: 220px; /* Make sure this value matches the sidebar's width */
+padding: 80px;
+margin-left: 220px; /* Make sure this value matches the sidebar's width */
 }
 
 /* Header Styling */
 header {
-  position: fixed;
-  top: 0;
-  left: 0; /* Start after the sidebar */
-  right: 0; /* Ensure it stretches to the right side */
-  height: 60px;
-  background-color: #444;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  box-sizing: border-box;
-  z-index: 1;
+position: fixed;
+top: 0;
+left: 0; /* Start after the sidebar */
+right: 0; /* Ensure it stretches to the right side */
+height: 60px;
+background-color: #444;
+color: white;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 20px;
+box-sizing: border-box;
+z-index: 1;
 }
 
 .leave-requests h2 {
-  margin-bottom: 20px;
+margin-bottom: 20px;
 }
 
 .leave-requests table {
-  width: 100%;
-  border-collapse: collapse;
+width: 100%;
+border-collapse: collapse;
 }
 
 .leave-requests th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
+border: 1px solid #ddd;
+padding: 10px;
+text-align: left;
 }
 
 .leave-requests th {
-  background-color: #45a049;
+background-color: #45a049;
 }
 
 /* Button Styling */
 .leave-requests button {
-  margin-right: 5px; /* Space between buttons */
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+margin-right: 5px; /* Space between buttons */
+padding: 5px 10px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
 }
 
 .leave-requests button:hover {
-  opacity: 0.8; /* Simple hover effect */
+opacity: 0.8; /* Simple hover effect */
 }
 
 .leave-requests button:focus {
-  outline: none; /* Remove default focus outline */
+outline: none; /* Remove default focus outline */
 }
 
 /* Approval button specific styling */
 .leave-requests button:nth-of-type(1) {
-  background-color: #f44336; /* Green */
-  color: white;
+background-color: #f44336; /* Green */
+color: white;
 }
 
 .leave-requests button:nth-of-type(2) {
-  background-color: #f44336; /* Red */
-  color: white;
+background-color: #f44336; /* Red */
+color: white;
 }

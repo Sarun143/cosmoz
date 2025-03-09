@@ -1,130 +1,140 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SHeader from './SHeader';
 import SSidebar from './SSidebar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './LeaveRequest.css';
 
-const SLeaveManagement = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [reason, setReason] = useState('');
-  const [message, setMessage] = useState('');
+const StaffLeaveStatus = () => {
+  const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Use React Router's navigate function
 
-  const handleSubmitLeave = async () => {
-    setMessage('');
+  // Function to fetch leave requests for the logged-in staff
+  const fetchMyLeaveRequests = async () => {
     setLoading(true);
+    setError('');
 
     try {
       const token = localStorage.getItem('authToken');
       
-      // Add more detailed debugging
-      console.log('Token from localStorage:', token ? token.substring(0, 20) + '...' : 'No token');
-      console.log('Authorization header:', `Bearer ${token}`.substring(0, 30) + '...');
-
       if (!token) {
-        setMessage('Please login first');
+        setError('Please login first');
+        setLoading(false);
         return;
       }
 
-      // Validate input before sending the request
-      if (!startDate || !endDate || !reason) {
-        setMessage('Please fill in all the fields.');
-        return;
-      }
-
-      if (new Date(startDate) > new Date(endDate)) {
-        setMessage('End date cannot be before start date.');
-        return;
-      }
-
-      const response = await fetch('http://localhost:5000/api/staff/requestleave', {
-        method: 'POST',
+      const response = await axios.get('http://localhost:5000/api/staff/viewleaves', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          startDate,
-          endDate,
-          reason,
-        }),
       });
 
-      // Get response text first
-      const responseText = await response.text();
-      console.log('Raw response:', responseText);
-
-      let data;
-      try {
-        // Try to parse as JSON
-        data = JSON.parse(responseText);
-      } catch (e) {
-        console.error('Failed to parse response as JSON:', e);
-        setMessage('Server returned invalid response');
-        return;
-      }
-
-      if (!response.ok) {
-        // Use the error message from the response if available
-        setMessage(data.message || 'Failed to submit leave request');
-        return;
-      }
-
-      console.log('Success response:', data);
-      setMessage('Leave request submitted successfully!');
-      
-    } catch (error) {
-      console.error('Error submitting leave request:', error);
-      // More specific error message
-      if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-        setMessage('Could not connect to server. Please check your internet connection.');
+      setLeaveRequests(response.data.leaveRequests || []);
+    } catch (err) {
+      console.error('Error fetching leave requests:', err);
+      if (err.response) {
+        setError(err.response.data.message || 'Failed to fetch leave requests.');
+      } else if (err.request) {
+        setError('Could not connect to server. Please check your internet connection.');
       } else {
-        setMessage('An error occurred while submitting the leave request: ' + error.message);
+        setError('An error occurred while fetching leave requests: ' + err.message);
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch data when component mounts
+  useEffect(() => {
+    fetchMyLeaveRequests();
+  }, []);
+
+  // Function to get status class for styling
+  const getStatusClass = (status) => {
+    switch(status.toLowerCase()) {
+      case 'approved': return 'status-approved';
+      case 'rejected': return 'status-rejected';
+      default: return 'status-pending';
+    }
+  };
+
+  // Function to navigate to the leave request form
+  const navigateToLeaveRequest = () => {
+    // Update this route to match your application's route structure
+    navigate('/staff/leaverequests'); // Modify this to your actual route
+    
+    // If you're not using React Router, use this instead:
+    // window.location.href = '/staff/leave-request';
+  };
+
+  // Calculate the duration of leave in days
+  const calculateDuration = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays + 1; // Including both start and end days
+  };
+
   return (
-    <div className="leave-container">
-    <SHeader />
-    <SSidebar />
-      <div className="leave-form">
-        <h1>Staff Leave Management</h1>
-        <div className="form-group">
-          <label>Start Date:</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            id="startdate"
-          />
+    <div className="staff-dashboard-container">
+      <SHeader />
+      <div className="dashboard-content">
+        <SSidebar />
+        <div className="main-content">
+          <h2>My Leave Requests</h2>
+          
+          {loading && <p className="loading-message">Loading your leave requests...</p>}
+          
+          {error && <p className="error-message">{error}</p>}
+          
+          <div className="request-button-container">
+            <button onClick={navigateToLeaveRequest} className="new-leave-btn">
+              Request New Leave
+            </button>
+          </div>
+          
+          {leaveRequests.length > 0 ? (
+            <div className="leave-requests-container">
+              <table className="leave-requests-table">
+                <thead>
+                  <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Duration</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Requested On</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaveRequests.map((leave) => (
+                    <tr key={leave._id}>
+                      <td>{new Date(leave.startDate).toLocaleDateString()}</td>
+                      <td>{new Date(leave.endDate).toLocaleDateString()}</td>
+                      <td>{calculateDuration(leave.startDate, leave.endDate)} days</td>
+                      <td>{leave.reason}</td>
+                      <td className={getStatusClass(leave.status || 'pending')}>
+                        {leave.status || 'Pending'}
+                      </td>
+                      <td>{new Date(leave.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="no-leave-requests">
+              <p>You haven't submitted any leave requests yet.</p>
+            </div>
+          )}
         </div>
-        <div className="form-group">
-          <label>End Date:</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            id="enddate"
-          />
-        </div>
-        <div className="form-group">
-          <label>Reason:</label>
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Enter reason for leave"
-            id="reason"
-          />
-        </div>
-        <button onClick={handleSubmitLeave} disabled={loading}  id="submitleave">
-          {loading ? 'Submitting...' : 'Submit Leave Request'}
-        </button>
-        {message && <p className="message">{message}</p>}
       </div>
     </div>
   );
 };
 
-export default SLeaveManagement;
+export default StaffLeaveStatus;

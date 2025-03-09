@@ -99,7 +99,7 @@ app.use('/',BusRoute);
 // Mount the promotion router with the base path
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/search',BusRoute)
-app.use('/api/staff', leaveRoutes);
+app.use('/api/staff',leaveRoutes);
 //feedback
 app.use("/api/feedback", feedbackRoutes);
 

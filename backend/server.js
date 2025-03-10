@@ -21,6 +21,7 @@ const promotionRoutes = require('./router/Promotion'); // Import your routes
 const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
 const feedbackRoutes = require("./router/FeedbackRoutes");
+const chatbotRoutes = require('./router/ChatbotRoutes');
 
 
 //liveloc
@@ -105,6 +106,9 @@ app.use("/api/feedback", feedbackRoutes);
 
 // Routes
 app.use('/api/bookings', bookingRoutes);
+//chatbot
+app.use('/api/chatbot', chatbotRoutes);
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;

@@ -64,7 +64,7 @@ const StaffLeaveStatus = () => {
   // Function to navigate to the leave request form
   const navigateToLeaveRequest = () => {
     // Update this route to match your application's route structure
-    navigate('/staff/leaverequests'); // Modify this to your actual route
+    navigate('/staff/leave-management2'); // Modify this to your actual route
     
     // If you're not using React Router, use this instead:
     // window.location.href = '/staff/leave-request';

@@ -36,6 +36,8 @@ import UHeader from "./components/UHeader";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 //import Slocation from "./components/Slocation";
 import LiveTracking from "./components/LiveTracking";
+import Chatbot from "./components/Chatbot";
+import STLeaveManagement from "./components/STleaveManagement";
 //import BusLocation from "./components/BusLocation";
 function App() {
   return (
@@ -72,6 +74,8 @@ function App() {
         <Route path='/LiveTracking' element={<LiveTracking />} />
         <Route path='/UHeader' element={<UHeader />} />
         <Route path='/FeedbackAnalytics' element={<FeedbackAnalytics />} />
+        <Route path='/Chatbot' element={<Chatbot />} />
+        <Route path='/staff/leave-management2' element={<STLeaveManagement />} />
         {/* //<Route path='Slocation' element={<Slocation />} />
         //<Route path='LiveTracking' element={<LiveTracking />} />
         <Route path='BusLocation' element={<BusLocation />} /> */}

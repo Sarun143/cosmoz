@@ -9,12 +9,10 @@ const RouteManagement = () => {
   const [newRoute, setNewRoute] = useState({
     routeName: '',
     startLocation: {
-      name: '',
-      coordinates: []
+      name: ''
     },
     endLocation: {
-      name: '',
-      coordinates: []
+      name: ''
     },
     startTime: '',
     endTime: '',
@@ -100,7 +98,7 @@ const RouteManagement = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/vstaff');
+      const response = await axios.get('http://localhost:5000/api/vstaff/view');
       // Filter staff by role if needed
       const staffData = response.data;
       setStaffList(staffData);
@@ -172,8 +170,8 @@ const RouteManagement = () => {
         const formattedStops = stops.map(stop => ({
           stop: stop.name,
           arrival: stop.arrivalTime,
-          coordinates: stop.coordinates,
-          distance: parseFloat(stop.fare) || 0
+          coordinates: stop.coordinates || [],
+          fare: parseFloat(stop.fare) || 0
         }));
 
         const totalDistance = parseFloat(newRoute.distance);
@@ -193,14 +191,6 @@ const RouteManagement = () => {
           departure: newRoute.startTime,
           arrivalStop: newRoute.endLocation.name,
           arrival: newRoute.endTime,
-          startLocation: {
-            name: newRoute.startLocation.name,
-            coordinates: newRoute.startLocation.coordinates
-          },
-          endLocation: {
-            name: newRoute.endLocation.name,
-            coordinates: newRoute.endLocation.coordinates
-          },
           stops: formattedStops,
           frequency: "daily",
           selectedDays: newRoute.serviceDays,
@@ -223,11 +213,11 @@ const RouteManagement = () => {
             routeName: response.data.name,
             startLocation: {
               name: response.data.departureStop,
-              coordinates: response.data.startLocation?.coordinates || []
+              coordinates: []
             },
             endLocation: {
               name: response.data.arrivalStop,
-              coordinates: response.data.endLocation?.coordinates || []
+              coordinates: []
             },
             startTime: response.data.departure,
             endTime: response.data.arrival,
@@ -254,8 +244,8 @@ const RouteManagement = () => {
   const resetForm = () => {
     setNewRoute({
       routeName: '',
-      startLocation: { name: '', coordinates: [] },
-      endLocation: { name: '', coordinates: [] },
+      startLocation: { name: '' },
+      endLocation: { name: '' },
       startTime: '',
       endTime: '',
       serviceDays: [],
@@ -321,7 +311,7 @@ const RouteManagement = () => {
         stop: stop.name,
         arrival: stop.arrivalTime,
         coordinates: stop.coordinates,
-        distance: parseFloat(stop.fare) || 0
+        fare: parseFloat(stop.fare) || 0
       }));
 
       const routeData = {
@@ -330,14 +320,6 @@ const RouteManagement = () => {
         departure: newRoute.startTime,
         arrivalStop: newRoute.endLocation.name,
         arrival: newRoute.endTime,
-        startLocation: {
-          name: newRoute.startLocation.name,
-          coordinates: newRoute.startLocation.coordinates
-        },
-        endLocation: {
-          name: newRoute.endLocation.name,
-          coordinates: newRoute.endLocation.coordinates
-        },
         stops: formattedStops,
         frequency: "daily",
         selectedDays: newRoute.serviceDays,
@@ -418,42 +400,6 @@ const RouteManagement = () => {
               onChange={handleInputChange}
               placeholder="Enter start location"
             />
-            <div className="coordinates-input">
-              <input
-                type="number"
-                name="startLocation.coordinates.0"
-                value={newRoute.startLocation.coordinates[0] || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setNewRoute(prev => ({
-                    ...prev,
-                    startLocation: {
-                      ...prev.startLocation,
-                      coordinates: [parseFloat(value), prev.startLocation.coordinates[1] || 0]
-                    }
-                  }));
-                }}
-                placeholder="Latitude"
-                step="any"
-              />
-              <input
-                type="number"
-                name="startLocation.coordinates.1"
-                value={newRoute.startLocation.coordinates[1] || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setNewRoute(prev => ({
-                    ...prev,
-                    startLocation: {
-                      ...prev.startLocation,
-                      coordinates: [prev.startLocation.coordinates[0] || 0, parseFloat(value)]
-                    }
-                  }));
-                }}
-                placeholder="Longitude"
-                step="any"
-              />
-            </div>
           </div>
 
           <div className="form-group">
@@ -465,42 +411,6 @@ const RouteManagement = () => {
               onChange={handleInputChange}
               placeholder="Enter end location"
             />
-            <div className="coordinates-input">
-              <input
-                type="number"
-                name="endLocation.coordinates.0"
-                value={newRoute.endLocation.coordinates[0] || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setNewRoute(prev => ({
-                    ...prev,
-                    endLocation: {
-                      ...prev.endLocation,
-                      coordinates: [parseFloat(value), prev.endLocation.coordinates[1] || 0]
-                    }
-                  }));
-                }}
-                placeholder="Latitude"
-                step="any"
-              />
-              <input
-                type="number"
-                name="endLocation.coordinates.1"
-                value={newRoute.endLocation.coordinates[1] || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setNewRoute(prev => ({
-                    ...prev,
-                    endLocation: {
-                      ...prev.endLocation,
-                      coordinates: [prev.endLocation.coordinates[0] || 0, parseFloat(value)]
-                    }
-                  }));
-                }}
-                placeholder="Longitude"
-                step="any"
-              />
-            </div>
           </div>
 
           <div className="form-group">
@@ -624,36 +534,6 @@ const RouteManagement = () => {
                   setStops(newStops);
                 }}
               />
-              <div className="coordinates-input">
-                <input
-                  type="number"
-                  placeholder="Latitude"
-                  value={stop.coordinates[0] || ''}
-                  onChange={(e) => {
-                    const newStops = [...stops];
-                    newStops[index].coordinates = [
-                      parseFloat(e.target.value),
-                      newStops[index].coordinates[1] || 0
-                    ];
-                    setStops(newStops);
-                  }}
-                  step="any"
-                />
-                <input
-                  type="number"
-                  placeholder="Longitude"
-                  value={stop.coordinates[1] || ''}
-                  onChange={(e) => {
-                    const newStops = [...stops];
-                    newStops[index].coordinates = [
-                      newStops[index].coordinates[0] || 0,
-                      parseFloat(e.target.value)
-                    ];
-                    setStops(newStops);
-                  }}
-                  step="any"
-                />
-              </div>
               <input
                 type="time"
                 value={stop.arrivalTime}

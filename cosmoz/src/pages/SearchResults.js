@@ -145,7 +145,7 @@ const SearchResults = () => {
                   </div>
                   
                   <button 
-                    onClick={() => navigate('/busbooking', { 
+                    onClick={() => navigate('/BookingPage', { 
                       state: { selectedRoute: result } 
                     })} 
                     className="book-button"

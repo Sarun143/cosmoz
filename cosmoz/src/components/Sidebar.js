@@ -18,6 +18,8 @@ const Sidebar = ({ setSelectedSection }) => {
         <li onClick={() => navigate('/admin/busdetails')}>BusDetails</li>
         <li onClick={() => navigate('/admin/salarymanagement')}>Salarymanagement</li>
         <li onClick={() => navigate('/admin/Booking')}>Booking</li>
+        <li onClick={() => navigate('/NotificationsPage')}>Notification</li>
+
 
 
 

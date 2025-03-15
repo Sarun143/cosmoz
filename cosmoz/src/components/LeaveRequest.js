@@ -91,7 +91,7 @@ const ViewLeaveRequests = () => {
         {error && <p className="error-message">{error}</p>}
 
         <table className="leave-requests-table">
-          <thead>
+          <thead className="green-header">
             <tr>
               <th scope="col">Staff Name</th>
               <th scope="col">Email</th>

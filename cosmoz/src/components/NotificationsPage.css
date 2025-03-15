@@ -1,0 +1,138 @@
+.notifications-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.notifications-container {
+  margin-left: 250px; /* Adjust based on your sidebar width */
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.notifications-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.notification-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  border-left: 5px solid #ccc;
+}
+
+.notification-card.expired {
+  border-left-color: #d32f2f;
+  background-color: #ffebee;
+}
+
+.notification-card.high {
+  border-left-color: #f57c00;
+  background-color: #fff3e0;
+}
+
+.notification-card.medium {
+  border-left-color: #fbc02d;
+  background-color: #fffde7;
+}
+
+.notification-card.low {
+  border-left-color: #388e3c;
+  background-color: #e8f5e9;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.days-remaining {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.days-remaining.expired {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.days-remaining.high {
+  background-color: #f57c00;
+  color: white;
+}
+
+.days-remaining.medium {
+  background-color: #fbc02d;
+  color: #333;
+}
+
+.days-remaining.low {
+  background-color: #388e3c;
+  color: white;
+}
+
+.notification-details {
+  font-size: 14px;
+  color: #555;
+}
+
+.notification-details p {
+  margin: 5px 0;
+}
+
+.no-notifications {
+  text-align: center;
+  padding: 30px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  color: #666;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}
+
+.refresh-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.refresh-button:hover {
+  background-color: #1565c0;
+}

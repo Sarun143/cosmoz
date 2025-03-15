@@ -33,23 +33,24 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create a new route
 // Create a new route with enhanced validation
 router.post('/new-route', async (req, res) => {
   try {
     const { 
+      routeId,
       name, 
       departureStop, 
       departure, 
       arrivalStop, 
       arrival, 
       stops,
-      startLocation,
-      endLocation,
       frequency, 
       selectedDays, 
       selectedDates, 
-      totaldistance 
+      totaldistance,
+      busAssigned,
+      staffs,
+      status
     } = req.body;
 
     // Validate totaldistance
@@ -60,47 +61,37 @@ router.post('/new-route', async (req, res) => {
       });
     }
 
-    // Generate automated routeId
-    const routeCount = await Route.countDocuments();
-    const routeId = `ROUTE${(routeCount + 1).toString().padStart(4, '0')}`; // Creates ROUTE0001, ROUTE0002, etc.
-
     const newRoute = new Route({
-      routeId,
+      routeId: routeId || `ROUTE${Date.now()}`,
       name,
       departureStop,
       departure,
       arrivalStop,
       arrival,
-      startLocation: {
-        name: startLocation.name,
-        coordinates: startLocation.coordinates
-      },
-      endLocation: {
-        name: endLocation.name,
-        coordinates: endLocation.coordinates
-      },
       stops: stops.map(stop => ({
         stop: stop.stop,
         arrival: stop.arrival,
-        coordinates: stop.coordinates,
-        distance: parseFloat(stop.distance) || 0
+        coordinates: stop.coordinates || [],
+        distance: parseFloat(stop.fare) || 0  // Changed from distance to fare to match frontend
       })),
-      frequency,
-      selectedDays,
-      selectedDates,
+      frequency: frequency || 'daily',
+      selectedDays: selectedDays || [],
+      selectedDates: selectedDates || [],
       totaldistance: distance,
-      busAssigned: req.body.busAssigned,
-      staffs: req.body.staffs,
-      status: req.body.status
+      busAssigned,
+      staffs: staffs || [],
+      status: status || 'Active'
     });
 
+    console.log('Attempting to save route:', JSON.stringify(newRoute, null, 2));
     const savedRoute = await newRoute.save();
     res.status(201).json(savedRoute);
   } catch (error) {
     console.error('Error saving route:', error);
     res.status(500).json({ 
       message: 'Error creating route', 
-      error: error.message 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });

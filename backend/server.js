@@ -22,6 +22,7 @@ const leaveRoutes = require('./router/leaveRoutes');
 const bookingRoutes = require('./router/bookings');
 const feedbackRoutes = require("./router/FeedbackRoutes");
 const chatbotRoutes = require('./router/ChatbotRoutes');
+const notiRoute = require('./router/Notificationsrouter');
 
 
 //liveloc
@@ -108,6 +109,7 @@ app.use("/api/feedback", feedbackRoutes);
 app.use('/api/bookings', bookingRoutes);
 //chatbot
 app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/notification', notiRoute);
 
 
 // Start the server

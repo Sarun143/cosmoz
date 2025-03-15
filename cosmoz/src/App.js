@@ -38,6 +38,7 @@ import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import LiveTracking from "./components/LiveTracking";
 import Chatbot from "./components/Chatbot";
 import STLeaveManagement from "./components/STleaveManagement";
+import NotificationsPage from "./components/NotificationsPage";
 //import BusLocation from "./components/BusLocation";
 function App() {
   return (
@@ -65,7 +66,7 @@ function App() {
         <Route path='/staff/scheduledtrips' element={<StaffScheduledTrips />} />
         <Route path='/staff/leave-management' element={<StaffLeaveManagement />} />
         <Route path='/searchresults' element={<SearchResults />} />
-        <Route path='BookingPage' element={<BookingPage />} />
+        <Route path='/BookingPage' element={<BookingPage />} />
         <Route path='/Promotioncomponet' element={<Promotioncomponet />} />
         <Route path='/PDFProcessor' element={<PDFProcessor />} />
         <Route path='/admin/salaryManagement' element={<SalaryManagement />} />
@@ -76,6 +77,8 @@ function App() {
         <Route path='/FeedbackAnalytics' element={<FeedbackAnalytics />} />
         <Route path='/Chatbot' element={<Chatbot />} />
         <Route path='/staff/leave-management2' element={<STLeaveManagement />} />
+        <Route path='/NotificationsPage' element={<NotificationsPage />} />
+
         {/* //<Route path='Slocation' element={<Slocation />} />
         //<Route path='LiveTracking' element={<LiveTracking />} />
         <Route path='BusLocation' element={<BusLocation />} /> */}

@@ -1,27 +1,77 @@
 /* Scheduled trips component styles */
+.staff-trips-container {
+  padding: 20px;
+  margin-left: 250px; /* Adjust based on your sidebar width */
+}
+
+.staff-trips-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.staff-info {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.loading-container, .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 18px;
+}
+
+.error-container {
+  color: #d9534f;
+}
+
+.trips-table-container {
+  overflow-x: auto;
+}
+
 .trips-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-  
-  .trips-table th,
-  .trips-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .trips-table th {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .trips-table td {
-    background-color: #f9f9f9;
-  }
-  
-  .trips-table tbody tr:nth-child(even) {
-    background-color: #f4f4f4;
-  }
-  
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.trips-table th, .trips-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.trips-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.trips-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.trips-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.today-trip {
+  background-color: #e6f7ff !important;
+}
+
+.view-stops-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.view-stops-btn:hover {
+  background-color: #45a049;
+}

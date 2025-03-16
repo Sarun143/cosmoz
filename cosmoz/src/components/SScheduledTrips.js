@@ -194,7 +194,7 @@ const StaffScheduledTrips = () => {
                     <td>{trip.arrivalStop}</td>
                     <td>{trip.departureTime}</td>
                     <td>{trip.arrivalTime}</td>
-                    <td>{trip.status}</td>
+                    <td data-status={trip.status}>{trip.status}</td>
                     <td>
                       {trip.stops && trip.stops.length > 0 ? (
                         <button 

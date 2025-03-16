@@ -1,77 +1,368 @@
-/* Scheduled trips component styles */
+/* Premium Colorful Scheduled Trips Component Styles */
 .staff-trips-container {
-  padding: 20px;
+  padding: 30px;
   margin-left: 250px; /* Adjust based on your sidebar width */
+  background: linear-gradient(135deg, #f8f9fc 0%, #eef7ff 100%);
+  min-height: 100vh;
+  font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
 }
 
 .staff-trips-content {
   background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(149, 157, 165, 0.2);
+  transition: all 0.3s ease;
+  border-top: 5px solid #2ecc71;
+}
+
+.staff-trips-content h2 {
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  position: relative;
+  padding-bottom: 15px;
+  text-align: center;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.staff-trips-content h2:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  height: 5px;
+  width: 80px;
+  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  border-radius: 10px;
 }
 
 .staff-info {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 25px 30px;
+  border-radius: 12px;
+  margin-bottom: 35px;
+  border-left: 6px solid #2ecc71;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-shadow: 0 6px 16px rgba(46, 204, 113, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.staff-info::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(46, 204, 113, 0.1);
+  z-index: 0;
+}
+
+.staff-info p {
+  margin: 10px 25px 10px 0;
+  font-size: 16px;
+  color: #2c3e50;
+  position: relative;
+  z-index: 1;
+}
+
+.staff-info p strong {
+  color: #27ae60;
+  font-weight: 700;
+  margin-right: 8px;
 }
 
 .loading-container, .error-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  height: 400px;
   font-size: 18px;
 }
 
+.loading-container {
+  color: #2ecc71;
+}
+
+.loading-container:after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  margin: 25px auto;
+  border-radius: 50%;
+  border: 4px solid rgba(46, 204, 113, 0.2);
+  border-top-color: #2ecc71;
+  border-bottom-color: #2ecc71;
+  animation: spin 1.5s infinite ease-in-out;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .error-container {
-  color: #d9534f;
+  color: #e74c3c;
+  background-color: #ffeaea;
+  border-radius: 12px;
+  padding: 35px;
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.15);
+  max-width: 600px;
+  margin: 0 auto;
+  border-left: 6px solid #e74c3c;
+}
+
+.error-container p:first-child {
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 15px;
 }
 
 .trips-table-container {
   overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 5px;
 }
 
 .trips-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 20px;
+  background-color: white;
+  overflow: hidden;
 }
 
 .trips-table th, .trips-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
+  padding: 18px 22px;
   text-align: left;
+  border-bottom: 1px solid #e8f5e9;
 }
 
 .trips-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(46, 204, 113, 0.2);
 }
 
-.trips-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.trips-table th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.trips-table th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.trips-table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.trips-table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+.trips-table tr {
+  transition: all 0.3s ease;
 }
 
 .trips-table tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f0fff4;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(46, 204, 113, 0.08);
 }
 
 .today-trip {
-  background-color: #e6f7ff !important;
+  background: linear-gradient(90deg, rgba(46, 204, 113, 0.08) 0%, rgba(39, 174, 96, 0.08) 100%) !important;
+  border-left: 5px solid #2ecc71;
+}
+
+.today-trip td:first-child {
+  font-weight: 700;
+  color: #27ae60;
 }
 
 .view-stops-btn {
-  background-color: #4CAF50;
+  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 10px 18px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.view-stops-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
 }
 
 .view-stops-btn:hover {
-  background-color: #45a049;
+  background: linear-gradient(90deg, #27ae60 0%, #219653 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.35);
+}
+
+.view-stops-btn:hover:before {
+  left: 100%;
+}
+
+.view-stops-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.25);
+}
+
+/* Status styling with colorful indicators */
+.trips-table td:nth-child(7) {
+  font-weight: 700;
+  position: relative;
+  padding-left: 30px;
+}
+
+.trips-table td:nth-child(7):before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.trips-table td[data-status="Active"] {
+  color: #27ae60;
+}
+
+.trips-table td[data-status="Active"]:before {
+  background-color: #27ae60;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+}
+
+.trips-table td[data-status="Inactive"] {
+  color: #e74c3c;
+}
+
+.trips-table td[data-status="Inactive"]:before {
+  background-color: #e74c3c;
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
+}
+
+/* Empty state styling with illustration */
+.staff-trips-content > p {
+  text-align: center;
+  padding: 50px 20px;
+  color: #7f8c8d;
+  font-size: 18px;
+  background-color: #f0fff4;
+  border-radius: 12px;
+  border: 2px dashed #2ecc71;
+  position: relative;
+  margin-top: 30px;
+}
+
+.staff-trips-content > p:before {
+  content: '🚌';
+  font-size: 40px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* Animated row highlighting */
+@keyframes highlight {
+  0% { background-color: rgba(46, 204, 113, 0.2); }
+  100% { background-color: transparent; }
+}
+
+.trips-table tr:nth-child(odd) {
+  animation: highlight 2s ease-out;
+}
+
+/* Colorful date formatting */
+.trips-table td:first-child {
+  color: #3498db;
+  font-weight: 600;
+}
+
+/* Route name styling */
+.trips-table td:nth-child(2) {
+  color: #8e44ad;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .staff-trips-container {
+    padding: 20px;
+    margin-left: 0;
+  }
+  
+  .staff-info {
+    flex-direction: column;
+  }
+  
+  .trips-table th, .trips-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .staff-trips-content h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .staff-trips-content {
+    padding: 25px 15px;
+  }
+  
+  .staff-trips-content h2 {
+    font-size: 24px;
+  }
+  
+  .trips-table th {
+    font-size: 13px;
+    padding: 12px 10px;
+  }
+  
+  .trips-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+  
+  .view-stops-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }

@@ -22,10 +22,6 @@ const BookingPage = () => {
       zip: ''
     }
   }]);
-  const [routes, setRoutes] = useState([]);
-  const [selectedRouteId, setSelectedRouteId] = useState('');
-  const [buses, setBuses] = useState([]);
-  const [selectedBus, setSelectedBus] = useState('');
   const [stops, setStops] = useState([]);
   const [availableStops, setAvailableStops] = useState({
     pickupPoints: [],
@@ -46,20 +42,44 @@ const BookingPage = () => {
     }
   });
 
-  // Fetch routes when component mounts
+  // Add these states directly from the passed data
+  const [selectedRouteId, setSelectedRouteId] = useState(selectedRoute?._id || '');
+  const [selectedBus, setSelectedBus] = useState(initialBusDetails?._id || '');
+
+  // Add this useEffect to load the Razorpay script
   useEffect(() => {
-    fetchRoutes();
+    const loadRazorpayScript = () => {
+      return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => {
+          resolve(true);
+        };
+        script.onerror = () => {
+          resolve(false);
+        };
+        document.body.appendChild(script);
+      });
+    };
+
+    // Load the script
+    loadRazorpayScript();
   }, []);
 
-  // Fetch bus details when component mounts and route is available
+  // Modify this useEffect to only fetch booked seats
   useEffect(() => {
     if (selectedRoute) {
-      fetchBusDetails();
+      // No need to fetch bus details again as we already have them
+      // fetchBusDetails();
       fetchStopsForRoute();
       // Set route automatically
       setSelectedRouteId(selectedRoute._id);
+      if (initialBusDetails) {
+        setSelectedBus(initialBusDetails._id);
+      }
     }
-  }, [selectedRoute]);
+  }, [selectedRoute, initialBusDetails]);
 
   // Add useEffect to fetch booked seats for the selected date
   useEffect(() => {
@@ -95,30 +115,6 @@ const BookingPage = () => {
 
     fetchBookedSeats();
   }, [selectedRoute?._id, departureDate]);
-
-  const fetchRoutes = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/routes');
-      if (response.ok) {
-        const data = await response.json();
-        setRoutes(data);
-      }
-    } catch (error) {
-      console.error('Error fetching routes:', error);
-    }
-  };
-
-  const fetchBusesForRoute = async (routeId) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/routes  /route/${routeId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setBuses(data);
-      }
-    } catch (error) {
-      console.error('Error fetching buses:', error);
-    }
-  };
 
   const fetchStopsForRoute = async () => {
     try {
@@ -159,36 +155,6 @@ const BookingPage = () => {
 
     } catch (error) {
       console.error('Error fetching stops:', error);
-    }
-  };
-
-  const fetchBusDetails = async () => {
-    try {
-      setLoading(true);
-      // Fetch buses assigned to this route
-      const response = await fetch(`http://localhost:5000/api/vehicles/route/${selectedRoute._id}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length > 0) {
-          setBusDetails(data[0]); // Get the first available bus
-          setSelectedBus(data[0]._id);
-          // Update bus layout based on the actual bus configuration
-          setBusLayout({
-            totalSeats: data[0].seats.totalSeats,
-            lowerDeck: data[0].seats.Lower,
-            upperDeck: data[0].seats.Upper,
-            bookedSeats: [], // You'll need to fetch booked seats separately
-            fareDetails: {
-              lower: 800,
-              upper: 700
-            }
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching bus details:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -262,10 +228,6 @@ const BookingPage = () => {
       alert("Please select both pickup and dropoff points.");
       return;
     }
-    if (!selectedBus || !selectedRouteId) {
-      alert("Please select a route and bus.");
-      return;
-    }
     
     // Validate passenger details
     const validPassengers = passengerDetails.filter(p => p.name && p.gender);
@@ -281,17 +243,31 @@ const BookingPage = () => {
     // Calculate total amount to be paid
     const amountPaid = selectedSeats.reduce((sum, seat) => sum + seat.fare, 0);
 
+    // Format the selectedSeats properly according to your Booking model schema
+    const formattedSeats = selectedSeats.map(seat => ({
+      seatNo: seat.seatNo,
+      seatType: seat.seatType,
+      fare: seat.fare
+    }));
+
     const bookingData = {
-      selectedSeats,
+      selectedSeats: formattedSeats, // Send the complete seat objects
       pickupPoint,
       dropoffPoint,
       passengerDetails: validPassengers,
       bus: selectedBus,
       route: selectedRouteId,
-      amountPaid
+      amountPaid,
+      journeyDate: departureDate
     };
 
     try {
+      // Check if Razorpay is loaded
+      if (!window.Razorpay) {
+        alert('Razorpay SDK failed to load. Please check your internet connection.');
+        return;
+      }
+
       // Use the /book endpoint which initiates payment
       const response = await fetch('http://localhost:5000/api/bookings/book', {
         method: 'POST',
@@ -303,20 +279,39 @@ const BookingPage = () => {
 
       if (response.ok) {
         const result = await response.json();
+        console.log('Booking created successfully:', result);
+        
+        // Store the booking ID in a variable for easier access
+        const bookingId = result.booking._id;
+        console.log('Booking ID:', bookingId);
+        
         // Handle Razorpay payment
         const { booking, payment } = result;
         
         // Initialize Razorpay
         const options = {
-          key: 'rzp_test_b2TpjIJkb7Ffek', // Your Razorpay Key ID
+          key: 'rzp_test_b2TpjIJkb7Ffek',
           amount: payment.amount,
           currency: payment.currency,
           name: 'Cosmoz Bus Booking',
           description: 'Bus Ticket Payment',
           order_id: payment.id,
           handler: function(response) {
-            // Call your verify-payment endpoint
-            verifyPayment(response, booking._id);
+            // Prepare all booking data to send with payment verification
+            const verificationData = {
+              ...response,
+              selectedSeats: formattedSeats,
+              pickupPoint,
+              dropoffPoint,
+              passengerDetails: validPassengers,
+              bus: selectedBus,
+              route: selectedRouteId,
+              amountPaid,
+              journeyDate: departureDate
+            };
+            
+            // Call verify-payment with all booking data
+            verifyPayment(verificationData);
           },
           prefill: {
             name: validPassengers[0].name,
@@ -340,33 +335,32 @@ const BookingPage = () => {
     }
   };
 
-  // Add a function to verify payment
-  const verifyPayment = async (paymentResponse, bookingId) => {
+  // Update the verifyPayment function
+  const verifyPayment = async (paymentData) => {
     try {
+      console.log('Verifying payment with data:', paymentData);
+      
       const response = await fetch('http://localhost:5000/api/bookings/verify-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          razorpay_order_id: paymentResponse.razorpay_order_id,
-          razorpay_payment_id: paymentResponse.razorpay_payment_id,
-          razorpay_signature: paymentResponse.razorpay_signature,
-          bookingId
-        }),
+        body: JSON.stringify(paymentData),
       });
 
+      const result = await response.json();
+      console.log('Payment verification response:', result);
+      
       if (response.ok) {
         alert('Payment successful! Your booking is confirmed.');
-        // Redirect to booking confirmation page or show booking details
-        // window.location.href = `/booking-confirmation/${bookingId}`;
+        // Redirect to a confirmation page
+        // window.location.href = `/booking-confirmation/${result.booking._id}`;
       } else {
-        const errorData = await response.json();
-        alert(`Payment verification failed: ${errorData.message}`);
+        alert(`Payment verification failed: ${result.message}`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred during payment verification.');
+      console.error('Error during payment verification:', error);
+      alert(`An error occurred during payment verification: ${error.message}`);
     }
   };
 
@@ -397,59 +391,33 @@ const BookingPage = () => {
             </div>
           )}
 
-          <div className="route-selection">
-            <h3>Select Route and Bus</h3>
-            <div className="form-group">
-              <label>Route:</label>
-              <select 
-                value={selectedRouteId} 
-                onChange={(e) => setSelectedRouteId(e.target.value)}
-              >
-                <option value="">Select Route</option>
-                {routes.map(route => (
-                  <option key={route._id} value={route._id}>
-                    {route.name || `${route.origin} to ${route.destination}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Bus:</label>
-              <select 
-                value={selectedBus} 
-                onChange={(e) => setSelectedBus(e.target.value)}
-                disabled={!selectedRouteId}
-              >
-                <option value="">Select Bus</option>
-                {buses.map(bus => (
-                  <option key={bus._id} value={bus._id}>
-                    {bus.registrationNumber} - {bus.type} ({bus.totalSeats} seats)
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
           <div className="seat-selection">
             <h3>Lower Deck</h3>
             <div className="bus-front">Front</div>
             <div className="seats-container">
-              {Array.from({ length: busLayout.lowerDeck / 4 }, (_, row) => (
+              {Array.from({ length: Math.ceil(busLayout.lowerDeck / 4) }, (_, row) => (
                 <div key={`lower-${row}`} className="seat-row">
                   {Array.from({ length: 4 }, (_, col) => {
-                    const seatNo = `L${row * 4 + col + 1}`;
-                    return (
-                      <div
-                        key={col}
-                        className={`seat ${
-                          !isSeatAvailable(seatNo) ? 'booked' : ''
-                        } ${selectedSeats.some(s => s.seatNo === seatNo) ? 'selected' : ''}`}
-                        onClick={() => isSeatAvailable(seatNo) && handleSeatClick(seatNo, 'Lower')}
-                      >
-                        {seatNo}
-                      </div>
-                    );
+                    // Calculate seat number (1-indexed)
+                    const seatIndex = row * 4 + col;
+                    // Only render if we haven't exceeded the total lower deck seats
+                    if (seatIndex < busLayout.lowerDeck) {
+                      const seatNo = `L${seatIndex + 1}`;
+                      return (
+                        <div
+                          key={col}
+                          className={`seat ${
+                            !isSeatAvailable(seatNo) ? 'booked' : ''
+                          } ${selectedSeats.some(s => s.seatNo === seatNo) ? 'selected' : ''}`}
+                          onClick={() => isSeatAvailable(seatNo) && handleSeatClick(seatNo, 'Lower')}
+                        >
+                          {seatNo}
+                        </div>
+                      );
+                    } else {
+                      // Return empty space if we've exceeded the total seats
+                      return <div key={col} className="seat-placeholder"></div>;
+                    }
                   })}
                 </div>
               ))}
@@ -457,16 +425,18 @@ const BookingPage = () => {
 
             <h3>Upper Deck</h3>
             <div className="seats-container">
-              {Array.from({ length: busLayout.upperDeck / 4 }, (_, row) => {
-                const startSeat = busLayout.lowerDeck + row * 4 + 1;
-                return (
-                  <div key={`upper-${row}`} className="seat-row">
-                    {Array.from({ length: 4 }, (_, col) => {
-                      const seatNo = `U${row * 4 + col + 1}`;
+              {Array.from({ length: Math.ceil(busLayout.upperDeck / 4) }, (_, row) => (
+                <div key={`upper-${row}`} className="seat-row">
+                  {Array.from({ length: 4 }, (_, col) => {
+                    // Calculate seat number (1-indexed)
+                    const seatIndex = row * 4 + col;
+                    // Only render if we haven't exceeded the total upper deck seats
+                    if (seatIndex < busLayout.upperDeck) {
+                      const seatNo = `U${seatIndex + 1}`;
                       return (
                         <div
                           key={col}
-                          className={`seat ${
+                          className={`seat upper ${
                             !isSeatAvailable(seatNo) ? 'booked' : ''
                           } ${selectedSeats.some(s => s.seatNo === seatNo) ? 'selected' : ''}`}
                           onClick={() => isSeatAvailable(seatNo) && handleSeatClick(seatNo, 'Upper')}
@@ -474,10 +444,13 @@ const BookingPage = () => {
                           {seatNo}
                         </div>
                       );
-                    })}
-                  </div>
-                );
-              })}
+                    } else {
+                      // Return empty space if we've exceeded the total seats
+                      return <div key={col} className="seat-placeholder"></div>;
+                    }
+                  })}
+                </div>
+              ))}
             </div>
 
             <div className="legend">
@@ -682,7 +655,7 @@ const BookingPage = () => {
           <button 
             className="proceed-button" 
             onClick={handleProceedToPayment}
-            disabled={!selectedBus || !selectedRouteId || selectedSeats.length === 0 || !pickupPoint || !dropoffPoint}
+            disabled={selectedSeats.length === 0 || !pickupPoint || !dropoffPoint}
           >
             Proceed to Payment
           </button>

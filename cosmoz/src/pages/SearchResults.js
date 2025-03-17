@@ -105,6 +105,17 @@ const SearchResults = () => {
     return stopsWithTimes;
   };
 
+  // Update the button click handler
+  const handleBookNow = (result) => {
+    navigate('/BookingPage', { 
+      state: { 
+        selectedRoute: result,
+        busDetails: result.busAssigned,
+        departureDate: departureDate // Pass the departure date as well
+      } 
+    });
+  };
+
   return (
     <div className="search-results-page">
       <Navbar />
@@ -115,7 +126,7 @@ const SearchResults = () => {
         
         <div className="results-list">
           {results.length > 0 && results.map((result) => {
-            const stopTimes = generateStopTimes(result);
+            const busDetails = result.busAssigned;
             
             return (
               <div key={result._id || result.routeId} className="result-card">
@@ -135,24 +146,68 @@ const SearchResults = () => {
                   </div>
                   
                   <div className="detail-item">
-                    <span className="detail-label">Total Distance:</span>
+                    <span className="detail-label">Distance:</span>
                     <span className="detail-value">{result.totaldistance || result.totalDistance || '0'} km</span>
                   </div>
-                  
-                  <div className="detail-item">
-                    <span className="detail-label">Frequency:</span>
-                    <span className="detail-value">{result.frequency || 'all_day'}</span>
-                  </div>
-                  
-                  <button 
-                    onClick={() => navigate('/BookingPage', { 
-                      state: { selectedRoute: result } 
-                    })} 
-                    className="book-button"
-                  >
-                    Book
-                  </button>
                 </div>
+
+                {/* Updated Bus Details Section */}
+                {busDetails && (
+                  <div className="bus-details-section">
+                    <div className="bus-info">
+                      <div className="bus-detail-item">
+                        <span className="detail-label">Bus Number:</span>
+                        <span className="detail-value">{busDetails.registrationNumber}</span>
+                      </div>
+                      <div className="bus-detail-item">
+                        <span className="detail-label">Type:</span>
+                        <span className="detail-value">{busDetails.type}</span>
+                      </div>
+                      <div className="bus-detail-item">
+                        <span className="detail-label">Status:</span>
+                        <span className={`detail-value status-${busDetails.status.toLowerCase()}`}>
+                          {busDetails.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* New Remaining Seats Section */}
+                    <div className="seats-info">
+                      <div className="seats-detail">
+                        <span className="detail-label">Available Seats:</span>
+                        <span className="detail-value">
+                          {busDetails.remainingSeats?.total || 0} of {busDetails.seats.totalSeats}
+                        </span>
+                      </div>
+                      <div className="seats-detail">
+                        <span className="detail-label">Lower Deck:</span>
+                        <span className="detail-value">{busDetails.seats.Lower} seats</span>
+                      </div>
+                      <div className="seats-detail">
+                        <span className="detail-label">Upper Deck:</span>
+                        <span className="detail-value">{busDetails.seats.Upper} seats</span>
+                      </div>
+                      {busDetails.remainingSeats?.bookedSeats > 0 && (
+                        <div className="seats-detail booked">
+                          <span className="detail-label">Booked:</span>
+                          <span className="detail-value">{busDetails.remainingSeats.bookedSeats} seats</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                <button 
+                  onClick={() => handleBookNow(result)} 
+                  className="book-button"
+                  disabled={!result.busAssigned || 
+                           result.busAssigned.status !== 'Active' || 
+                           (result.busAssigned.remainingSeats?.total <= 0)}
+                >
+                  {!result.busAssigned ? 'No Bus Assigned' : 
+                   result.busAssigned.status !== 'Active' ? 'Bus Not Available' :
+                   result.busAssigned.remainingSeats?.total <= 0 ? 'Fully Booked' : 'Book Now'}
+                </button>
               </div>
             );
           })}

@@ -1,121 +1,242 @@
-/* LeaveRequest.css */
-.staff-dashboard-container {
+/* Reset and base styles */
+.leave-management-page {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background-color: #f8f9fa;
+  margin-top: 5%;
+}
+
+.leave-management-layout {
+  display: flex;
+}
+
+.leave-management-content {
+  flex: 1;
+  padding: 2rem;
+  margin-left: 250px; /* Adjust based on sidebar width */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fc 0%, #eef7ff 100%);
+}
+
+/* Header styles */
+.leave-management-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.leave-management-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #2ecc71, #2ecc71);
+  border-radius: 12px;
+}
+
+/* Loading state */
+.leave-loading {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.dashboard-content {
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(52, 152, 219, 0.2);
+  border-radius: 50%;
+  border-top-color: #2ecc71;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.leave-loading p {
+  color: #2ecc71;
+  font-size: 1.1rem;
+}
+
+/* Error state */
+.leave-error {
+  background-color: #fee;
+  border-left: 4px solid #e74c3c;
+  color: #c0392b;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Action bar */
+.leave-action-bar {
   display: flex;
-  flex: 1;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
 }
 
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+.request-leave-button {
+  background: linear-gradient(90deg, #2ecc71, #2ecc71);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
 }
 
-.main-content h2 {
-  margin-bottom: 20px;
-  color: #333;
+.request-leave-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
 }
 
-.leave-requests-container {
-  margin-top: 20px;
-  background-color: #fff;
+.request-leave-button:active {
+  transform: translateY(0);
+}
+
+/* Table styles */
+.leave-table-container {
+  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.leave-requests-table {
+.leave-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
 }
 
-.leave-requests-table th, 
-.leave-requests-table td {
-  padding: 12px 15px;
+.leave-table th,
+.leave-table td {
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #eee;
 }
 
-.leave-requests-table th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-  color: #333;
-}
-
-.leave-requests-table tr:last-child td {
-  border-bottom: none;
-}
-
-.leave-requests-table tr:hover {
-  background-color: #f9f9f9;
-}
-
-.status-approved {
-  color: #28a745;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: rgba(40, 167, 69, 0.1);
-}
-
-.status-rejected {
-  color: #dc3545;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: rgba(220, 53, 69, 0.1);
-}
-
-.status-pending {
-  color: #ffc107;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: rgba(255, 193, 7, 0.1);
-}
-
-.request-button-container {
-  margin-bottom: 20px;
-}
-
-.new-leave-btn {
-  background-color: #007bff;
+.leave-table th {
+  background: linear-gradient(90deg, #2ecc71, #2ecc71);
   color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.3s;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
-.new-leave-btn:hover {
-  background-color: #0069d9;
+.leave-table tr:hover {
+  background-color: #f8f9fa;
 }
 
-.loading-message, 
-.error-message {
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 4px;
+/* Status styling */
+.leave-status {
+  font-weight: 600;
+  position: relative;
+  padding-left: 1.5rem !important;
 }
 
-.loading-message {
-  background-color: #e9f5fe;
-  color: #0c5460;
+.leave-status::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
+.leave-status.approved {
+  color: #27ae60;
 }
 
+.leave-status.approved::before {
+  background-color: #27ae60;
+  box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+}
+
+.leave-status.rejected {
+  color: #e74c3c;
+}
+
+.leave-status.rejected::before {
+  background-color: #e74c3c;
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+}
+
+.leave-status.pending {
+  color: #f39c12;
+}
+
+.leave-status.pending::before {
+  background-color: #f39c12;
+  box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+}
+
+/* Empty state */
+.no-leaves-message {
+  background-color: #f0f8ff;
+  border: 2px dashed #3498db;
+  border-radius: 8px;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #7f8c8d;
+  margin-top: 2rem;
+}
+
+.no-leaves-message::before {
+  content: '📅';
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .leave-management-content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .leave-table th,
+  .leave-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .leave-management-content h2 {
+    font-size: 1.75rem;
+  }
+  
+  .request-leave-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .leave-table-container {
+    overflow-x: auto;
+  }
+  
+  .leave-table {
+    min-width: 600px;
+  }
+}
 .no-leave-requests {
   text-align: center;
   padding: 30px;

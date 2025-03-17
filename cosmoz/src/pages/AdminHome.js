@@ -237,9 +237,9 @@ const AdminHome = () => {
         <div className="dashboard-header">
           <h1>Admin Dashboard</h1>
           <p>Overview of all system metrics and data</p>
-        </div>
-        
-        {/* Overview Cards */}
+      </div>
+      
+      {/* Overview Cards */}
         <div className="overview-cards">
           <div className="card">
             <div className="card-icon staff-icon">
@@ -255,23 +255,23 @@ const AdminHome = () => {
           <div className="card">
             <div className="card-icon bus-icon">
               <Bus size={24} />
-            </div>
+          </div>
             <div className="card-content">
               <p className="card-label">Total Buses</p>
               <h3 className="card-value">{dashboardData.busSummary.total}</h3>
               <p className="card-subtext">{dashboardData.busSummary.active} active</p>
-            </div>
+        </div>
           </div>
           
           <div className="card">
             <div className="card-icon leave-icon">
               <Calendar size={24} />
-            </div>
+          </div>
             <div className="card-content">
               <p className="card-label">Leave Requests</p>
               <h3 className="card-value">{dashboardData.leaveRequests.total}</h3>
               <p className="card-subtext">{dashboardData.leaveRequests.pending} pending</p>
-            </div>
+        </div>
           </div>
           
           <div className="card">
@@ -289,177 +289,177 @@ const AdminHome = () => {
           <div className="card">
             <div className="card-icon feedback-icon">
               <MessageSquare size={24} />
-            </div>
+        </div>
             <div className="card-content">
               <p className="card-label">Feedback</p>
               <h3 className="card-value">{dashboardData.feedbackAnalytics.totalFeedback}</h3>
               <p className="card-subtext">
                 {dashboardData.feedbackAnalytics.sentimentDistribution.positive} positive
               </p>
-            </div>
           </div>
         </div>
-        
-        {/* Charts Row 1 */}
+      </div>
+      
+      {/* Charts Row 1 */}
         <div className="charts-row">
-          {/* Staff Role Distribution */}
+        {/* Staff Role Distribution */}
           <div className="chart-card">
             <h3>Staff Role Distribution</h3>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={dashboardData.staffSummary.roleDistribution}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {dashboardData.staffSummary.roleDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={STAFF_COLORS[index % STAFF_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={dashboardData.staffSummary.roleDistribution}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={true}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {dashboardData.staffSummary.roleDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={STAFF_COLORS[index % STAFF_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-          
-          {/* Bus Status Distribution */}
+        </div>
+        
+        {/* Bus Status Distribution */}
           <div className="chart-card">
             <h3>Bus Status Distribution</h3>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={dashboardData.busSummary.statusDistribution}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {dashboardData.busSummary.statusDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={BUS_COLORS[index % BUS_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={dashboardData.busSummary.statusDistribution}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={true}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {dashboardData.busSummary.statusDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={BUS_COLORS[index % BUS_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
-        
-        {/* Charts Row 2 */}
+      </div>
+      
+      {/* Charts Row 2 */}
         <div className="charts-row">
-          {/* Staff Attendance Trend */}
+        {/* Staff Attendance Trend */}
           <div className="chart-card">
             <h3>Staff Attendance Trend</h3>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={dashboardData.staffSummary.attendanceData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="present" name="Present %" fill="#4CAF50" />
-                  <Bar dataKey="absent" name="Absent %" fill="#F44336" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          
-          {/* Leave Requests by Month */}
-          <div className="chart-card">
-            <h3>Leave Requests by Month</h3>
-            <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={dashboardData.leaveRequests.monthlyData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="leaves" name="Leave Requests" stroke="#FFC107" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={dashboardData.staffSummary.attendanceData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="present" name="Present %" fill="#4CAF50" />
+                <Bar dataKey="absent" name="Absent %" fill="#F44336" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
         
-        {/* Charts Row 3 */}
+        {/* Leave Requests by Month */}
+          <div className="chart-card">
+            <h3>Leave Requests by Month</h3>
+            <div className="chart-container">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={dashboardData.leaveRequests.monthlyData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="leaves" name="Leave Requests" stroke="#FFC107" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+      
+      {/* Charts Row 3 */}
         <div className="charts-row">
-          {/* Feedback Sentiment Distribution */}
+        {/* Feedback Sentiment Distribution */}
           <div className="chart-card">
             <h3>Feedback Sentiment Analysis</h3>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={dashboardData.feedbackAnalytics.pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {dashboardData.feedbackAnalytics.pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={SENTIMENT_COLORS[index % SENTIMENT_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={dashboardData.feedbackAnalytics.pieData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={true}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {dashboardData.feedbackAnalytics.pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={SENTIMENT_COLORS[index % SENTIMENT_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-          
+        </div>
+        
           {/* Document Expiry Alerts */}
           <div className="chart-card">
             <h3>Document Expiry Alerts</h3>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={dashboardData.busSummary.expiryData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
-                  <YAxis />
+                <YAxis />
                   <Tooltip />
-                  <Legend />
+                <Legend />
                   <Bar dataKey="upcoming" name="Documents Expiring Soon" fill="#FF9800" />
                 </BarChart>
-              </ResponsiveContainer>
-            </div>
+            </ResponsiveContainer>
           </div>
         </div>
-        
-        {/* Alert Section */}
+      </div>
+      
+      {/* Alert Section */}
         <div className="alerts-section">
           <div className="alerts-header">
             <Activity size={24} className="alert-icon" />
             <h3>Alerts & Notifications</h3>
-          </div>
-          
+        </div>
+        
           <div className="alerts-container">
-            {dashboardData.busSummary.upcoming.tax > 0 && (
+          {dashboardData.busSummary.upcoming.tax > 0 && (
               <div className="alert tax-alert">
                 <div className="alert-icon-container">
                   <svg className="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -468,11 +468,11 @@ const AdminHome = () => {
                 </div>
                 <div className="alert-content">
                   <p>{dashboardData.busSummary.upcoming.tax} buses have tax documents expiring soon</p>
-                </div>
               </div>
-            )}
-            
-            {dashboardData.busSummary.upcoming.insurance > 0 && (
+            </div>
+          )}
+          
+          {dashboardData.busSummary.upcoming.insurance > 0 && (
               <div className="alert insurance-alert">
                 <div className="alert-icon-container">
                   <svg className="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -481,11 +481,11 @@ const AdminHome = () => {
                 </div>
                 <div className="alert-content">
                   <p>{dashboardData.busSummary.upcoming.insurance} buses have insurance expiring soon</p>
-                </div>
               </div>
-            )}
-            
-            {dashboardData.leaveRequests.pending > 0 && (
+            </div>
+          )}
+          
+          {dashboardData.leaveRequests.pending > 0 && (
               <div className="alert leave-alert">
                 <div className="alert-icon-container">
                   <svg className="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -494,11 +494,11 @@ const AdminHome = () => {
                 </div>
                 <div className="alert-content">
                   <p>{dashboardData.leaveRequests.pending} leave requests pending approval</p>
-                </div>
               </div>
-            )}
-            
-            {dashboardData.feedbackAnalytics.sentimentDistribution.negative > 50 && (
+            </div>
+          )}
+          
+          {dashboardData.feedbackAnalytics.sentimentDistribution.negative > 50 && (
               <div className="alert feedback-alert">
                 <div className="alert-icon-container">
                   <svg className="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -510,7 +510,7 @@ const AdminHome = () => {
                 </div>
               </div>
             )}
-          </div>
+            </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 /* Premium Dashboard Styling */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #1a2b42;
-  line-height: 1.5;
+    line-height: 1.5;
   background-color: #f8fafc;
 }
 
@@ -397,16 +397,16 @@ body {
 }
 
 /* Premium Recharts customization */
-.recharts-tooltip-wrapper {
+  .recharts-tooltip-wrapper {
   background-color: rgba(255, 255, 255, 0.95) !important;
   border-radius: 12px !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
   backdrop-filter: blur(4px);
-}
-
-.recharts-default-tooltip {
-  background-color: white !important;
-  border: none !important;
+  }
+  
+  .recharts-default-tooltip {
+    background-color: white !important;
+    border: none !important;
   border-radius: 12px !important;
   padding: 12px 16px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
@@ -432,50 +432,50 @@ body {
 }
 
 /* Custom premium scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
   background: #f1f5f9;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 10px;
+    border-radius: 10px;
   border: 2px solid #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb:hover {
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
 /* Premium Animations */
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
+  @keyframes pulse {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.6;
+    }
   }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
-@keyframes slideIn {
-  from {
+  
+  @keyframes slideIn {
+    from {
     transform: translateX(-15px);
-    opacity: 0;
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
+  
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);
@@ -552,25 +552,25 @@ body {
   .chart-container {
     height: 250px;
   }
-}
-
-/* Print styles */
-@media print {
-  .no-print {
-    display: none !important;
   }
   
-  body {
-    background-color: white !important;
-  }
-  
+  /* Print styles */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    
+    body {
+      background-color: white !important;
+    }
+    
   .dashboard-content {
     margin-left: 0 !important;
-    padding: 0 !important;
-  }
-  
+      padding: 0 !important;
+    }
+    
   .chart-card {
-    page-break-inside: avoid;
+      page-break-inside: avoid;
     box-shadow: none;
     border: 1px solid #eee;
   }
@@ -609,5 +609,5 @@ body {
   .dark-mode-enabled .card-value,
   .dark-mode-enabled h3 {
     color: var(--text-primary);
+    }
   }
-}

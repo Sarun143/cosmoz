@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Route = require('../model/Route');
+const Booking = require('../model/Booking');
 
 router.post('/search-bus', async (req, res) => {
   const { departureStop, arrivalStop, departureDate } = req.body;
@@ -37,12 +38,48 @@ router.post('/search-bus', async (req, res) => {
 
     console.log('MongoDB query:', JSON.stringify(query, null, 2));
     
-    // Find matching routes
-    const routes = await Route.find(query);
+    // Populate bus details and get routes
+    const routes = await Route.find(query)
+      .populate({
+        path: 'busAssigned',
+        select: 'registrationNumber type seats status'
+      });
     
-    console.log(`Found ${routes.length} matching routes.`);
+    // Get booked seats for each route's bus for the specified date
+    const routesWithAvailability = await Promise.all(routes.map(async (route) => {
+      const routeObj = route.toObject();
+      
+      if (routeObj.busAssigned) {
+        // Find bookings for this bus on the specified date
+        const bookings = await Booking.find({
+          route: route._id,
+          journeyDate: new Date(departureDate),
+          status: { $ne: 'cancelled' } // Exclude cancelled bookings
+        });
+
+        // Calculate booked seats
+        const bookedSeats = bookings.reduce((acc, booking) => {
+          return acc + (booking.selectedSeats?.length || 0);
+        }, 0);
+
+        // Calculate remaining seats
+        const totalSeats = routeObj.busAssigned.seats.totalSeats;
+        const remainingSeats = {
+          total: totalSeats - bookedSeats,
+          lower: routeObj.busAssigned.seats.Lower,
+          upper: routeObj.busAssigned.seats.Upper,
+          bookedSeats: bookedSeats
+        };
+
+        routeObj.busAssigned.remainingSeats = remainingSeats;
+      }
+
+      return routeObj;
+    }));
     
-    if (routes.length === 0) {
+    console.log(`Found ${routesWithAvailability.length} matching routes.`);
+    
+    if (routesWithAvailability.length === 0) {
       // If no exact matches, try a broader search
       const allRoutes = await Route.find({
         $or: [
@@ -51,7 +88,12 @@ router.post('/search-bus', async (req, res) => {
           { 'stops.stop': { $regex: new RegExp(departureStop, 'i') } },
           { 'stops.stop': { $regex: new RegExp(arrivalStop, 'i') } }
         ]
-      }).limit(10);
+      })
+      .populate({
+        path: 'busAssigned',
+        select: 'registrationNumber type seats status'
+      })
+      .limit(10);
       
       console.log(`Found ${allRoutes.length} routes in broader search.`);
       
@@ -61,13 +103,44 @@ router.post('/search-bus', async (req, res) => {
       }
       
       // Return these routes with a note that they're partial matches
-      return res.json(allRoutes.map(route => ({
-        ...route.toObject(),
+      const allRoutesWithAvailability = await Promise.all(allRoutes.map(async (route) => {
+        const routeObj = route.toObject();
+        
+        if (routeObj.busAssigned) {
+          // Find bookings for this bus on the specified date
+          const bookings = await Booking.find({
+            route: route._id,
+            journeyDate: new Date(departureDate),
+            status: { $ne: 'cancelled' } // Exclude cancelled bookings
+          });
+
+          // Calculate booked seats
+          const bookedSeats = bookings.reduce((acc, booking) => {
+            return acc + (booking.selectedSeats?.length || 0);
+          }, 0);
+
+          // Calculate remaining seats
+          const totalSeats = routeObj.busAssigned.seats.totalSeats;
+          const remainingSeats = {
+            total: totalSeats - bookedSeats,
+            lower: routeObj.busAssigned.seats.Lower,
+            upper: routeObj.busAssigned.seats.Upper,
+            bookedSeats: bookedSeats
+          };
+
+          routeObj.busAssigned.remainingSeats = remainingSeats;
+        }
+
+        return routeObj;
+      }));
+      
+      return res.json(allRoutesWithAvailability.map(route => ({
+        ...route,
         isPartialMatch: true
       })));
     }
     
-    res.json(routes);
+    res.json(routesWithAvailability);
   } catch (error) {
     console.error('Error fetching routes:', error);
     res.status(500).json({ message: 'Error fetching routes', error: error.message });
@@ -130,6 +203,31 @@ router.get('/stop-suggestions', async (req, res) => {
   } catch (error) {
     console.error('Error fetching stop suggestions:', error);
     res.status(500).json({ message: 'Error fetching stop suggestions', error: error.message });
+  }
+});
+
+// Add this new route to get booked seats for a specific route and date
+router.post('/booked-seats', async (req, res) => {
+  const { routeId, journeyDate } = req.body;
+
+  try {
+    const bookings = await Booking.find({
+      route: routeId,
+      journeyDate: {
+        $gte: new Date(journeyDate).setHours(0, 0, 0),
+        $lt: new Date(journeyDate).setHours(23, 59, 59)
+      },
+      status: { $ne: 'cancelled' }
+    });
+
+    const bookedSeats = bookings.reduce((acc, booking) => {
+      return [...acc, ...(booking.selectedSeats || [])];
+    }, []);
+
+    res.json({ bookedSeats });
+  } catch (error) {
+    console.error('Error fetching booked seats:', error);
+    res.status(500).json({ message: 'Error fetching booked seats', error: error.message });
   }
 });
 

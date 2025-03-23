@@ -258,6 +258,27 @@ router.put('/:id', async (req, res) => {
 //   }
 // });
 
-
+// GET USER BOOKINGS
+router.get('/user/:email', async (req, res) => {
+  try {
+    const userEmail = req.params.email;
+    console.log("Fetching bookings for email:", userEmail);
+    
+    // Find bookings with this email in the passengerDetails
+    // Don't use populate() since Vehicle model is not registered
+    const bookings = await Booking.find({
+      $or: [
+        { 'passengerDetails.email': userEmail },
+        { 'email': userEmail } 
+      ]
+    });
+    
+    console.log(`Found ${bookings.length} bookings for ${userEmail}`);
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 module.exports = router;

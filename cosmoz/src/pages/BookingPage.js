@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './BookingPage.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const BookingPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { selectedRoute, busDetails: initialBusDetails, departureDate } = location.state || {};
   
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -335,7 +336,7 @@ const BookingPage = () => {
     }
   };
 
-  // Update the verifyPayment function
+  // Update the verifyPayment function to send confirmation email
   const verifyPayment = async (paymentData) => {
     try {
       console.log('Verifying payment with data:', paymentData);
@@ -352,15 +353,56 @@ const BookingPage = () => {
       console.log('Payment verification response:', result);
       
       if (response.ok) {
-        alert('Payment successful! Your booking is confirmed.');
-        // Redirect to a confirmation page
-        // window.location.href = `/booking-confirmation/${result.booking._id}`;
+        // Send confirmation email
+        await sendConfirmationEmail(result.booking);
+        
+        alert('Payment successful! Your booking is confirmed. A confirmation email has been sent to your email address.');
+        // Redirect to dashboard with email for fetching bookings
+        const primaryPassenger = passengerDetails[0];
+        navigate('/dashboard', { state: { email: primaryPassenger.email } });
       } else {
         alert(`Payment verification failed: ${result.message}`);
       }
     } catch (error) {
       console.error('Error during payment verification:', error);
       alert(`An error occurred during payment verification: ${error.message}`);
+    }
+  };
+
+  // Add a function to send confirmation email
+  const sendConfirmationEmail = async (booking) => {
+    try {
+      // Get primary passenger's email (usually the first passenger)
+      const primaryPassenger = passengerDetails[0];
+      const emailData = {
+        bookingId: booking._id,
+        email: primaryPassenger.email,
+        name: primaryPassenger.name,
+        departureStop: selectedRoute.departureStop,
+        arrivalStop: selectedRoute.arrivalStop,
+        journeyDate: departureDate,
+        pickupPoint: pickupPoint,
+        dropoffPoint: dropoffPoint,
+        selectedSeats: selectedSeats,
+        passengers: passengerDetails,
+        totalAmount: selectedSeats.reduce((sum, seat) => sum + seat.fare, 0),
+        busDetails: busDetails
+      };
+      
+      const response = await fetch('http://localhost:5000/api/bookings/send-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+      
+      const result = await response.json();
+      console.log('Email confirmation response:', result);
+      
+      return result;
+    } catch (error) {
+      console.error('Error sending confirmation email:', error);
     }
   };
 

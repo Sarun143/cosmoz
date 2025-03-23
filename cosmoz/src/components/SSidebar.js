@@ -29,13 +29,13 @@ const SSidebar = ({ setSelectedSection }) => {
           <span className="menu-text">Profile</span>
         </li>
         
-        <li 
-          className={isActive('/staff/attendance') ? 'active' : ''} 
-          onClick={() => navigate('/staff/attendance')}
-        >
-          <span className="menu-icon">📋</span>
-          <span className="menu-text">Attendance</span>
-        </li>
+      {/* <li 
+        className={isActive('/staff/attendance') ? 'active' : ''} 
+        onClick={() => navigate('/staff/attendance')}
+      >
+        <span className="menu-icon">📋</span>
+        <span className="menu-text">Attendance</span>
+      </li> */}
         
         <li 
           className={isActive('/staff/leave-management') ? 'active' : ''} 

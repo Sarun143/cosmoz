@@ -62,7 +62,7 @@ console.log('JWT_SECRET is set:', !!process.env.JWT_SECRET);
 // Middleware
 app.use(express.json());  // To parse incoming JSON requests
 // app.use(cors());          // To allow requests from your React frontend
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: '*' }));
 // app.use(cors({ origin: 'https://cosmoz-b302.onrender.com' }));
 
 

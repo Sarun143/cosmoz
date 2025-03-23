@@ -74,6 +74,7 @@ const Chatbot = () => {
     <div className="chatbot-container">
       {/* Chatbot toggle button */}
       <button 
+        id="chatbot-toggle"
         className="chatbot-toggle"
         onClick={toggleChatbot}
       >
@@ -87,7 +88,7 @@ const Chatbot = () => {
             <h3>Cosmoz Travelmate</h3>
           </div>
           
-          <div className="chatbot-messages">
+          <div className="chatbot-messages" id="chatbot-messages">
             {messages.map((message, index) => (
               <div 
                 key={index} 
@@ -109,12 +110,17 @@ const Chatbot = () => {
           <form className="chatbot-input" onSubmit={handleSubmit}>
             <input
               type="text"
+              id="chatbot-input"
               value={input}
               onChange={handleInputChange}
               placeholder="Type your question here..."
               disabled={loading}
             />
-            <button type="submit" disabled={loading || !input.trim()}>
+            <button 
+              type="submit" 
+              id="chatbot-send-button"
+              disabled={loading || !input.trim()}
+            >
               Send
             </button>
           </form>
